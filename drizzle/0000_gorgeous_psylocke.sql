@@ -1,0 +1,22 @@
+CREATE TABLE `popups` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`name` text NOT NULL,
+	`template` text,
+	`headline` text NOT NULL,
+	`subheadline` text,
+	`button_text` text NOT NULL,
+	`background_color` text DEFAULT '#ffffff' NOT NULL,
+	`text_color` text DEFAULT '#000000' NOT NULL,
+	`button_color` text DEFAULT '#6366f1' NOT NULL,
+	`border_radius` integer DEFAULT 12 NOT NULL,
+	`show_image` integer DEFAULT true NOT NULL,
+	`show_close_button` integer DEFAULT true NOT NULL,
+	`show_overlay` integer DEFAULT true NOT NULL,
+	`close_on_outside_click` integer DEFAULT true NOT NULL,
+	`animation_enabled` integer DEFAULT true NOT NULL,
+	`animation_style` text DEFAULT 'fade' NOT NULL,
+	`embed_code` text,
+	`is_published` integer DEFAULT false NOT NULL,
+	`created_at` text NOT NULL,
+	`updated_at` text NOT NULL
+);
