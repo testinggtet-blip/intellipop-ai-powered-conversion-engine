@@ -674,14 +674,46 @@ export default function BuilderPage() {
 
         <div className="p-6 text-center relative z-10" style={config.backgroundImage ? { backgroundColor: 'rgba(0,0,0,0.4)' } : {}}>
           {config.showImage &&
-          <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
+          <div 
+            className={`w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center relative group ${
+              isActive ? "cursor-pointer" : ""
+            }`}
+            onClick={(e) => {
+              if (isActive) {
+                e.stopPropagation();
+                setEditingElement("icon");
+              }
+            }}>
               <Sparkles className="w-8 h-8 text-white" />
+              
+              {/* Action icons on click/hover */}
+              {isActive && editingElement === "icon" &&
+                <div className="absolute -top-2 -right-2 flex gap-1 z-20">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // Toggle icon visibility
+                      if (isFollowUp && activeFollowUpId) {
+                        updateActiveFollowUp({ showImage: false });
+                      } else {
+                        updateActiveStep({ showImage: false });
+                      }
+                      setEditingElement(null);
+                    }}
+                    title="Remove icon">
+                    <X className="w-3 h-3 text-destructive" />
+                  </Button>
+                </div>
+              }
             </div>
           }
           
           {/* Editable Headline */}
           <div
-            className={`text-lg font-bold mb-2 !whitespace-pre-line ${isActive ? "cursor-text hover:ring-2 hover:ring-[#1DBFAA]/50 rounded px-2 py-1 transition-all" : ""} ${
+            className={`text-lg font-bold mb-2 !whitespace-pre-line relative group ${isActive ? "cursor-text hover:ring-2 hover:ring-[#1DBFAA]/50 rounded px-2 py-1 transition-all" : ""} ${
             editingElement === "headline" && isActive ? "ring-2 ring-[#1DBFAA]" : ""}`
             }
             style={{
@@ -695,6 +727,19 @@ export default function BuilderPage() {
                 setEditingElement("headline");
               }
             }}>
+
+            {/* Action icons on click */}
+            {isActive && editingElement === "headline" && !editingElement.includes("input") &&
+              <div className="absolute -top-3 -right-3 flex gap-1 z-20">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
+                  title="Reorder">
+                  <GripVertical className="w-3 h-3" />
+                </Button>
+              </div>
+            }
 
             {editingElement === "headline" && isActive ?
             <Input
@@ -718,7 +763,7 @@ export default function BuilderPage() {
           
           {/* Editable Subheadline */}
           <div
-            className={`text-sm mb-4 ${isActive ? "cursor-text hover:ring-2 hover:ring-[#1DBFAA]/50 rounded px-2 py-1 transition-all" : ""} ${
+            className={`text-sm mb-4 !whitespace-pre-line relative group ${isActive ? "cursor-text hover:ring-2 hover:ring-[#1DBFAA]/50 rounded px-2 py-1 transition-all" : ""} ${
             editingElement === "subheadline" && isActive ? "ring-2 ring-[#1DBFAA]" : ""}`
             }
             style={{
@@ -733,6 +778,19 @@ export default function BuilderPage() {
                 setEditingElement("subheadline");
               }
             }}>
+
+            {/* Action icons on click */}
+            {isActive && editingElement === "subheadline" &&
+              <div className="absolute -top-3 -right-3 flex gap-1 z-20">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
+                  title="Reorder">
+                  <GripVertical className="w-3 h-3" />
+                </Button>
+              </div>
+            }
 
             {editingElement === "subheadline" && isActive ?
             <Input
@@ -900,7 +958,7 @@ export default function BuilderPage() {
           
           {/* Editable Button */}
           <div
-            className={`${isActive ? "cursor-text hover:ring-2 hover:ring-[#1DBFAA]/50 rounded transition-all" : ""} ${
+            className={`relative ${isActive ? "cursor-text hover:ring-2 hover:ring-[#1DBFAA]/50 rounded transition-all" : ""} ${
             editingElement === "button" && isActive ? "ring-2 ring-[#1DBFAA]" : ""}`
             }
             onClick={(e) => {
@@ -909,6 +967,19 @@ export default function BuilderPage() {
                 setEditingElement("button");
               }
             }}>
+
+            {/* Action icons on click */}
+            {isActive && editingElement === "button" &&
+              <div className="absolute -top-3 -right-3 flex gap-1 z-20">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
+                  title="Reorder">
+                  <GripVertical className="w-3 h-3" />
+                </Button>
+              </div>
+            }
 
             {editingElement === "button" && isActive ?
             <Input
