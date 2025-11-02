@@ -167,6 +167,9 @@ export default function CampaignsPage() {
 
   const showUrlFields = displayWhere === "selected-pages" || displayWhere === "except-pages";
 
+  // Determine if trigger needs additional fields
+  const showTriggerFields = triggerType !== "exit-intent" && triggerType !== "on-load";
+
   return (
     <div className="min-h-screen bg-background flex">
       <Sidebar />
@@ -312,7 +315,7 @@ export default function CampaignsPage() {
       <Sheet open={createSheetOpen} onOpenChange={setCreateSheetOpen}>
         <SheetContent className="w-[500px] sm:max-w-[500px] overflow-y-auto px-6">
           <SheetHeader className="pb-6 pt-2">
-            <SheetTitle className="text-xl font-semibold !whitespace-pre-line">Create Campaign </SheetTitle>
+            <SheetTitle className="text-xl font-semibold !whitespace-pre-line">Create Campaign </SheetTitle>
           </SheetHeader>
 
           <div className="space-y-6 pb-4">
@@ -411,17 +414,46 @@ export default function CampaignsPage() {
             {/* When it has to Trigger */}
             <div className="space-y-2">
               <Label className="text-sm font-medium text-foreground">When it has to Trigger</Label>
-              <Select value={triggerType} onValueChange={setTriggerType}>
-                <SelectTrigger className="h-10">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="time-on-page">Time on Page</SelectItem>
-                  <SelectItem value="scroll-depth">Scroll Depth</SelectItem>
-                  <SelectItem value="exit-intent">Exit Intent</SelectItem>
-                  <SelectItem value="on-load">On Load</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex items-center gap-2">
+                <Select value={triggerType} onValueChange={setTriggerType}>
+                  <SelectTrigger className="h-10 flex-1">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="time-on-page">Time on Page</SelectItem>
+                    <SelectItem value="time-on-site">Time on Site</SelectItem>
+                    <SelectItem value="inactivity">Inactivity</SelectItem>
+                    <SelectItem value="scroll-depth">Quick Scroll</SelectItem>
+                    <SelectItem value="exit-intent">Exit Intent</SelectItem>
+                    <SelectItem value="on-load">On Load</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                {showTriggerFields && (
+                  <>
+                    <span className="text-sm text-muted-foreground">of</span>
+                    <Input
+                      type="number"
+                      value={triggerValue}
+                      onChange={(e) => setTriggerValue(e.target.value)}
+                      className="w-20 h-10" />
+
+                    {triggerType === "scroll-depth" ? (
+                      <span className="text-sm text-muted-foreground w-12">%</span>
+                    ) : (
+                      <Select value={triggerUnit} onValueChange={setTriggerUnit}>
+                        <SelectTrigger className="w-24 h-10">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="sec">Sec</SelectItem>
+                          <SelectItem value="min">Min</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    )}
+                  </>
+                )}
+              </div>
             </div>
 
             {/* Where to Display */}
