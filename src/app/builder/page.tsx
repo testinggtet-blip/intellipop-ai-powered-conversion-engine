@@ -186,6 +186,7 @@ export default function BuilderPage() {
   const [editingFieldId, setEditingFieldId] = useState<string | null>(null);
   const [editingElement, setEditingElement] = useState<string | null>(null);
   const [draggedFieldIndex, setDraggedFieldIndex] = useState<number | null>(null);
+  const [cursorPosition, setCursorPosition] = useState<number | null>(null);
 
   // Save to history whenever popupFlow changes
   const saveToHistory = (newFlow: PopupFlow) => {
@@ -468,6 +469,67 @@ export default function BuilderPage() {
     }
 
     toast.success(`Added ${fieldType} field`);
+  };
+
+  const insertMergeTag = (tag: string) => {
+    // Check what element is currently being edited
+    if (editingElement === "headline") {
+      const currentValue = activeFollowUp?.headline || activeStep?.headline || "";
+      const position = cursorPosition ?? currentValue.length;
+      const newValue = currentValue.slice(0, position) + tag + currentValue.slice(position);
+      
+      if (activeFollowUpId && activeFollowUp) {
+        updateActiveFollowUp({ headline: newValue });
+      } else if (activeStep) {
+        updateActiveStep({ headline: newValue });
+      }
+      toast.success(`Added ${tag} to headline`);
+    } else if (editingElement === "subheadline") {
+      const currentValue = activeFollowUp?.subheadline || activeStep?.subheadline || "";
+      const position = cursorPosition ?? currentValue.length;
+      const newValue = currentValue.slice(0, position) + tag + currentValue.slice(position);
+      
+      if (activeFollowUpId && activeFollowUp) {
+        updateActiveFollowUp({ subheadline: newValue });
+      } else if (activeStep) {
+        updateActiveStep({ subheadline: newValue });
+      }
+      toast.success(`Added ${tag} to subheadline`);
+    } else if (editingElement === "button") {
+      const currentValue = activeFollowUp?.buttonText || activeStep?.buttonText || "";
+      const position = cursorPosition ?? currentValue.length;
+      const newValue = currentValue.slice(0, position) + tag + currentValue.slice(position);
+      
+      if (activeFollowUpId && activeFollowUp) {
+        updateActiveFollowUp({ buttonText: newValue });
+      } else if (activeStep) {
+        updateActiveStep({ buttonText: newValue });
+      }
+      toast.success(`Added ${tag} to button`);
+    } else if (editingFieldId) {
+      // Insert into form field
+      const field = activeFollowUp?.formFields?.find(f => f.id === editingFieldId) ||
+                    activeStep?.formFields?.find(f => f.id === editingFieldId);
+      
+      if (field && (field.type === "text" || field.type === "textarea" || field.type === "url")) {
+        const currentValue = field.placeholder || "";
+        const position = cursorPosition ?? currentValue.length;
+        const newValue = currentValue.slice(0, position) + tag + currentValue.slice(position);
+        updateFormField(editingFieldId, { placeholder: newValue });
+        toast.success(`Added ${tag} to form field`);
+      }
+    } else {
+      // No element is being edited, default to headline
+      const currentValue = activeFollowUp?.headline || activeStep?.headline || "";
+      const newValue = currentValue + (currentValue ? " " : "") + tag;
+      
+      if (activeFollowUpId && activeFollowUp) {
+        updateActiveFollowUp({ headline: newValue });
+      } else if (activeStep) {
+        updateActiveStep({ headline: newValue });
+      }
+      toast.success(`Added ${tag} to headline`);
+    }
   };
 
   const removeFormField = (fieldId: string) => {
@@ -768,6 +830,18 @@ export default function BuilderPage() {
                   updateActiveStep({ headline: e.target.value });
                 }
               }}
+              onSelect={(e) => {
+                const target = e.target as HTMLInputElement;
+                setCursorPosition(target.selectionStart);
+              }}
+              onClick={(e) => {
+                const target = e.target as HTMLInputElement;
+                setCursorPosition(target.selectionStart);
+              }}
+              onKeyUp={(e) => {
+                const target = e.target as HTMLInputElement;
+                setCursorPosition(target.selectionStart);
+              }}
               onBlur={() => setEditingElement(null)}
               autoFocus
               className="text-lg font-bold text-center"
@@ -835,6 +909,18 @@ export default function BuilderPage() {
                 } else {
                   updateActiveStep({ subheadline: e.target.value });
                 }
+              }}
+              onSelect={(e) => {
+                const target = e.target as HTMLInputElement;
+                setCursorPosition(target.selectionStart);
+              }}
+              onClick={(e) => {
+                const target = e.target as HTMLInputElement;
+                setCursorPosition(target.selectionStart);
+              }}
+              onKeyUp={(e) => {
+                const target = e.target as HTMLInputElement;
+                setCursorPosition(target.selectionStart);
               }}
               onBlur={() => setEditingElement(null)}
               autoFocus
@@ -1041,6 +1127,18 @@ export default function BuilderPage() {
                 } else {
                   updateActiveStep({ buttonText: e.target.value });
                 }
+              }}
+              onSelect={(e) => {
+                const target = e.target as HTMLInputElement;
+                setCursorPosition(target.selectionStart);
+              }}
+              onClick={(e) => {
+                const target = e.target as HTMLInputElement;
+                setCursorPosition(target.selectionStart);
+              }}
+              onKeyUp={(e) => {
+                const target = e.target as HTMLInputElement;
+                setCursorPosition(target.selectionStart);
               }}
               onBlur={() => setEditingElement(null)}
               autoFocus
@@ -2068,7 +2166,7 @@ export default function BuilderPage() {
                       {/* Merge Tags Block */}
                       <div className="pt-3 border-t border-border">
                         <Label className="text-xs mb-2 block">Merge Tags</Label>
-                        <p className="text-xs text-muted-foreground mb-3">Click to copy merge tags for personalization</p>
+                        <p className="text-xs text-muted-foreground mb-3">Click to insert into your content</p>
                         
                         <div className="space-y-2">
                           {[
@@ -2079,8 +2177,7 @@ export default function BuilderPage() {
                             <button
                               key={mergeTag.tag}
                               onClick={() => {
-                                navigator.clipboard.writeText(mergeTag.tag);
-                                toast.success(`Copied ${mergeTag.label} tag`);
+                                insertMergeTag(mergeTag.tag);
                               }}
                               className="w-full flex items-center justify-between p-2 rounded-lg border border-border hover:bg-muted/50 hover:border-[#1DBFAA]/30 transition-all group">
                               <div className="flex items-center gap-2">
@@ -2090,7 +2187,7 @@ export default function BuilderPage() {
                                 <code className="text-xs bg-muted px-2 py-1 rounded text-muted-foreground">
                                   {mergeTag.tag}
                                 </code>
-                                <Copy className="w-3 h-3 text-muted-foreground group-hover:text-[#1DBFAA] transition-colors" />
+                                <Plus className="w-3 h-3 text-muted-foreground group-hover:text-[#1DBFAA] transition-colors" />
                               </div>
                             </button>
                           ))}
