@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Search, MoreVertical, Play, Pause, Copy, Trash2 } from "lucide-react";
+import { Plus, Search, MoreVertical, Play, Pause, Copy, Trash2, Check, X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -42,13 +42,13 @@ export default function CampaignsPage() {
   // Form state
   const [campaignName, setCampaignName] = useState("");
   const [template, setTemplate] = useState("");
-  const [target, setTarget] = useState("existing");
+  const [target, setTarget] = useState("new");
   const [segment, setSegment] = useState("");
   const [triggerType, setTriggerType] = useState("time-on-page");
   const [triggerValue, setTriggerValue] = useState("3");
   const [triggerUnit, setTriggerUnit] = useState("sec");
   const [displayWhere, setDisplayWhere] = useState("all-pages");
-  const [url, setUrl] = useState("https://zapier.com/blog");
+  const [urls, setUrls] = useState<string[]>(["https://zapier.com/blog"]);
   const [stopIfContainPage, setStopIfContainPage] = useState("https://zapier.com/blog");
   const [endCampaignOption, setEndCampaignOption] = useState("session");
   const [endAfterValue, setEndAfterValue] = useState("3");
@@ -95,6 +95,22 @@ export default function CampaignsPage() {
     },
   ]);
 
+  const addUrl = () => {
+    setUrls([...urls, ""]);
+  };
+
+  const removeUrl = (index: number) => {
+    if (urls.length > 1) {
+      setUrls(urls.filter((_, i) => i !== index));
+    }
+  };
+
+  const updateUrl = (index: number, value: string) => {
+    const newUrls = [...urls];
+    newUrls[index] = value;
+    setUrls(newUrls);
+  };
+
   const handleCreateCampaign = () => {
     // Validate required fields
     if (!campaignName.trim()) {
@@ -125,13 +141,13 @@ export default function CampaignsPage() {
   const resetForm = () => {
     setCampaignName("");
     setTemplate("");
-    setTarget("existing");
+    setTarget("new");
     setSegment("");
     setTriggerType("time-on-page");
     setTriggerValue("3");
     setTriggerUnit("sec");
     setDisplayWhere("all-pages");
-    setUrl("https://zapier.com/blog");
+    setUrls(["https://zapier.com/blog"]);
     setStopIfContainPage("https://zapier.com/blog");
     setEndCampaignOption("session");
     setEndAfterValue("3");
@@ -148,6 +164,8 @@ export default function CampaignsPage() {
   const filteredCampaigns = campaigns.filter((campaign) =>
     campaign.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const showUrlFields = displayWhere === "selected-pages" || displayWhere === "except-pages";
 
   return (
     <div className="min-h-screen bg-background flex">
@@ -292,15 +310,15 @@ export default function CampaignsPage() {
 
       {/* Create Campaign Sheet (Slides from right) */}
       <Sheet open={createSheetOpen} onOpenChange={setCreateSheetOpen}>
-        <SheetContent className="w-[600px] sm:max-w-[600px] overflow-y-auto">
-          <SheetHeader>
-            <SheetTitle className="text-xl">Create Pop-up Campaign</SheetTitle>
+        <SheetContent className="w-[500px] sm:max-w-[500px] overflow-y-auto">
+          <SheetHeader className="pb-6">
+            <SheetTitle className="text-xl font-semibold">Create</SheetTitle>
           </SheetHeader>
 
-          <div className="space-y-6 py-6">
+          <div className="space-y-5 py-2">
             {/* Campaign Name */}
-            <div>
-              <Label htmlFor="campaign-name" className="text-sm font-medium">
+            <div className="space-y-2">
+              <Label htmlFor="campaign-name" className="text-sm font-medium text-foreground">
                 Campaign Name
               </Label>
               <Input
@@ -308,32 +326,31 @@ export default function CampaignsPage() {
                 value={campaignName}
                 onChange={(e) => setCampaignName(e.target.value)}
                 placeholder="Enter campaign name"
-                className="mt-2"
+                className="h-10"
               />
             </div>
 
             {/* Template */}
-            <div>
-              <Label htmlFor="template" className="text-sm font-medium">
+            <div className="space-y-2">
+              <Label htmlFor="template" className="text-sm font-medium text-foreground">
                 Template
               </Label>
-              <div className="flex gap-2 mt-2">
-                <Input
-                  id="template"
-                  value={template}
-                  onChange={(e) => setTemplate(e.target.value)}
-                  placeholder="Select template"
-                  className="flex-1"
-                />
-                <Button variant="outline" size="icon" className="bg-[#1DBFAA] text-white hover:bg-[#1DBFAA]/90">
-                  <Plus className="w-4 h-4" />
-                </Button>
-              </div>
+              <Select value={template} onValueChange={setTemplate}>
+                <SelectTrigger className="h-10">
+                  <SelectValue placeholder="Select template" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="newsletter">Newsletter Signup</SelectItem>
+                  <SelectItem value="exit-intent">Exit Intent</SelectItem>
+                  <SelectItem value="free-shipping">Free Shipping</SelectItem>
+                  <SelectItem value="custom">Custom</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Target */}
-            <div>
-              <Label className="text-sm font-medium mb-3 block">Target</Label>
+            <div className="space-y-3">
+              <Label className="text-sm font-medium text-foreground">Target</Label>
               <div className="flex items-center gap-6">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -342,9 +359,9 @@ export default function CampaignsPage() {
                     value="new"
                     checked={target === "new"}
                     onChange={(e) => setTarget(e.target.value)}
-                    className="w-4 h-4"
+                    className="w-4 h-4 accent-[#1DBFAA]"
                   />
-                  <span className="text-sm">New</span>
+                  <span className="text-sm text-foreground">New</span>
                 </label>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -353,9 +370,9 @@ export default function CampaignsPage() {
                     value="existing"
                     checked={target === "existing"}
                     onChange={(e) => setTarget(e.target.value)}
-                    className="w-4 h-4"
+                    className="w-4 h-4 accent-[#1DBFAA]"
                   />
-                  <span className="text-sm">Existing</span>
+                  <span className="text-sm text-foreground">Existing</span>
                 </label>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -364,106 +381,118 @@ export default function CampaignsPage() {
                     value="all"
                     checked={target === "all"}
                     onChange={(e) => setTarget(e.target.value)}
-                    className="w-4 h-4"
+                    className="w-4 h-4 accent-[#1DBFAA]"
                   />
-                  <span className="text-sm">All</span>
+                  <span className="text-sm text-foreground">All</span>
                 </label>
               </div>
             </div>
 
-            {/* Segment */}
-            <div>
-              <Label htmlFor="segment" className="text-sm font-medium">
-                Segment
-              </Label>
-              <div className="flex gap-2 mt-2">
-                <Input
-                  id="segment"
-                  value={segment}
-                  onChange={(e) => setSegment(e.target.value)}
-                  placeholder="Select segment"
-                  className="flex-1"
-                />
-                <Button variant="outline" size="icon" className="bg-[#1DBFAA] text-white hover:bg-[#1DBFAA]/90">
-                  <Plus className="w-4 h-4" />
-                </Button>
+            {/* Segment - Only show when target is "existing" */}
+            {target === "existing" && (
+              <div className="space-y-2">
+                <Label htmlFor="segment" className="text-sm font-medium text-foreground">
+                  Segment
+                </Label>
+                <Select value={segment} onValueChange={setSegment}>
+                  <SelectTrigger className="h-10">
+                    <SelectValue placeholder="Select segment" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="high-value">High Value Customers</SelectItem>
+                    <SelectItem value="cart-abandoners">Cart Abandoners</SelectItem>
+                    <SelectItem value="repeat-buyers">Repeat Buyers</SelectItem>
+                    <SelectItem value="inactive">Inactive Users</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-            </div>
+            )}
 
             {/* When it has to Trigger */}
-            <div>
-              <Label className="text-sm font-medium mb-2 block">When it has to Trigger</Label>
-              <div className="flex items-center gap-3">
-                <Select value={triggerType} onValueChange={setTriggerType}>
-                  <SelectTrigger className="flex-1">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="time-on-page">Time on Page</SelectItem>
-                    <SelectItem value="scroll-depth">Scroll Depth</SelectItem>
-                    <SelectItem value="exit-intent">Exit Intent</SelectItem>
-                    <SelectItem value="on-load">On Load</SelectItem>
-                  </SelectContent>
-                </Select>
-                <span className="text-sm text-muted-foreground">of</span>
-                <Input
-                  type="number"
-                  value={triggerValue}
-                  onChange={(e) => setTriggerValue(e.target.value)}
-                  className="w-20"
-                />
-                <Select value={triggerUnit} onValueChange={setTriggerUnit}>
-                  <SelectTrigger className="w-24">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="sec">Sec</SelectItem>
-                    <SelectItem value="min">Min</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            {/* Where to Display */}
-            <div>
-              <Label htmlFor="display-where" className="text-sm font-medium">
-                Where to Display
-              </Label>
-              <Select value={displayWhere} onValueChange={setDisplayWhere}>
-                <SelectTrigger className="mt-2">
+            <div className="space-y-2">
+              <Label className="text-sm font-medium text-foreground">When it has to Trigger</Label>
+              <Select value={triggerType} onValueChange={setTriggerType}>
+                <SelectTrigger className="h-10">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all-pages">All Pages</SelectItem>
-                  <SelectItem value="homepage">Homepage Only</SelectItem>
-                  <SelectItem value="specific-pages">Specific Pages</SelectItem>
-                  <SelectItem value="specific-urls">Specific URLs</SelectItem>
+                  <SelectItem value="time-on-page">Time on Page</SelectItem>
+                  <SelectItem value="scroll-depth">Scroll Depth</SelectItem>
+                  <SelectItem value="exit-intent">Exit Intent</SelectItem>
+                  <SelectItem value="on-load">On Load</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
-            {/* URL */}
-            <div>
-              <Label htmlFor="url" className="text-sm font-medium">
-                URL
+            {/* Where to Display */}
+            <div className="space-y-2">
+              <Label htmlFor="display-where" className="text-sm font-medium text-foreground">
+                Where to Display
               </Label>
-              <Input
-                id="url"
-                type="url"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                placeholder="https://example.com"
-                className="mt-2"
-              />
+              <Select value={displayWhere} onValueChange={setDisplayWhere}>
+                <SelectTrigger className="h-10">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all-pages">All Pages</SelectItem>
+                  <SelectItem value="selected-pages">Selected Pages</SelectItem>
+                  <SelectItem value="except-pages">Except Pages</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
+            {/* URL Fields - Show when Selected Pages or Except Pages */}
+            {showUrlFields && (
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-foreground">URL</Label>
+                <div className="space-y-2">
+                  {urls.map((url, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <div className="relative flex-1">
+                        <Input
+                          type="url"
+                          value={url}
+                          onChange={(e) => updateUrl(index, e.target.value)}
+                          placeholder="https://zapier.com/blog"
+                          className="h-10 pr-8"
+                        />
+                        {url && (
+                          <Check className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-green-600" />
+                        )}
+                      </div>
+                      {urls.length > 1 && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => removeUrl(index)}
+                          className="h-10 w-10 flex-shrink-0"
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    onClick={addUrl}
+                    className="h-10 w-10 bg-[#1DBFAA] text-white hover:bg-[#1DBFAA]/90 hover:text-white"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
+
             {/* Sessions Handling */}
-            <div className="pt-4 border-t border-border">
-              <h3 className="text-base font-semibold mb-4">Sessions Handling</h3>
+            <div className="pt-4 border-t border-border space-y-4">
+              <h3 className="text-sm font-semibold text-foreground">Sessions Handling</h3>
 
               {/* Stop if contain page */}
-              <div className="mb-4">
-                <Label htmlFor="stop-page" className="text-sm font-medium">
+              <div className="space-y-2">
+                <Label htmlFor="stop-page" className="text-sm font-medium text-foreground">
                   Stop if contain page
                 </Label>
                 <Input
@@ -472,48 +501,48 @@ export default function CampaignsPage() {
                   value={stopIfContainPage}
                   onChange={(e) => setStopIfContainPage(e.target.value)}
                   placeholder="https://example.com"
-                  className="mt-2"
+                  className="h-10"
                 />
               </div>
 
               {/* End campaign options */}
               <div className="space-y-3">
-                <label className="flex items-center gap-3 cursor-pointer">
+                <label className="flex items-start gap-3 cursor-pointer group">
                   <input
                     type="radio"
                     name="end-campaign"
                     value="session"
                     checked={endCampaignOption === "session"}
                     onChange={(e) => setEndCampaignOption(e.target.value)}
-                    className="w-4 h-4"
+                    className="w-4 h-4 mt-0.5 accent-[#1DBFAA]"
                   />
-                  <span className="text-sm">End campaign after the current session ends</span>
+                  <span className="text-sm text-foreground leading-relaxed">End campaign after current session ends</span>
                 </label>
 
-                <label className="flex items-center gap-3 cursor-pointer">
+                <label className="flex items-start gap-3 cursor-pointer group">
                   <input
                     type="radio"
                     name="end-campaign"
                     value="end-after"
                     checked={endCampaignOption === "end-after"}
                     onChange={(e) => setEndCampaignOption(e.target.value)}
-                    className="w-4 h-4"
+                    className="w-4 h-4 mt-0.5 accent-[#1DBFAA]"
                   />
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm">End After</span>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-sm text-foreground">End After</span>
                     <Input
                       type="number"
                       value={endAfterValue}
                       onChange={(e) => setEndAfterValue(e.target.value)}
                       disabled={endCampaignOption !== "end-after"}
-                      className="w-20 h-8"
+                      className="w-20 h-8 text-sm"
                     />
                     <Select
                       value={endAfterUnit}
                       onValueChange={setEndAfterUnit}
                       disabled={endCampaignOption !== "end-after"}
                     >
-                      <SelectTrigger className="w-24 h-8">
+                      <SelectTrigger className="w-24 h-8 text-sm">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -528,8 +557,8 @@ export default function CampaignsPage() {
             </div>
 
             {/* Frequency */}
-            <div className="pt-4 border-t border-border">
-              <h3 className="text-base font-semibold mb-4">Frequency</h3>
+            <div className="pt-4 border-t border-border space-y-4">
+              <h3 className="text-sm font-semibold text-foreground">Frequency</h3>
               <div className="space-y-3">
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
@@ -538,35 +567,35 @@ export default function CampaignsPage() {
                     value="once-per-session"
                     checked={frequency === "once-per-session"}
                     onChange={(e) => setFrequency(e.target.value)}
-                    className="w-4 h-4"
+                    className="w-4 h-4 accent-[#1DBFAA]"
                   />
-                  <span className="text-sm">Start once per session</span>
+                  <span className="text-sm text-foreground">Start once per session</span>
                 </label>
 
-                <label className="flex items-center gap-3 cursor-pointer">
+                <label className="flex items-start gap-3 cursor-pointer">
                   <input
                     type="radio"
                     name="frequency"
                     value="once-every"
                     checked={frequency === "once-every"}
                     onChange={(e) => setFrequency(e.target.value)}
-                    className="w-4 h-4"
+                    className="w-4 h-4 mt-0.5 accent-[#1DBFAA]"
                   />
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm">Start once every</span>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-sm text-foreground">Start once every</span>
                     <Input
                       type="number"
                       value={frequencyValue}
                       onChange={(e) => setFrequencyValue(e.target.value)}
                       disabled={frequency !== "once-every"}
-                      className="w-20 h-8"
+                      className="w-20 h-8 text-sm"
                     />
                     <Select
                       value={frequencyUnit}
                       onValueChange={setFrequencyUnit}
                       disabled={frequency !== "once-every"}
                     >
-                      <SelectTrigger className="w-24 h-8">
+                      <SelectTrigger className="w-24 h-8 text-sm">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -585,39 +614,39 @@ export default function CampaignsPage() {
                     value="once-lifetime"
                     checked={frequency === "once-lifetime"}
                     onChange={(e) => setFrequency(e.target.value)}
-                    className="w-4 h-4"
+                    className="w-4 h-4 accent-[#1DBFAA]"
                   />
-                  <span className="text-sm">Start only once in lifetime</span>
+                  <span className="text-sm text-foreground">Start only once in lifetime</span>
                 </label>
               </div>
             </div>
 
             {/* Display When */}
-            <div className="pt-4 border-t border-border">
-              <h3 className="text-base font-semibold mb-4">Display When</h3>
+            <div className="pt-4 border-t border-border space-y-4">
+              <h3 className="text-sm font-semibold text-foreground">Display When</h3>
               <div className="space-y-3">
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={preventIfSeenCampaign}
                     onChange={(e) => setPreventIfSeenCampaign(e.target.checked)}
-                    className="w-4 h-4 mt-0.5"
+                    className="w-4 h-4 mt-0.5 accent-[#1DBFAA]"
                   />
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-sm">Do not show this campaign if visitor has seen another campaign in last</span>
+                    <span className="text-sm text-foreground">Do not show if visitor has seen another campaign in last</span>
                     <Input
                       type="number"
                       value={displayWhenValue}
                       onChange={(e) => setDisplayWhenValue(e.target.value)}
                       disabled={!preventIfSeenCampaign}
-                      className="w-20 h-8"
+                      className="w-20 h-8 text-sm"
                     />
                     <Select
                       value={displayWhenUnit}
                       onValueChange={setDisplayWhenUnit}
                       disabled={!preventIfSeenCampaign}
                     >
-                      <SelectTrigger className="w-24 h-8">
+                      <SelectTrigger className="w-24 h-8 text-sm">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -636,9 +665,9 @@ export default function CampaignsPage() {
                     value="over-take-replace"
                     checked={displayWhenOption === "over-take-replace"}
                     onChange={(e) => setDisplayWhenOption(e.target.value)}
-                    className="w-4 h-4"
+                    className="w-4 h-4 accent-[#1DBFAA]"
                   />
-                  <span className="text-sm">Over take and replace any other campaign</span>
+                  <span className="text-sm text-foreground">Over take and replace any other campaign</span>
                 </label>
 
                 <label className="flex items-center gap-3 cursor-pointer">
@@ -648,9 +677,9 @@ export default function CampaignsPage() {
                     value="over-take-contains"
                     checked={displayWhenOption === "over-take-contains"}
                     onChange={(e) => setDisplayWhenOption(e.target.value)}
-                    className="w-4 h-4"
+                    className="w-4 h-4 accent-[#1DBFAA]"
                   />
-                  <span className="text-sm">Over take and replace campaign contains</span>
+                  <span className="text-sm text-foreground">Over take and replace campaign contains</span>
                 </label>
 
                 <label className="flex items-center gap-3 cursor-pointer">
@@ -660,27 +689,28 @@ export default function CampaignsPage() {
                     value="do-not-trigger"
                     checked={displayWhenOption === "do-not-trigger"}
                     onChange={(e) => setDisplayWhenOption(e.target.value)}
-                    className="w-4 h-4"
+                    className="w-4 h-4 accent-[#1DBFAA]"
                   />
-                  <span className="text-sm">Do not trigger this campaign if another campaign is running</span>
+                  <span className="text-sm text-foreground">Do not trigger if another campaign is running</span>
                 </label>
               </div>
             </div>
           </div>
 
-          <SheetFooter className="border-t border-border pt-4">
+          <SheetFooter className="border-t border-border pt-6 mt-6 flex gap-3">
             <Button
               variant="outline"
               onClick={() => {
                 resetForm();
                 setCreateSheetOpen(false);
               }}
+              className="flex-1"
             >
               Cancel
             </Button>
             <Button
               onClick={handleCreateCampaign}
-              className="bg-[#1DBFAA] hover:bg-[#1DBFAA]/90"
+              className="flex-1 bg-[#1DBFAA] hover:bg-[#1DBFAA]/90"
             >
               Save
             </Button>
