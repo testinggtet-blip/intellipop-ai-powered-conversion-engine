@@ -42,8 +42,10 @@ export default function CampaignsPage() {
   // Form state
   const [campaignName, setCampaignName] = useState("");
   const [template, setTemplate] = useState("");
+  const [templateSearch, setTemplateSearch] = useState("");
   const [target, setTarget] = useState("new");
   const [segment, setSegment] = useState("");
+  const [segmentSearch, setSegmentSearch] = useState("");
   const [triggerType, setTriggerType] = useState("time-on-page");
   const [triggerValue, setTriggerValue] = useState("3");
   const [triggerUnit, setTriggerUnit] = useState("sec");
@@ -141,8 +143,10 @@ export default function CampaignsPage() {
   const resetForm = () => {
     setCampaignName("");
     setTemplate("");
+    setTemplateSearch("");
     setTarget("new");
     setSegment("");
+    setSegmentSearch("");
     setTriggerType("time-on-page");
     setTriggerValue("3");
     setTriggerUnit("sec");
@@ -330,25 +334,30 @@ export default function CampaignsPage() {
                 onChange={(e) => setCampaignName(e.target.value)}
                 placeholder="Enter campaign name"
                 className="h-10" />
-
             </div>
 
-            {/* Template */}
+            {/* Template with Search and Create */}
             <div className="space-y-2.5">
-              <Label htmlFor="template" className="text-sm font-medium text-foreground">
+              <Label className="text-sm font-medium text-foreground">
                 Template
               </Label>
-              <Select value={template} onValueChange={setTemplate}>
-                <SelectTrigger className="h-10">
-                  <SelectValue placeholder="Select template" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="newsletter">Newsletter Signup</SelectItem>
-                  <SelectItem value="exit-intent">Exit Intent</SelectItem>
-                  <SelectItem value="free-shipping">Free Shipping</SelectItem>
-                  <SelectItem value="custom">Custom</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex items-center gap-2">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    value={templateSearch}
+                    onChange={(e) => setTemplateSearch(e.target.value)}
+                    placeholder="Search templates..."
+                    className="h-10 pl-10" />
+                </div>
+                <Button
+                  type="button"
+                  size="icon"
+                  onClick={() => toast.success("Create template functionality")}
+                  className="h-10 w-10 bg-[#1DBFAA] hover:bg-[#1DBFAA]/90 flex-shrink-0">
+                  <Plus className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
 
             {/* Target */}
@@ -363,7 +372,6 @@ export default function CampaignsPage() {
                     checked={target === "new"}
                     onChange={(e) => setTarget(e.target.value)}
                     className="w-4 h-4 accent-[#1DBFAA]" />
-
                   <span className="text-sm text-foreground">New</span>
                 </label>
                 <label className="flex items-center gap-2 cursor-pointer">
@@ -374,7 +382,6 @@ export default function CampaignsPage() {
                     checked={target === "existing"}
                     onChange={(e) => setTarget(e.target.value)}
                     className="w-4 h-4 accent-[#1DBFAA]" />
-
                   <span className="text-sm text-foreground">Existing</span>
                 </label>
                 <label className="flex items-center gap-2 cursor-pointer">
@@ -385,29 +392,34 @@ export default function CampaignsPage() {
                     checked={target === "all"}
                     onChange={(e) => setTarget(e.target.value)}
                     className="w-4 h-4 accent-[#1DBFAA]" />
-
                   <span className="text-sm text-foreground">All</span>
                 </label>
               </div>
             </div>
 
-            {/* Segment - Only show when target is "existing" */}
+            {/* Segment with Search and Create - Only show when target is "existing" */}
             {target === "existing" &&
-            <div className="space-y-2">
-                <Label htmlFor="segment" className="text-sm font-medium text-foreground">
+            <div className="space-y-2.5">
+                <Label className="text-sm font-medium text-foreground">
                   Segment
                 </Label>
-                <Select value={segment} onValueChange={setSegment}>
-                  <SelectTrigger className="h-10">
-                    <SelectValue placeholder="Select segment" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="high-value">High Value Customers</SelectItem>
-                    <SelectItem value="cart-abandoners">Cart Abandoners</SelectItem>
-                    <SelectItem value="repeat-buyers">Repeat Buyers</SelectItem>
-                    <SelectItem value="inactive">Inactive Users</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="flex items-center gap-2">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      value={segmentSearch}
+                      onChange={(e) => setSegmentSearch(e.target.value)}
+                      placeholder="Search segments..."
+                      className="h-10 pl-10" />
+                  </div>
+                  <Button
+                    type="button"
+                    size="icon"
+                    onClick={() => toast.success("Create segment functionality")}
+                    className="h-10 w-10 bg-[#1DBFAA] hover:bg-[#1DBFAA]/90 flex-shrink-0">
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
             }
 
@@ -737,18 +749,15 @@ export default function CampaignsPage() {
                 setCreateSheetOpen(false);
               }}
               className="flex-1">
-
               Cancel
             </Button>
             <Button
               onClick={handleCreateCampaign}
               className="flex-1 bg-[#1DBFAA] hover:bg-[#1DBFAA]/90">
-
               Save
             </Button>
           </SheetFooter>
         </SheetContent>
       </Sheet>
     </div>);
-
 }
