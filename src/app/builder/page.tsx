@@ -1047,7 +1047,7 @@ export default function BuilderPage() {
         <div className="container mx-auto max-w-7xl px-4 py-6">
           <div className="grid lg:grid-cols-[280px_1fr_320px] gap-6">
             {/* Left Sidebar - Steps Journey */}
-            <div className="space-y-4">
+            <div className="space-y-4 sticky top-6 self-start max-h-[calc(100vh-180px)] overflow-y-auto">
               <Card className="p-4">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-semibold text-base">Steps</h3>
@@ -1381,7 +1381,7 @@ export default function BuilderPage() {
             </div>
 
             {/* Right Sidebar */}
-            <div className="space-y-4">
+            <div className="space-y-4 sticky top-6 self-start max-h-[calc(100vh-180px)] overflow-y-auto">
               {/* Active Step Customization - Shows only when step is tapped/selected */}
               {(activeStep || activeFollowUp) && (
                 <Card className="p-4">
