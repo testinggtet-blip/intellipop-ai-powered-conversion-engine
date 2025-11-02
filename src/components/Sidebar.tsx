@@ -2,13 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Zap, LayoutDashboard, BarChart3, Zap as TriggerIcon, BookOpen } from "lucide-react";
+import { Zap, LayoutDashboard, BarChart3, Zap as TriggerIcon, BookOpen, Megaphone } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function Sidebar() {
   const pathname = usePathname();
 
   const modules = [
+    {
+      name: "Campaigns",
+      href: "/campaigns",
+      icon: Megaphone
+    },
     {
       name: "Builder",
       href: "/builder",
