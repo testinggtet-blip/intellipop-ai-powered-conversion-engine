@@ -2064,6 +2064,38 @@ export default function BuilderPage() {
                           </div>
                       }
                       </div>
+
+                      {/* Merge Tags Block */}
+                      <div className="pt-3 border-t border-border">
+                        <Label className="text-xs mb-2 block">Merge Tags</Label>
+                        <p className="text-xs text-muted-foreground mb-3">Click to copy merge tags for personalization</p>
+                        
+                        <div className="space-y-2">
+                          {[
+                            { label: "First name", tag: "{{first_name}}" },
+                            { label: "Last name", tag: "{{last_name}}" },
+                            { label: "Organisation Name", tag: "{{organisation_name}}" }
+                          ].map((mergeTag) => (
+                            <button
+                              key={mergeTag.tag}
+                              onClick={() => {
+                                navigator.clipboard.writeText(mergeTag.tag);
+                                toast.success(`Copied ${mergeTag.label} tag`);
+                              }}
+                              className="w-full flex items-center justify-between p-2 rounded-lg border border-border hover:bg-muted/50 hover:border-[#1DBFAA]/30 transition-all group">
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs font-medium">{mergeTag.label}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <code className="text-xs bg-muted px-2 py-1 rounded text-muted-foreground">
+                                  {mergeTag.tag}
+                                </code>
+                                <Copy className="w-3 h-3 text-muted-foreground group-hover:text-[#1DBFAA] transition-colors" />
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
                     </TabsContent>
                   </Tabs>
                 </Card>
