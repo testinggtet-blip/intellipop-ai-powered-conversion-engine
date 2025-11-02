@@ -15,18 +15,18 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
+  DialogFooter } from
+"@/components/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  SelectValue } from
+"@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
+import {
   Palette,
   Type,
   Image as ImageIcon,
@@ -60,8 +60,8 @@ import {
   Edit,
   GripVertical,
   Upload,
-  Video
-} from "lucide-react";
+  Video } from
+"lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
@@ -126,30 +126,30 @@ interface PopupFlow {
     buttonWeight: number;
     buttonSize: number;
   };
-  colors: Array<{ name: string; value: string; percentage: number }>;
+  colors: Array<{name: string;value: string;percentage: number;}>;
 }
 
 export default function BuilderPage() {
   const [popupFlow, setPopupFlow] = useState<PopupFlow>({
     name: "Sitewide Email Capture | Free Shipping",
     steps: [
-      {
-        id: "1",
-        name: "Offer",
-        type: "offer",
-        headline: "You've Got Free Shipping",
-        subheadline: "Get free shipping on your order today",
-        buttonText: "Claim Offer",
-        backgroundColor: "#FFFFFF",
-        textColor: "#493D34",
-        buttonColor: "#EC5B31",
-        borderRadius: 12,
-        showImage: true,
-        template: "offer",
-        followUps: [],
-        formFields: []
-      }
-    ],
+    {
+      id: "1",
+      name: "Offer",
+      type: "offer",
+      headline: "",
+      subheadline: "",
+      buttonText: "Claim Offer",
+      backgroundColor: "#FFFFFF",
+      textColor: "#493D34",
+      buttonColor: "#EC5B31",
+      borderRadius: 12,
+      showImage: true,
+      template: "offer",
+      followUps: [],
+      formFields: []
+    }],
+
     typography: {
       headingFont: "Sora",
       headingWeight: 700,
@@ -165,12 +165,12 @@ export default function BuilderPage() {
       buttonSize: 14
     },
     colors: [
-      { name: "Primary", value: "#493D34", percentage: 100 },
-      { name: "Background", value: "#FFFFFF", percentage: 30 },
-      { name: "Accent", value: "#F0E7E1", percentage: 97 },
-      { name: "Button", value: "#EC5B31", percentage: 100 },
-      { name: "Border", value: "#CCCCCC", percentage: 100 }
-    ]
+    { name: "Primary", value: "#493D34", percentage: 100 },
+    { name: "Background", value: "#FFFFFF", percentage: 30 },
+    { name: "Accent", value: "#F0E7E1", percentage: 97 },
+    { name: "Button", value: "#EC5B31", percentage: 100 },
+    { name: "Border", value: "#CCCCCC", percentage: 100 }]
+
   });
 
   // History management for undo/redo
@@ -223,126 +223,126 @@ export default function BuilderPage() {
   }, []);
 
   const templates = [
-    {
-      name: "Blank Canvas",
-      preview: "📝",
-      description: "Start from scratch with a blank popup",
-      gradient: "from-gray-400 to-gray-600",
-      type: "custom" as const,
-      config: {
-        headline: "Your Headline Here",
-        subheadline: "Add your message here",
-        buttonText: "Click Here",
-        backgroundColor: "#ffffff",
-        textColor: "#000000",
-        buttonColor: "#000000",
-        borderRadius: 8,
-        showImage: false
-      }
-    },
-    {
-      name: "Newsletter Signup",
-      preview: "📧",
-      description: "Clean, minimal design for email collection",
-      gradient: "from-blue-500 to-cyan-500",
-      type: "email-capture" as const,
-      config: {
-        headline: "Join Our Newsletter",
-        subheadline: "Get weekly updates and exclusive offers",
-        buttonText: "Subscribe Now",
-        backgroundColor: "#ffffff",
-        textColor: "#1f2937",
-        buttonColor: "#3b82f6",
-        borderRadius: 8,
-        showImage: false
-      }
-    },
-    {
-      name: "Exit Intent",
-      preview: "🚪",
-      description: "Catch visitors before they leave",
-      gradient: "from-purple-500 to-pink-500",
-      type: "offer" as const,
-      config: {
-        headline: "Wait! Don't Leave Yet",
-        subheadline: "Get 15% off before you go",
-        buttonText: "Claim Discount",
-        backgroundColor: "#a855f7",
-        textColor: "#ffffff",
-        buttonColor: "#ffffff",
-        borderRadius: 16,
-        showImage: true
-      }
-    },
-    {
-      name: "Limited Offer",
-      preview: "⚡",
-      description: "Urgency-driven conversion template",
-      gradient: "from-orange-500 to-red-500",
-      type: "offer" as const,
-      config: {
-        headline: "⚡ Flash Sale - 50% Off!",
-        subheadline: "Limited time offer. Hurry before it ends!",
-        buttonText: "Shop Now",
-        backgroundColor: "#ef4444",
-        textColor: "#ffffff",
-        buttonColor: "#fbbf24",
-        borderRadius: 12,
-        showImage: true
-      }
-    },
-    {
-      name: "Video Popup",
-      preview: "🎥",
-      description: "Engage with video content",
-      gradient: "from-green-500 to-emerald-500",
-      type: "custom" as const,
-      config: {
-        headline: "Watch Our Demo",
-        subheadline: "See how it works in 2 minutes",
-        buttonText: "Play Video",
-        backgroundColor: "#10b981",
-        textColor: "#ffffff",
-        buttonColor: "#ffffff",
-        borderRadius: 20,
-        showImage: true
-      }
-    },
-    {
-      name: "Thank You",
-      preview: "✅",
-      description: "Confirmation message",
-      gradient: "from-green-400 to-emerald-600",
-      type: "confirmation" as const,
-      config: {
-        headline: "Thank You!",
-        subheadline: "Check your email for your discount code",
-        buttonText: "Continue Shopping",
-        backgroundColor: "#f3f4f6",
-        textColor: "#111827",
-        buttonColor: "#10b981",
-        borderRadius: 8,
-        showImage: true
-      }
-    },
-    {
-      name: "Free Shipping",
-      preview: "📦",
-      description: "Free shipping offer",
-      gradient: "from-orange-400 to-red-500",
-      type: "offer" as const,
-      config: {
-        headline: "You've Got Free Shipping",
-        subheadline: "Get free shipping on your order today",
-        buttonText: "Claim Offer",
-        backgroundColor: "#FFFFFF",
-        textColor: "#493D34",
-        buttonColor: "#EC5B31",
-        borderRadius: 12,
-        showImage: true
-      }
+  {
+    name: "Blank Canvas",
+    preview: "📝",
+    description: "Start from scratch with a blank popup",
+    gradient: "from-gray-400 to-gray-600",
+    type: "custom" as const,
+    config: {
+      headline: "Your Headline Here",
+      subheadline: "Add your message here",
+      buttonText: "Click Here",
+      backgroundColor: "#ffffff",
+      textColor: "#000000",
+      buttonColor: "#000000",
+      borderRadius: 8,
+      showImage: false
     }
-  ];
+  },
+  {
+    name: "Newsletter Signup",
+    preview: "📧",
+    description: "Clean, minimal design for email collection",
+    gradient: "from-blue-500 to-cyan-500",
+    type: "email-capture" as const,
+    config: {
+      headline: "Join Our Newsletter",
+      subheadline: "Get weekly updates and exclusive offers",
+      buttonText: "Subscribe Now",
+      backgroundColor: "#ffffff",
+      textColor: "#1f2937",
+      buttonColor: "#3b82f6",
+      borderRadius: 8,
+      showImage: false
+    }
+  },
+  {
+    name: "Exit Intent",
+    preview: "🚪",
+    description: "Catch visitors before they leave",
+    gradient: "from-purple-500 to-pink-500",
+    type: "offer" as const,
+    config: {
+      headline: "Wait! Don't Leave Yet",
+      subheadline: "Get 15% off before you go",
+      buttonText: "Claim Discount",
+      backgroundColor: "#a855f7",
+      textColor: "#ffffff",
+      buttonColor: "#ffffff",
+      borderRadius: 16,
+      showImage: true
+    }
+  },
+  {
+    name: "Limited Offer",
+    preview: "⚡",
+    description: "Urgency-driven conversion template",
+    gradient: "from-orange-500 to-red-500",
+    type: "offer" as const,
+    config: {
+      headline: "⚡ Flash Sale - 50% Off!",
+      subheadline: "Limited time offer. Hurry before it ends!",
+      buttonText: "Shop Now",
+      backgroundColor: "#ef4444",
+      textColor: "#ffffff",
+      buttonColor: "#fbbf24",
+      borderRadius: 12,
+      showImage: true
+    }
+  },
+  {
+    name: "Video Popup",
+    preview: "🎥",
+    description: "Engage with video content",
+    gradient: "from-green-500 to-emerald-500",
+    type: "custom" as const,
+    config: {
+      headline: "Watch Our Demo",
+      subheadline: "See how it works in 2 minutes",
+      buttonText: "Play Video",
+      backgroundColor: "#10b981",
+      textColor: "#ffffff",
+      buttonColor: "#ffffff",
+      borderRadius: 20,
+      showImage: true
+    }
+  },
+  {
+    name: "Thank You",
+    preview: "✅",
+    description: "Confirmation message",
+    gradient: "from-green-400 to-emerald-600",
+    type: "confirmation" as const,
+    config: {
+      headline: "Thank You!",
+      subheadline: "Check your email for your discount code",
+      buttonText: "Continue Shopping",
+      backgroundColor: "#f3f4f6",
+      textColor: "#111827",
+      buttonColor: "#10b981",
+      borderRadius: 8,
+      showImage: true
+    }
+  },
+  {
+    name: "Free Shipping",
+    preview: "📦",
+    description: "Free shipping offer",
+    gradient: "from-orange-400 to-red-500",
+    type: "offer" as const,
+    config: {
+      headline: "You've Got Free Shipping",
+      subheadline: "Get free shipping on your order today",
+      buttonText: "Claim Offer",
+      backgroundColor: "#FFFFFF",
+      textColor: "#493D34",
+      buttonColor: "#EC5B31",
+      borderRadius: 12,
+      showImage: true
+    }
+  }];
+
 
   const applyTemplate = (template: typeof templates[0]) => {
     const newStep: StepConfig = {
@@ -354,12 +354,12 @@ export default function BuilderPage() {
       followUps: [],
       formFields: []
     };
-    
+
     setPopupFlow({
       ...popupFlow,
       steps: [...popupFlow.steps, newStep]
     });
-    
+
     setActiveStepId(newStep.id);
     setActiveFollowUpId(null);
     setTemplateDialogOpen(false);
@@ -371,7 +371,7 @@ export default function BuilderPage() {
   };
 
   const addFollowUpStep = (parentStepId: string) => {
-    const parentStep = popupFlow.steps.find(s => s.id === parentStepId);
+    const parentStep = popupFlow.steps.find((s) => s.id === parentStepId);
     if (!parentStep) return;
 
     // Duplicate the parent step's config for the follow-up
@@ -394,16 +394,16 @@ export default function BuilderPage() {
 
     setPopupFlow({
       ...popupFlow,
-      steps: popupFlow.steps.map(step =>
-        step.id === parentStepId
-          ? {
-              ...step,
-              followUps: [
-                ...(step.followUps || []),
-                newFollowUp
-              ]
-            }
-          : step
+      steps: popupFlow.steps.map((step) =>
+      step.id === parentStepId ?
+      {
+        ...step,
+        followUps: [
+        ...(step.followUps || []),
+        newFollowUp]
+
+      } :
+      step
       )
     });
     toast.success("Follow-up step added (duplicated from main step)");
@@ -414,41 +414,41 @@ export default function BuilderPage() {
       toast.error("Cannot delete the only step");
       return;
     }
-    
-    const newSteps = popupFlow.steps.filter(s => s.id !== stepId);
+
+    const newSteps = popupFlow.steps.filter((s) => s.id !== stepId);
     setPopupFlow({ ...popupFlow, steps: newSteps });
-    
+
     if (activeStepId === stepId) {
       setActiveStepId(newSteps[0].id);
       setActiveFollowUpId(null);
     }
-    
+
     toast.success("Step deleted");
   };
 
   const deleteFollowUp = (stepId: string, followUpId: string) => {
     setPopupFlow({
       ...popupFlow,
-      steps: popupFlow.steps.map(step =>
-        step.id === stepId
-          ? {
-              ...step,
-              followUps: (step.followUps || []).filter(fu => fu.id !== followUpId)
-            }
-          : step
+      steps: popupFlow.steps.map((step) =>
+      step.id === stepId ?
+      {
+        ...step,
+        followUps: (step.followUps || []).filter((fu) => fu.id !== followUpId)
+      } :
+      step
       )
     });
-    
+
     if (activeFollowUpId === followUpId) {
       setActiveFollowUpId(null);
     }
-    
+
     toast.success("Follow-up deleted");
   };
 
   const addFormField = (fieldType: FormField["type"]) => {
     if (!activeStep && !activeFollowUp) return;
-    
+
     const newField: FormField = {
       id: `field-${Date.now()}`,
       type: fieldType,
@@ -456,7 +456,7 @@ export default function BuilderPage() {
       placeholder: fieldType === "text" || fieldType === "textarea" || fieldType === "url" ? "Enter value..." : undefined,
       options: fieldType === "dropdown" || fieldType === "radio" ? ["Option 1", "Option 2", "Option 3"] : undefined
     };
-    
+
     if (activeFollowUpId && activeFollowUp) {
       updateActiveFollowUp({
         formFields: [...(activeFollowUp.formFields || []), newField]
@@ -466,21 +466,21 @@ export default function BuilderPage() {
         formFields: [...(activeStep.formFields || []), newField]
       });
     }
-    
+
     toast.success(`Added ${fieldType} field`);
   };
 
   const removeFormField = (fieldId: string) => {
     if (activeFollowUpId && activeFollowUp) {
       updateActiveFollowUp({
-        formFields: (activeFollowUp.formFields || []).filter(f => f.id !== fieldId)
+        formFields: (activeFollowUp.formFields || []).filter((f) => f.id !== fieldId)
       });
     } else if (activeStep) {
       updateActiveStep({
-        formFields: (activeStep.formFields || []).filter(f => f.id !== fieldId)
+        formFields: (activeStep.formFields || []).filter((f) => f.id !== fieldId)
       });
     }
-    
+
     setEditingFieldId(null);
     toast.success("Field removed");
   };
@@ -488,24 +488,24 @@ export default function BuilderPage() {
   const updateFormField = (fieldId: string, updates: Partial<FormField>) => {
     if (activeFollowUpId && activeFollowUp) {
       updateActiveFollowUp({
-        formFields: (activeFollowUp.formFields || []).map(f => 
-          f.id === fieldId ? { ...f, ...updates } : f
+        formFields: (activeFollowUp.formFields || []).map((f) =>
+        f.id === fieldId ? { ...f, ...updates } : f
         )
       });
     } else if (activeStep) {
       updateActiveStep({
-        formFields: (activeStep.formFields || []).map(f => 
-          f.id === fieldId ? { ...f, ...updates } : f
+        formFields: (activeStep.formFields || []).map((f) =>
+        f.id === fieldId ? { ...f, ...updates } : f
         )
       });
     }
   };
 
   const reorderFormField = (fromIndex: number, toIndex: number) => {
-    const fields = activeFollowUpId && activeFollowUp 
-      ? activeFollowUp.formFields || []
-      : activeStep?.formFields || [];
-    
+    const fields = activeFollowUpId && activeFollowUp ?
+    activeFollowUp.formFields || [] :
+    activeStep?.formFields || [];
+
     const newFields = [...fields];
     const [removed] = newFields.splice(fromIndex, 1);
     newFields.splice(toIndex, 0, removed);
@@ -518,47 +518,47 @@ export default function BuilderPage() {
   };
 
   const addOption = (fieldId: string) => {
-    const field = activeFollowUpId && activeFollowUp
-      ? activeFollowUp.formFields?.find(f => f.id === fieldId)
-      : activeStep?.formFields?.find(f => f.id === fieldId);
-    
-    if (!field || (!field.options && field.type !== "dropdown" && field.type !== "radio")) return;
-    
+    const field = activeFollowUpId && activeFollowUp ?
+    activeFollowUp.formFields?.find((f) => f.id === fieldId) :
+    activeStep?.formFields?.find((f) => f.id === fieldId);
+
+    if (!field || !field.options && field.type !== "dropdown" && field.type !== "radio") return;
+
     const newOptions = [...(field.options || []), `Option ${(field.options?.length || 0) + 1}`];
     updateFormField(fieldId, { options: newOptions });
   };
 
   const removeOption = (fieldId: string, optionIndex: number) => {
-    const field = activeFollowUpId && activeFollowUp
-      ? activeFollowUp.formFields?.find(f => f.id === fieldId)
-      : activeStep?.formFields?.find(f => f.id === fieldId);
-    
+    const field = activeFollowUpId && activeFollowUp ?
+    activeFollowUp.formFields?.find((f) => f.id === fieldId) :
+    activeStep?.formFields?.find((f) => f.id === fieldId);
+
     if (!field || !field.options) return;
-    
+
     const newOptions = field.options.filter((_, i) => i !== optionIndex);
     updateFormField(fieldId, { options: newOptions });
   };
 
   const updateOption = (fieldId: string, optionIndex: number, value: string) => {
-    const field = activeFollowUpId && activeFollowUp
-      ? activeFollowUp.formFields?.find(f => f.id === fieldId)
-      : activeStep?.formFields?.find(f => f.id === fieldId);
-    
+    const field = activeFollowUpId && activeFollowUp ?
+    activeFollowUp.formFields?.find((f) => f.id === fieldId) :
+    activeStep?.formFields?.find((f) => f.id === fieldId);
+
     if (!field || !field.options) return;
-    
+
     const newOptions = field.options.map((opt, i) => i === optionIndex ? value : opt);
     updateFormField(fieldId, { options: newOptions });
   };
 
   const duplicateStep = (stepId: string) => {
-    const stepToDuplicate = popupFlow.steps.find(s => s.id === stepId);
+    const stepToDuplicate = popupFlow.steps.find((s) => s.id === stepId);
     if (!stepToDuplicate) return;
 
     const newStep: StepConfig = {
       ...stepToDuplicate,
       id: Date.now().toString(),
       name: `${stepToDuplicate.name} (Copy)`,
-      followUps: stepToDuplicate.followUps ? stepToDuplicate.followUps.map(fu => ({
+      followUps: stepToDuplicate.followUps ? stepToDuplicate.followUps.map((fu) => ({
         ...fu,
         id: `${Date.now()}-fu-${Math.random()}`
       })) : []
@@ -575,9 +575,9 @@ export default function BuilderPage() {
   };
 
   const duplicateFollowUp = (stepId: string, followUpId: string) => {
-    const parentStep = popupFlow.steps.find(s => s.id === stepId);
-    const followUpToDuplicate = parentStep?.followUps?.find(fu => fu.id === followUpId);
-    
+    const parentStep = popupFlow.steps.find((s) => s.id === stepId);
+    const followUpToDuplicate = parentStep?.followUps?.find((fu) => fu.id === followUpId);
+
     if (!followUpToDuplicate || !parentStep) return;
 
     const newFollowUp: FollowUpStep = {
@@ -588,13 +588,13 @@ export default function BuilderPage() {
 
     setPopupFlow({
       ...popupFlow,
-      steps: popupFlow.steps.map(step =>
-        step.id === stepId
-          ? {
-              ...step,
-              followUps: [...(step.followUps || []), newFollowUp]
-            }
-          : step
+      steps: popupFlow.steps.map((step) =>
+      step.id === stepId ?
+      {
+        ...step,
+        followUps: [...(step.followUps || []), newFollowUp]
+      } :
+      step
       )
     });
 
@@ -604,8 +604,8 @@ export default function BuilderPage() {
   const updateActiveStep = (updates: Partial<StepConfig>) => {
     const newFlow = {
       ...popupFlow,
-      steps: popupFlow.steps.map(step =>
-        step.id === activeStepId ? { ...step, ...updates } : step
+      steps: popupFlow.steps.map((step) =>
+      step.id === activeStepId ? { ...step, ...updates } : step
       )
     };
     saveToHistory(newFlow);
@@ -614,22 +614,22 @@ export default function BuilderPage() {
   const updateActiveFollowUp = (updates: Partial<FollowUpStep>) => {
     const newFlow = {
       ...popupFlow,
-      steps: popupFlow.steps.map(step =>
-        step.id === activeStepId
-          ? {
-              ...step,
-              followUps: (step.followUps || []).map(fu =>
-                fu.id === activeFollowUpId ? { ...fu, ...updates } : fu
-              )
-            }
-          : step
+      steps: popupFlow.steps.map((step) =>
+      step.id === activeStepId ?
+      {
+        ...step,
+        followUps: (step.followUps || []).map((fu) =>
+        fu.id === activeFollowUpId ? { ...fu, ...updates } : fu
+        )
+      } :
+      step
       )
     };
     saveToHistory(newFlow);
   };
 
-  const activeStep = popupFlow.steps.find(s => s.id === activeStepId);
-  const activeFollowUp = activeStep?.followUps?.find(fu => fu.id === activeFollowUpId);
+  const activeStep = popupFlow.steps.find((s) => s.id === activeStepId);
+  const activeFollowUp = activeStep?.followUps?.find((fu) => fu.id === activeFollowUpId);
 
   const handleSave = async () => {
     setSaving(true);
@@ -656,12 +656,12 @@ export default function BuilderPage() {
   };
 
   const renderStepPreview = (
-    config: StepConfig | FollowUpStep,
-    isActive: boolean,
-    isFollowUp: boolean = false
-  ) => {
+  config: StepConfig | FollowUpStep,
+  isActive: boolean,
+  isFollowUp: boolean = false) =>
+  {
     return (
-      <div 
+      <div
         className="bg-background rounded-lg shadow-lg border border-border overflow-hidden transition-all hover:shadow-xl relative"
         style={{
           backgroundColor: config.backgroundColor,
@@ -670,21 +670,21 @@ export default function BuilderPage() {
           backgroundImage: config.backgroundImage ? `url(${config.backgroundImage})` : undefined,
           backgroundSize: 'cover',
           backgroundPosition: 'center'
-        }}
-      >
+        }}>
+
         <div className="p-6 text-center relative z-10" style={config.backgroundImage ? { backgroundColor: 'rgba(0,0,0,0.4)' } : {}}>
-          {config.showImage && (
-            <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
+          {config.showImage &&
+          <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
               <Sparkles className="w-8 h-8 text-white" />
             </div>
-          )}
+          }
           
           {/* Editable Headline */}
           <div
-            className={`text-lg font-bold mb-2 ${isActive ? "cursor-text hover:ring-2 hover:ring-[#1DBFAA]/50 rounded px-2 py-1 transition-all" : ""} ${
-              editingElement === "headline" && isActive ? "ring-2 ring-[#1DBFAA]" : ""
-            }`}
-            style={{ 
+            className={`text-lg font-bold mb-2 !whitespace-pre-line ${isActive ? "cursor-text hover:ring-2 hover:ring-[#1DBFAA]/50 rounded px-2 py-1 transition-all" : ""} ${
+            editingElement === "headline" && isActive ? "ring-2 ring-[#1DBFAA]" : ""}`
+            }
+            style={{
               color: config.backgroundImage ? '#ffffff' : config.textColor,
               fontSize: `${popupFlow.typography.headingSize}px`,
               fontWeight: popupFlow.typography.headingWeight
@@ -694,34 +694,34 @@ export default function BuilderPage() {
                 e.stopPropagation();
                 setEditingElement("headline");
               }
-            }}
-          >
-            {editingElement === "headline" && isActive ? (
-              <Input
-                value={config.headline}
-                onChange={(e) => {
-                  if (isFollowUp && activeFollowUpId) {
-                    updateActiveFollowUp({ headline: e.target.value });
-                  } else {
-                    updateActiveStep({ headline: e.target.value });
-                  }
-                }}
-                onBlur={() => setEditingElement(null)}
-                autoFocus
-                className="text-lg font-bold text-center"
-                style={{ color: config.backgroundImage ? '#ffffff' : config.textColor }}
-              />
-            ) : (
-              config.headline
-            )}
+            }}>
+
+            {editingElement === "headline" && isActive ?
+            <Input
+              value={config.headline}
+              onChange={(e) => {
+                if (isFollowUp && activeFollowUpId) {
+                  updateActiveFollowUp({ headline: e.target.value });
+                } else {
+                  updateActiveStep({ headline: e.target.value });
+                }
+              }}
+              onBlur={() => setEditingElement(null)}
+              autoFocus
+              className="text-lg font-bold text-center"
+              style={{ color: config.backgroundImage ? '#ffffff' : config.textColor }} /> :
+
+
+            config.headline
+            }
           </div>
           
           {/* Editable Subheadline */}
           <div
             className={`text-sm mb-4 ${isActive ? "cursor-text hover:ring-2 hover:ring-[#1DBFAA]/50 rounded px-2 py-1 transition-all" : ""} ${
-              editingElement === "subheadline" && isActive ? "ring-2 ring-[#1DBFAA]" : ""
-            }`}
-            style={{ 
+            editingElement === "subheadline" && isActive ? "ring-2 ring-[#1DBFAA]" : ""}`
+            }
+            style={{
               color: config.backgroundImage ? '#ffffff' : config.textColor,
               opacity: 0.9,
               fontSize: `${popupFlow.typography.subheadingSize}px`,
@@ -732,129 +732,129 @@ export default function BuilderPage() {
                 e.stopPropagation();
                 setEditingElement("subheadline");
               }
-            }}
-          >
-            {editingElement === "subheadline" && isActive ? (
-              <Input
-                value={config.subheadline}
-                onChange={(e) => {
-                  if (isFollowUp && activeFollowUpId) {
-                    updateActiveFollowUp({ subheadline: e.target.value });
-                  } else {
-                    updateActiveStep({ subheadline: e.target.value });
-                  }
-                }}
-                onBlur={() => setEditingElement(null)}
-                autoFocus
-                className="text-sm text-center"
-                style={{ color: config.backgroundImage ? '#ffffff' : config.textColor }}
-              />
-            ) : (
-              config.subheadline
-            )}
+            }}>
+
+            {editingElement === "subheadline" && isActive ?
+            <Input
+              value={config.subheadline}
+              onChange={(e) => {
+                if (isFollowUp && activeFollowUpId) {
+                  updateActiveFollowUp({ subheadline: e.target.value });
+                } else {
+                  updateActiveStep({ subheadline: e.target.value });
+                }
+              }}
+              onBlur={() => setEditingElement(null)}
+              autoFocus
+              className="text-sm text-center"
+              style={{ color: config.backgroundImage ? '#ffffff' : config.textColor }} /> :
+
+
+            config.subheadline
+            }
           </div>
           
           {/* Render custom form fields with drag and drop */}
-          {config.formFields && config.formFields.length > 0 && (
-            <div className="space-y-2 mb-4">
-              {config.formFields.map((field, index) => (
-                <div
-                  key={field.id}
-                  draggable={isActive}
-                  onDragStart={() => setDraggedFieldIndex(index)}
-                  onDragOver={(e) => {
-                    e.preventDefault();
-                    if (draggedFieldIndex !== null && draggedFieldIndex !== index) {
-                      reorderFormField(draggedFieldIndex, index);
-                      setDraggedFieldIndex(index);
-                    }
-                  }}
-                  onDragEnd={() => setDraggedFieldIndex(null)}
-                  className={`text-left relative group ${isActive ? "cursor-move" : ""}`}
-                >
-                  {isActive && (
-                    <div className="absolute -left-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+          {config.formFields && config.formFields.length > 0 &&
+          <div className="space-y-2 mb-4">
+              {config.formFields.map((field, index) =>
+            <div
+              key={field.id}
+              draggable={isActive}
+              onDragStart={() => setDraggedFieldIndex(index)}
+              onDragOver={(e) => {
+                e.preventDefault();
+                if (draggedFieldIndex !== null && draggedFieldIndex !== index) {
+                  reorderFormField(draggedFieldIndex, index);
+                  setDraggedFieldIndex(index);
+                }
+              }}
+              onDragEnd={() => setDraggedFieldIndex(null)}
+              className={`text-left relative group ${isActive ? "cursor-move" : ""}`}>
+
+                  {isActive &&
+              <div className="absolute -left-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
                       <GripVertical className="w-4 h-4 text-muted-foreground" />
                     </div>
-                  )}
+              }
                   
-                  {field.type === "text" && (
-                    <div>
+                  {field.type === "text" &&
+              <div>
                       <Label className="text-xs mb-1">{field.label}</Label>
-                      <Input 
-                        placeholder={field.placeholder} 
-                        className="text-xs h-8"
-                        disabled
-                      />
+                      <Input
+                  placeholder={field.placeholder}
+                  className="text-xs h-8"
+                  disabled />
+
                     </div>
-                  )}
-                  {field.type === "textarea" && (
-                    <div>
+              }
+                  {field.type === "textarea" &&
+              <div>
                       <Label className="text-xs mb-1">{field.label}</Label>
-                      <Textarea 
-                        placeholder={field.placeholder} 
-                        className="text-xs min-h-[60px]"
-                        disabled
-                      />
+                      <Textarea
+                  placeholder={field.placeholder}
+                  className="text-xs min-h-[60px]"
+                  disabled />
+
                     </div>
-                  )}
-                  {field.type === "url" && (
-                    <div>
+              }
+                  {field.type === "url" &&
+              <div>
                       <Label className="text-xs mb-1">{field.label}</Label>
-                      <Input 
-                        type="url"
-                        placeholder={field.placeholder} 
-                        className="text-xs h-8"
-                        disabled
-                      />
+                      <Input
+                  type="url"
+                  placeholder={field.placeholder}
+                  className="text-xs h-8"
+                  disabled />
+
                     </div>
-                  )}
-                  {field.type === "image" && (
-                    <div>
+              }
+                  {field.type === "image" &&
+              <div>
                       <Label className="text-xs mb-1">{field.label}</Label>
-                      {field.fileUrl ? (
-                        <div className="relative w-full h-24 rounded border border-border overflow-hidden">
+                      {field.fileUrl ?
+                <div className="relative w-full h-24 rounded border border-border overflow-hidden">
                           <img src={field.fileUrl} alt="Preview" className="w-full h-full object-cover" />
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-2">
+                        </div> :
+
+                <div className="flex items-center gap-2">
                           <Button variant="outline" size="sm" className="h-8 text-xs" disabled>
                             <ImageIcon className="w-3 h-3 mr-1" />
                             Upload Image
                           </Button>
                         </div>
-                      )}
+                }
                     </div>
-                  )}
-                  {field.type === "video" && (
-                    <div>
+              }
+                  {field.type === "video" &&
+              <div>
                       <Label className="text-xs mb-1">{field.label}</Label>
-                      {field.fileUrl ? (
-                        <div className="relative w-full h-32 rounded border border-border overflow-hidden bg-black">
+                      {field.fileUrl ?
+                <div className="relative w-full h-32 rounded border border-border overflow-hidden bg-black">
                           <video src={field.fileUrl} className="w-full h-full object-cover" controls />
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-2">
+                        </div> :
+
+                <div className="flex items-center gap-2">
                           <Button variant="outline" size="sm" className="h-8 text-xs" disabled>
                             <Video className="w-3 h-3 mr-1" />
                             Upload Video
                           </Button>
                         </div>
-                      )}
+                }
                     </div>
-                  )}
-                  {field.type === "button" && (
-                    <Button 
-                      variant="outline"
-                      size="sm"
-                      className="w-full text-xs"
-                      disabled
-                    >
+              }
+                  {field.type === "button" &&
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full text-xs"
+                disabled>
+
                       {field.label}
                     </Button>
-                  )}
-                  {field.type === "socials" && (
-                    <div className="flex gap-2 justify-center">
+              }
+                  {field.type === "socials" &&
+              <div className="flex gap-2 justify-center">
                       <Button variant="outline" size="sm" className="h-8 w-8 p-0" disabled>
                         <Share2 className="w-4 h-4" />
                       </Button>
@@ -865,26 +865,26 @@ export default function BuilderPage() {
                         <Share2 className="w-4 h-4" />
                       </Button>
                     </div>
-                  )}
-                  {field.type === "checkbox" && (
-                    <div className="flex items-center gap-2">
+              }
+                  {field.type === "checkbox" &&
+              <div className="flex items-center gap-2">
                       <input type="checkbox" disabled className="w-4 h-4" />
                       <span className="text-xs">{field.label}</span>
                     </div>
-                  )}
-                  {field.type === "radio" && (
-                    <div className="space-y-1">
+              }
+                  {field.type === "radio" &&
+              <div className="space-y-1">
                       <Label className="text-xs mb-1">{field.label}</Label>
-                      {field.options?.map((opt, i) => (
-                        <div key={i} className="flex items-center gap-2">
+                      {field.options?.map((opt, i) =>
+                <div key={i} className="flex items-center gap-2">
                           <input type="radio" name={field.id} disabled className="w-4 h-4" />
                           <span className="text-xs">{opt}</span>
                         </div>
-                      ))}
+                )}
                     </div>
-                  )}
-                  {field.type === "dropdown" && (
-                    <div>
+              }
+                  {field.type === "dropdown" &&
+              <div>
                       <Label className="text-xs mb-1">{field.label}</Label>
                       <Select disabled>
                         <SelectTrigger className="text-xs h-8">
@@ -892,56 +892,56 @@ export default function BuilderPage() {
                         </SelectTrigger>
                       </Select>
                     </div>
-                  )}
+              }
                 </div>
-              ))}
+            )}
             </div>
-          )}
+          }
           
           {/* Editable Button */}
           <div
             className={`${isActive ? "cursor-text hover:ring-2 hover:ring-[#1DBFAA]/50 rounded transition-all" : ""} ${
-              editingElement === "button" && isActive ? "ring-2 ring-[#1DBFAA]" : ""
-            }`}
+            editingElement === "button" && isActive ? "ring-2 ring-[#1DBFAA]" : ""}`
+            }
             onClick={(e) => {
               if (isActive) {
                 e.stopPropagation();
                 setEditingElement("button");
               }
-            }}
-          >
-            {editingElement === "button" && isActive ? (
-              <Input
-                value={config.buttonText}
-                onChange={(e) => {
-                  if (isFollowUp && activeFollowUpId) {
-                    updateActiveFollowUp({ buttonText: e.target.value });
-                  } else {
-                    updateActiveStep({ buttonText: e.target.value });
-                  }
-                }}
-                onBlur={() => setEditingElement(null)}
-                autoFocus
-                className="w-full text-xs text-center"
-              />
-            ) : (
-              <Button 
-                size="sm"
-                className="w-full text-xs pointer-events-none"
-                style={{
-                  backgroundColor: config.buttonColor,
-                  borderRadius: `${config.borderRadius}px`,
-                  fontSize: `${popupFlow.typography.buttonSize}px`,
-                  fontWeight: popupFlow.typography.buttonWeight
-                }}
-              >
+            }}>
+
+            {editingElement === "button" && isActive ?
+            <Input
+              value={config.buttonText}
+              onChange={(e) => {
+                if (isFollowUp && activeFollowUpId) {
+                  updateActiveFollowUp({ buttonText: e.target.value });
+                } else {
+                  updateActiveStep({ buttonText: e.target.value });
+                }
+              }}
+              onBlur={() => setEditingElement(null)}
+              autoFocus
+              className="w-full text-xs text-center" /> :
+
+
+            <Button
+              size="sm"
+              className="w-full text-xs pointer-events-none"
+              style={{
+                backgroundColor: config.buttonColor,
+                borderRadius: `${config.borderRadius}px`,
+                fontSize: `${popupFlow.typography.buttonSize}px`,
+                fontWeight: popupFlow.typography.buttonWeight
+              }}>
+
                 {config.buttonText}
               </Button>
-            )}
+            }
           </div>
         </div>
-      </div>
-    );
+      </div>);
+
   };
 
   return (
@@ -956,27 +956,27 @@ export default function BuilderPage() {
               <Input
                 value={popupFlow.name}
                 onChange={(e) => setPopupFlow({ ...popupFlow, name: e.target.value })}
-                className="text-sm font-semibold bg-background border-0 h-8 w-[400px]"
-              />
+                className="text-sm font-semibold bg-background border-0 h-8 w-[400px]" />
+
               <Badge variant="secondary" className="text-xs">Initial Design</Badge>
             </div>
             <div className="flex items-center gap-2">
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <Button
+                variant="ghost"
+                size="sm"
                 className="h-8 w-8 p-0"
                 onClick={handleUndo}
-                disabled={historyIndex <= 0}
-              >
+                disabled={historyIndex <= 0}>
+
                 <Undo className="w-4 h-4" />
               </Button>
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <Button
+                variant="ghost"
+                size="sm"
                 className="h-8 w-8 p-0"
                 onClick={handleRedo}
-                disabled={historyIndex >= history.length - 1}
-              >
+                disabled={historyIndex >= history.length - 1}>
+
                 <Redo className="w-4 h-4" />
               </Button>
               <div className="mx-2 h-6 w-px bg-border" />
@@ -1001,43 +1001,43 @@ export default function BuilderPage() {
                   <SelectItem value="mobile">Mobile</SelectItem>
                 </SelectContent>
               </Select>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="sm"
                 className="h-8 text-xs"
-                onClick={() => setTemplateDialogOpen(true)}
-              >
+                onClick={() => setTemplateDialogOpen(true)}>
+
                 <LayoutTemplate className="w-3 h-3 mr-1" />
                 Template
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="sm"
                 className="h-8 text-xs"
-                onClick={() => setPreviewOpen(true)}
-              >
+                onClick={() => setPreviewOpen(true)}>
+
                 <Eye className="w-3 h-3 mr-1" />
                 Preview
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="sm"
                 className="h-8 text-xs"
                 onClick={handleSave}
-                disabled={saving}
-              >
-                {saving ? (
-                  <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-                ) : (
-                  <Save className="w-3 h-3 mr-1" />
-                )}
+                disabled={saving}>
+
+                {saving ?
+                <Loader2 className="w-3 h-3 mr-1 animate-spin" /> :
+
+                <Save className="w-3 h-3 mr-1" />
+                }
                 Save Draft
               </Button>
-              <Button 
-                size="sm" 
+              <Button
+                size="sm"
                 className="bg-[#1DBFAA] hover:bg-[#1DBFAA]/90 h-8 text-xs"
-                onClick={handleSave}
-              >
+                onClick={handleSave}>
+
                 Save and review
               </Button>
             </div>
@@ -1056,27 +1056,27 @@ export default function BuilderPage() {
                 
                 <div className="space-y-3">
                   <AnimatePresence mode="popLayout">
-                    {popupFlow.steps.map((step, index) => (
-                      <motion.div
-                        key={step.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, x: -20 }}
-                        className="space-y-2"
-                      >
+                    {popupFlow.steps.map((step, index) =>
+                    <motion.div
+                      key={step.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      className="space-y-2">
+
                         {/* Main Step */}
                         <button
-                          onClick={() => {
-                            setActiveStepId(step.id);
-                            setActiveFollowUpId(null);
-                            setEditingElement(null);
-                          }}
-                          className={`w-full text-left p-3 rounded-lg transition-all flex items-center justify-between group border ${
-                            activeStepId === step.id && !activeFollowUpId
-                              ? "bg-background border-border shadow-sm"
-                              : "bg-muted/30 border-transparent hover:border-border/50"
-                          }`}
-                        >
+                        onClick={() => {
+                          setActiveStepId(step.id);
+                          setActiveFollowUpId(null);
+                          setEditingElement(null);
+                        }}
+                        className={`w-full text-left p-3 rounded-lg transition-all flex items-center justify-between group border ${
+                        activeStepId === step.id && !activeFollowUpId ?
+                        "bg-background border-border shadow-sm" :
+                        "bg-muted/30 border-transparent hover:border-border/50"}`
+                        }>
+
                           <div className="flex items-center gap-3 flex-1">
                             <span className="text-sm font-semibold text-muted-foreground bg-background w-6 h-6 rounded flex items-center justify-center">
                               {index + 1}
@@ -1087,141 +1087,141 @@ export default function BuilderPage() {
                           </div>
                           <div className="flex items-center gap-1">
                             <Button
-                              variant="ghost"
-                              size="sm"
-                              className={`h-7 w-7 p-0 hover:bg-[#1DBFAA]/10 transition-opacity ${
-                                activeStepId === step.id && !activeFollowUpId
-                                  ? "opacity-100"
-                                  : "opacity-0 group-hover:opacity-100"
-                              }`}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                duplicateStep(step.id);
-                              }}
-                              title="Duplicate step"
-                            >
+                            variant="ghost"
+                            size="sm"
+                            className={`h-7 w-7 p-0 hover:bg-[#1DBFAA]/10 transition-opacity ${
+                            activeStepId === step.id && !activeFollowUpId ?
+                            "opacity-100" :
+                            "opacity-0 group-hover:opacity-100"}`
+                            }
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              duplicateStep(step.id);
+                            }}
+                            title="Duplicate step">
+
                               <Copy className="w-3.5 h-3.5 text-[#1DBFAA]" />
                             </Button>
-                            {popupFlow.steps.length > 1 && (
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className={`h-7 w-7 p-0 hover:bg-destructive/10 transition-opacity ${
-                                  activeStepId === step.id && !activeFollowUpId
-                                    ? "opacity-100"
-                                    : "opacity-0 group-hover:opacity-100"
-                                }`}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  deleteStep(step.id);
-                                }}
-                              >
+                            {popupFlow.steps.length > 1 &&
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className={`h-7 w-7 p-0 hover:bg-destructive/10 transition-opacity ${
+                            activeStepId === step.id && !activeFollowUpId ?
+                            "opacity-100" :
+                            "opacity-0 group-hover:opacity-100"}`
+                            }
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteStep(step.id);
+                            }}>
+
                                 <Trash2 className="w-3.5 h-3.5 text-destructive" />
                               </Button>
-                            )}
+                          }
                             <ChevronRight className="w-4 h-4 text-muted-foreground" />
                           </div>
                         </button>
 
                         {/* Follow-up Steps */}
-                        {step.followUps && step.followUps.length > 0 && (
-                          <div className="ml-6 pl-4 border-l-2 border-border/50 space-y-2">
-                            {step.followUps.map((followUp) => (
-                              <button
-                                key={followUp.id}
-                                onClick={() => {
-                                  setActiveStepId(step.id);
-                                  setActiveFollowUpId(followUp.id);
-                                  setEditingElement(null);
-                                }}
-                                className={`w-full text-left p-2.5 rounded-lg transition-all flex items-center justify-between group border ${
-                                  activeFollowUpId === followUp.id
-                                    ? "bg-background border-border shadow-sm"
-                                    : "bg-muted/20 border-transparent hover:border-border/50"
-                                }`}
-                              >
+                        {step.followUps && step.followUps.length > 0 &&
+                      <div className="ml-6 pl-4 border-l-2 border-border/50 space-y-2">
+                            {step.followUps.map((followUp) =>
+                        <button
+                          key={followUp.id}
+                          onClick={() => {
+                            setActiveStepId(step.id);
+                            setActiveFollowUpId(followUp.id);
+                            setEditingElement(null);
+                          }}
+                          className={`w-full text-left p-2.5 rounded-lg transition-all flex items-center justify-between group border ${
+                          activeFollowUpId === followUp.id ?
+                          "bg-background border-border shadow-sm" :
+                          "bg-muted/20 border-transparent hover:border-border/50"}`
+                          }>
+
                                 <div className="flex items-center gap-2 flex-1">
                                   <span className="text-xs text-muted-foreground">Follow-up /</span>
                                   <span className="text-xs font-medium">{followUp.name}</span>
                                 </div>
                                 <div className="flex items-center gap-1">
                                   <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className={`h-6 w-6 p-0 hover:bg-[#1DBFAA]/10 transition-opacity ${
-                                      activeFollowUpId === followUp.id
-                                        ? "opacity-100"
-                                        : "opacity-0 group-hover:opacity-100"
-                                    }`}
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      duplicateFollowUp(step.id, followUp.id);
-                                    }}
-                                    title="Duplicate follow-up"
-                                  >
+                              variant="ghost"
+                              size="sm"
+                              className={`h-6 w-6 p-0 hover:bg-[#1DBFAA]/10 transition-opacity ${
+                              activeFollowUpId === followUp.id ?
+                              "opacity-100" :
+                              "opacity-0 group-hover:opacity-100"}`
+                              }
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                duplicateFollowUp(step.id, followUp.id);
+                              }}
+                              title="Duplicate follow-up">
+
                                     <Copy className="w-3 h-3 text-[#1DBFAA]" />
                                   </Button>
                                   <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className={`h-6 w-6 p-0 hover:bg-destructive/10 transition-opacity ${
-                                      activeFollowUpId === followUp.id
-                                        ? "opacity-100"
-                                        : "opacity-0 group-hover:opacity-100"
-                                    }`}
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      deleteFollowUp(step.id, followUp.id);
-                                    }}
-                                  >
+                              variant="ghost"
+                              size="sm"
+                              className={`h-6 w-6 p-0 hover:bg-destructive/10 transition-opacity ${
+                              activeFollowUpId === followUp.id ?
+                              "opacity-100" :
+                              "opacity-0 group-hover:opacity-100"}`
+                              }
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                deleteFollowUp(step.id, followUp.id);
+                              }}>
+
                                     <Trash2 className="w-3 h-3 text-destructive" />
                                   </Button>
                                   <ChevronRight className="w-3 h-3 text-muted-foreground" />
                                 </div>
                               </button>
-                            ))}
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="w-full justify-start h-8 text-xs text-muted-foreground hover:text-foreground"
-                              onClick={() => addFollowUpStep(step.id)}
-                            >
-                              <Plus className="w-3 h-3 mr-1" />
-                              Add follow-up
-                            </Button>
-                          </div>
                         )}
-
-                        {!step.followUps || step.followUps.length === 0 ? (
-                          <div className="ml-6 pl-4 border-l-2 border-border/50">
                             <Button
-                              variant="ghost"
-                              size="sm"
-                              className="w-full justify-start h-8 text-xs text-muted-foreground hover:text-foreground"
-                              onClick={() => addFollowUpStep(step.id)}
-                            >
+                          variant="ghost"
+                          size="sm"
+                          className="w-full justify-start h-8 text-xs text-muted-foreground hover:text-foreground"
+                          onClick={() => addFollowUpStep(step.id)}>
+
                               <Plus className="w-3 h-3 mr-1" />
                               Add follow-up
                             </Button>
                           </div>
-                        ) : null}
+                      }
+
+                        {!step.followUps || step.followUps.length === 0 ?
+                      <div className="ml-6 pl-4 border-l-2 border-border/50">
+                            <Button
+                          variant="ghost"
+                          size="sm"
+                          className="w-full justify-start h-8 text-xs text-muted-foreground hover:text-foreground"
+                          onClick={() => addFollowUpStep(step.id)}>
+
+                              <Plus className="w-3 h-3 mr-1" />
+                              Add follow-up
+                            </Button>
+                          </div> :
+                      null}
 
                         {/* Connection line to next step */}
-                        {index < popupFlow.steps.length - 1 && (
-                          <div className="flex items-center justify-center h-4">
+                        {index < popupFlow.steps.length - 1 &&
+                      <div className="flex items-center justify-center h-4">
                             <div className="w-px h-full bg-border/50" />
                           </div>
-                        )}
+                      }
                       </motion.div>
-                    ))}
+                    )}
                   </AnimatePresence>
                 </div>
 
                 <Button
                   variant="outline"
                   className="w-full mt-4 text-[#1DBFAA] border-[#1DBFAA]/30 hover:bg-[#1DBFAA]/10"
-                  onClick={addStep}
-                >
+                  onClick={addStep}>
+
                   <Plus className="w-4 h-4 mr-2" />
                   Add a step
                 </Button>
@@ -1233,58 +1233,58 @@ export default function BuilderPage() {
               <Card className="flex-1 p-6 bg-muted/20 min-h-[600px]">
                 <div className="h-full flex flex-col items-center justify-start gap-6 overflow-y-auto overflow-x-auto py-8 px-16" style={{ zoom: `${zoomLevel}%` }}>
                   <AnimatePresence mode="popLayout">
-                    {popupFlow.steps.map((step, index) => (
-                      <motion.div
-                        key={step.id}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.9 }}
-                        className="w-full"
-                      >
+                    {popupFlow.steps.map((step, index) =>
+                    <motion.div
+                      key={step.id}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      className="w-full">
+
                         <div className="flex items-start gap-16">
                           {/* Main Step Preview */}
-                          <div 
-                            onClick={() => {
-                              setActiveStepId(step.id);
-                              setActiveFollowUpId(null);
-                            }}
-                            className={`cursor-pointer transition-all relative flex-shrink-0 w-[320px] group ${
-                              activeStepId === step.id && !activeFollowUpId
-                                ? "ring-2 ring-[#1DBFAA] ring-offset-2"
-                                : "hover:ring-2 hover:ring-border hover:ring-offset-2"
-                            }`}
-                          >
+                          <div
+                          onClick={() => {
+                            setActiveStepId(step.id);
+                            setActiveFollowUpId(null);
+                          }}
+                          className={`cursor-pointer transition-all relative flex-shrink-0 w-[320px] group ${
+                          activeStepId === step.id && !activeFollowUpId ?
+                          "ring-2 ring-[#1DBFAA] ring-offset-2" :
+                          "hover:ring-2 hover:ring-border hover:ring-offset-2"}`
+                          }>
+
                             {/* Action buttons - visible when selected OR on hover */}
                             <div className={`absolute -top-3 -right-3 flex gap-1 z-20 transition-opacity ${
-                              activeStepId === step.id && !activeFollowUpId 
-                                ? "opacity-100" 
-                                : "opacity-0 group-hover:opacity-100"
-                            }`}>
+                          activeStepId === step.id && !activeFollowUpId ?
+                          "opacity-100" :
+                          "opacity-0 group-hover:opacity-100"}`
+                          }>
                               <Button
-                                variant="outline"
-                                size="sm"
-                                className="h-7 w-7 p-0 rounded-full shadow-lg bg-background border-[#1DBFAA] hover:bg-[#1DBFAA]/10"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  duplicateStep(step.id);
-                                }}
-                                title="Duplicate step"
-                              >
+                              variant="outline"
+                              size="sm"
+                              className="h-7 w-7 p-0 rounded-full shadow-lg bg-background border-[#1DBFAA] hover:bg-[#1DBFAA]/10"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                duplicateStep(step.id);
+                              }}
+                              title="Duplicate step">
+
                                 <Copy className="w-3.5 h-3.5 text-[#1DBFAA]" />
                               </Button>
-                              {popupFlow.steps.length > 1 && (
-                                <Button
-                                  variant="destructive"
-                                  size="sm"
-                                  className="h-7 w-7 p-0 rounded-full shadow-lg"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    deleteStep(step.id);
-                                  }}
-                                >
+                              {popupFlow.steps.length > 1 &&
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              className="h-7 w-7 p-0 rounded-full shadow-lg"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                deleteStep(step.id);
+                              }}>
+
                                   <Trash2 className="w-3.5 h-3.5" />
                                 </Button>
-                              )}
+                            }
                             </div>
                             {renderStepPreview(step, activeStepId === step.id && !activeFollowUpId, false)}
                             
@@ -1295,53 +1295,53 @@ export default function BuilderPage() {
                           </div>
 
                           {/* Follow-up Steps - Show to the right with connecting line */}
-                          {step.followUps && step.followUps.length > 0 && (
-                            <div className="flex items-start gap-8 pt-8">
-                              {step.followUps.map((followUp, fuIndex) => (
-                                <div key={followUp.id} className="relative flex items-center gap-8">
+                          {step.followUps && step.followUps.length > 0 &&
+                        <div className="flex items-start gap-8 pt-8">
+                              {step.followUps.map((followUp, fuIndex) =>
+                          <div key={followUp.id} className="relative flex items-center gap-8">
                                   {/* Horizontal Connector Line */}
-                                  {fuIndex === 0 && (
-                                    <div className="absolute -left-10 top-1/2 -translate-y-1/2 w-16 h-0.5 bg-[#1DBFAA]" />
-                                  )}
+                                  {fuIndex === 0 &&
+                            <div className="absolute -left-10 top-1/2 -translate-y-1/2 w-16 h-0.5 bg-[#1DBFAA]" />
+                            }
                                   
                                   <div
-                                    onClick={() => {
-                                      setActiveStepId(step.id);
-                                      setActiveFollowUpId(followUp.id);
-                                    }}
-                                    className={`cursor-pointer transition-all relative flex-shrink-0 w-[280px] group ${
-                                      activeFollowUpId === followUp.id
-                                        ? "ring-2 ring-[#1DBFAA] ring-offset-2"
-                                        : "hover:ring-2 hover:ring-border hover:ring-offset-2"
-                                    }`}
-                                  >
+                              onClick={() => {
+                                setActiveStepId(step.id);
+                                setActiveFollowUpId(followUp.id);
+                              }}
+                              className={`cursor-pointer transition-all relative flex-shrink-0 w-[280px] group ${
+                              activeFollowUpId === followUp.id ?
+                              "ring-2 ring-[#1DBFAA] ring-offset-2" :
+                              "hover:ring-2 hover:ring-border hover:ring-offset-2"}`
+                              }>
+
                                     {/* Action buttons - visible when selected OR on hover */}
                                     <div className={`absolute -top-3 -right-3 flex gap-1 z-20 transition-opacity ${
-                                      activeFollowUpId === followUp.id
-                                        ? "opacity-100"
-                                        : "opacity-0 group-hover:opacity-100"
-                                    }`}>
+                              activeFollowUpId === followUp.id ?
+                              "opacity-100" :
+                              "opacity-0 group-hover:opacity-100"}`
+                              }>
                                       <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className="h-7 w-7 p-0 rounded-full shadow-lg bg-background border-[#1DBFAA] hover:bg-[#1DBFAA]/10"
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          duplicateFollowUp(step.id, followUp.id);
-                                        }}
-                                        title="Duplicate follow-up"
-                                      >
+                                  variant="outline"
+                                  size="sm"
+                                  className="h-7 w-7 p-0 rounded-full shadow-lg bg-background border-[#1DBFAA] hover:bg-[#1DBFAA]/10"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    duplicateFollowUp(step.id, followUp.id);
+                                  }}
+                                  title="Duplicate follow-up">
+
                                         <Copy className="w-3.5 h-3.5 text-[#1DBFAA]" />
                                       </Button>
                                       <Button
-                                        variant="destructive"
-                                        size="sm"
-                                        className="h-7 w-7 p-0 rounded-full shadow-lg"
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          deleteFollowUp(step.id, followUp.id);
-                                        }}
-                                      >
+                                  variant="destructive"
+                                  size="sm"
+                                  className="h-7 w-7 p-0 rounded-full shadow-lg"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    deleteFollowUp(step.id, followUp.id);
+                                  }}>
+
                                         <Trash2 className="w-3.5 h-3.5" />
                                       </Button>
                                     </div>
@@ -1354,27 +1354,27 @@ export default function BuilderPage() {
                                   </div>
                                   
                                   {/* Connector to next follow-up */}
-                                  {fuIndex < (step.followUps?.length || 0) - 1 && (
-                                    <ChevronRight className="w-5 h-5 text-[#1DBFAA]" />
-                                  )}
+                                  {fuIndex < (step.followUps?.length || 0) - 1 &&
+                            <ChevronRight className="w-5 h-5 text-[#1DBFAA]" />
+                            }
                                 </div>
-                              ))}
-                            </div>
                           )}
+                            </div>
+                        }
                         </div>
 
                         {/* Connection Arrow to Next Step */}
-                        {index < popupFlow.steps.length - 1 && (
-                          <div className="flex items-center justify-center py-6">
+                        {index < popupFlow.steps.length - 1 &&
+                      <div className="flex items-center justify-center py-6">
                             <div className="flex flex-col items-center">
                               <div className="w-px h-8 bg-border/50" />
                               <ArrowDown className="w-5 h-5 text-border" />
                               <div className="w-px h-8 bg-border/50" />
                             </div>
                           </div>
-                        )}
+                      }
                       </motion.div>
-                    ))}
+                    )}
                   </AnimatePresence>
                 </div>
               </Card>
@@ -1383,8 +1383,8 @@ export default function BuilderPage() {
             {/* Right Sidebar */}
             <div className="space-y-4 sticky top-6 self-start max-h-[calc(100vh-180px)] overflow-y-auto">
               {/* Active Step Customization - Shows only when step is tapped/selected */}
-              {(activeStep || activeFollowUp) && (
-                <Card className="p-4">
+              {(activeStep || activeFollowUp) &&
+              <Card className="p-4">
                   <h3 className="font-semibold text-sm mb-3">
                     Customize {activeFollowUpId ? "Follow-up" : "Step"}
                   </h3>
@@ -1400,60 +1400,60 @@ export default function BuilderPage() {
                       <div>
                         <Label className="text-xs mb-1">Headline</Label>
                         <Input
-                          value={activeFollowUp?.headline || activeStep?.headline || ""}
-                          onChange={(e) => {
-                            if (activeFollowUpId) {
-                              updateActiveFollowUp({ headline: e.target.value });
-                            } else {
-                              updateActiveStep({ headline: e.target.value });
-                            }
-                          }}
-                          className="text-xs h-8"
-                        />
+                        value={activeFollowUp?.headline || activeStep?.headline || ""}
+                        onChange={(e) => {
+                          if (activeFollowUpId) {
+                            updateActiveFollowUp({ headline: e.target.value });
+                          } else {
+                            updateActiveStep({ headline: e.target.value });
+                          }
+                        }}
+                        className="text-xs h-8" />
+
                       </div>
 
                       <div>
                         <Label className="text-xs mb-1">Subheadline</Label>
                         <Input
-                          value={activeFollowUp?.subheadline || activeStep?.subheadline || ""}
-                          onChange={(e) => {
-                            if (activeFollowUpId) {
-                              updateActiveFollowUp({ subheadline: e.target.value });
-                            } else {
-                              updateActiveStep({ subheadline: e.target.value });
-                            }
-                          }}
-                          className="text-xs h-8"
-                        />
+                        value={activeFollowUp?.subheadline || activeStep?.subheadline || ""}
+                        onChange={(e) => {
+                          if (activeFollowUpId) {
+                            updateActiveFollowUp({ subheadline: e.target.value });
+                          } else {
+                            updateActiveStep({ subheadline: e.target.value });
+                          }
+                        }}
+                        className="text-xs h-8" />
+
                       </div>
 
                       <div>
                         <Label className="text-xs mb-1">Button Text</Label>
                         <Input
-                          value={activeFollowUp?.buttonText || activeStep?.buttonText || ""}
-                          onChange={(e) => {
-                            if (activeFollowUpId) {
-                              updateActiveFollowUp({ buttonText: e.target.value });
-                            } else {
-                              updateActiveStep({ buttonText: e.target.value });
-                            }
-                          }}
-                          className="text-xs h-8"
-                        />
+                        value={activeFollowUp?.buttonText || activeStep?.buttonText || ""}
+                        onChange={(e) => {
+                          if (activeFollowUpId) {
+                            updateActiveFollowUp({ buttonText: e.target.value });
+                          } else {
+                            updateActiveStep({ buttonText: e.target.value });
+                          }
+                        }}
+                        className="text-xs h-8" />
+
                       </div>
 
                       <div className="flex items-center justify-between">
                         <Label className="text-xs">Show Icon</Label>
                         <Switch
-                          checked={activeFollowUp?.showImage || activeStep?.showImage || false}
-                          onCheckedChange={(checked) => {
-                            if (activeFollowUpId) {
-                              updateActiveFollowUp({ showImage: checked });
-                            } else {
-                              updateActiveStep({ showImage: checked });
-                            }
-                          }}
-                        />
+                        checked={activeFollowUp?.showImage || activeStep?.showImage || false}
+                        onCheckedChange={(checked) => {
+                          if (activeFollowUpId) {
+                            updateActiveFollowUp({ showImage: checked });
+                          } else {
+                            updateActiveStep({ showImage: checked });
+                          }
+                        }} />
+
                       </div>
                     </TabsContent>
 
@@ -1469,26 +1469,26 @@ export default function BuilderPage() {
                             <div>
                               <Label className="text-xs mb-1">Font Size</Label>
                               <Input
-                                type="number"
-                                value={popupFlow.typography.headingSize}
-                                onChange={(e) => setPopupFlow({
-                                  ...popupFlow,
-                                  typography: { ...popupFlow.typography, headingSize: parseInt(e.target.value) || 24 }
-                                })}
-                                className="text-xs h-7"
-                                min={12}
-                                max={48}
-                              />
+                              type="number"
+                              value={popupFlow.typography.headingSize}
+                              onChange={(e) => setPopupFlow({
+                                ...popupFlow,
+                                typography: { ...popupFlow.typography, headingSize: parseInt(e.target.value) || 24 }
+                              })}
+                              className="text-xs h-7"
+                              min={12}
+                              max={48} />
+
                             </div>
                             <div>
                               <Label className="text-xs mb-1">Weight</Label>
                               <Select
-                                value={popupFlow.typography.headingWeight.toString()}
-                                onValueChange={(value) => setPopupFlow({
-                                  ...popupFlow,
-                                  typography: { ...popupFlow.typography, headingWeight: parseInt(value) }
-                                })}
-                              >
+                              value={popupFlow.typography.headingWeight.toString()}
+                              onValueChange={(value) => setPopupFlow({
+                                ...popupFlow,
+                                typography: { ...popupFlow.typography, headingWeight: parseInt(value) }
+                              })}>
+
                                 <SelectTrigger className="text-xs h-7">
                                   <SelectValue />
                                 </SelectTrigger>
@@ -1511,26 +1511,26 @@ export default function BuilderPage() {
                             <div>
                               <Label className="text-xs mb-1">Font Size</Label>
                               <Input
-                                type="number"
-                                value={popupFlow.typography.subheadingSize}
-                                onChange={(e) => setPopupFlow({
-                                  ...popupFlow,
-                                  typography: { ...popupFlow.typography, subheadingSize: parseInt(e.target.value) || 14 }
-                                })}
-                                className="text-xs h-7"
-                                min={10}
-                                max={24}
-                              />
+                              type="number"
+                              value={popupFlow.typography.subheadingSize}
+                              onChange={(e) => setPopupFlow({
+                                ...popupFlow,
+                                typography: { ...popupFlow.typography, subheadingSize: parseInt(e.target.value) || 14 }
+                              })}
+                              className="text-xs h-7"
+                              min={10}
+                              max={24} />
+
                             </div>
                             <div>
                               <Label className="text-xs mb-1">Weight</Label>
                               <Select
-                                value={popupFlow.typography.subheadingWeight.toString()}
-                                onValueChange={(value) => setPopupFlow({
-                                  ...popupFlow,
-                                  typography: { ...popupFlow.typography, subheadingWeight: parseInt(value) }
-                                })}
-                              >
+                              value={popupFlow.typography.subheadingWeight.toString()}
+                              onValueChange={(value) => setPopupFlow({
+                                ...popupFlow,
+                                typography: { ...popupFlow.typography, subheadingWeight: parseInt(value) }
+                              })}>
+
                                 <SelectTrigger className="text-xs h-7">
                                   <SelectValue />
                                 </SelectTrigger>
@@ -1552,26 +1552,26 @@ export default function BuilderPage() {
                             <div>
                               <Label className="text-xs mb-1">Font Size</Label>
                               <Input
-                                type="number"
-                                value={popupFlow.typography.buttonSize}
-                                onChange={(e) => setPopupFlow({
-                                  ...popupFlow,
-                                  typography: { ...popupFlow.typography, buttonSize: parseInt(e.target.value) || 14 }
-                                })}
-                                className="text-xs h-7"
-                                min={10}
-                                max={20}
-                              />
+                              type="number"
+                              value={popupFlow.typography.buttonSize}
+                              onChange={(e) => setPopupFlow({
+                                ...popupFlow,
+                                typography: { ...popupFlow.typography, buttonSize: parseInt(e.target.value) || 14 }
+                              })}
+                              className="text-xs h-7"
+                              min={10}
+                              max={20} />
+
                             </div>
                             <div>
                               <Label className="text-xs mb-1">Weight</Label>
                               <Select
-                                value={popupFlow.typography.buttonWeight.toString()}
-                                onValueChange={(value) => setPopupFlow({
-                                  ...popupFlow,
-                                  typography: { ...popupFlow.typography, buttonWeight: parseInt(value) }
-                                })}
-                              >
+                              value={popupFlow.typography.buttonWeight.toString()}
+                              onValueChange={(value) => setPopupFlow({
+                                ...popupFlow,
+                                typography: { ...popupFlow.typography, buttonWeight: parseInt(value) }
+                              })}>
+
                                 <SelectTrigger className="text-xs h-7">
                                   <SelectValue />
                                 </SelectTrigger>
@@ -1593,17 +1593,17 @@ export default function BuilderPage() {
                         <div>
                           <Label className="text-xs mb-1">Background Image URL</Label>
                           <Input
-                            value={activeFollowUp?.backgroundImage || activeStep?.backgroundImage || ""}
-                            onChange={(e) => {
-                              if (activeFollowUpId) {
-                                updateActiveFollowUp({ backgroundImage: e.target.value });
-                              } else {
-                                updateActiveStep({ backgroundImage: e.target.value });
-                              }
-                            }}
-                            placeholder="https://example.com/image.jpg"
-                            className="text-xs h-8"
-                          />
+                          value={activeFollowUp?.backgroundImage || activeStep?.backgroundImage || ""}
+                          onChange={(e) => {
+                            if (activeFollowUpId) {
+                              updateActiveFollowUp({ backgroundImage: e.target.value });
+                            } else {
+                              updateActiveStep({ backgroundImage: e.target.value });
+                            }
+                          }}
+                          placeholder="https://example.com/image.jpg"
+                          className="text-xs h-8" />
+
                           <p className="text-xs text-muted-foreground mt-1">Leave empty for solid color</p>
                         </div>
                       </div>
@@ -1615,28 +1615,28 @@ export default function BuilderPage() {
                           <Label className="text-xs mb-1">Background</Label>
                           <div className="flex gap-2">
                             <Input
-                              type="color"
-                              value={activeFollowUp?.backgroundColor || activeStep?.backgroundColor || "#FFFFFF"}
-                              onChange={(e) => {
-                                if (activeFollowUpId) {
-                                  updateActiveFollowUp({ backgroundColor: e.target.value });
-                                } else {
-                                  updateActiveStep({ backgroundColor: e.target.value });
-                                }
-                              }}
-                              className="w-12 h-8 p-1 cursor-pointer"
-                            />
+                            type="color"
+                            value={activeFollowUp?.backgroundColor || activeStep?.backgroundColor || "#FFFFFF"}
+                            onChange={(e) => {
+                              if (activeFollowUpId) {
+                                updateActiveFollowUp({ backgroundColor: e.target.value });
+                              } else {
+                                updateActiveStep({ backgroundColor: e.target.value });
+                              }
+                            }}
+                            className="w-12 h-8 p-1 cursor-pointer" />
+
                             <Input
-                              value={activeFollowUp?.backgroundColor || activeStep?.backgroundColor || "#FFFFFF"}
-                              onChange={(e) => {
-                                if (activeFollowUpId) {
-                                  updateActiveFollowUp({ backgroundColor: e.target.value });
-                                } else {
-                                  updateActiveStep({ backgroundColor: e.target.value });
-                                }
-                              }}
-                              className="flex-1 text-xs h-8"
-                            />
+                            value={activeFollowUp?.backgroundColor || activeStep?.backgroundColor || "#FFFFFF"}
+                            onChange={(e) => {
+                              if (activeFollowUpId) {
+                                updateActiveFollowUp({ backgroundColor: e.target.value });
+                              } else {
+                                updateActiveStep({ backgroundColor: e.target.value });
+                              }
+                            }}
+                            className="flex-1 text-xs h-8" />
+
                           </div>
                         </div>
 
@@ -1644,28 +1644,28 @@ export default function BuilderPage() {
                           <Label className="text-xs mb-1">Text Color</Label>
                           <div className="flex gap-2">
                             <Input
-                              type="color"
-                              value={activeFollowUp?.textColor || activeStep?.textColor || "#493D34"}
-                              onChange={(e) => {
-                                if (activeFollowUpId) {
-                                  updateActiveFollowUp({ textColor: e.target.value });
-                                } else {
-                                  updateActiveStep({ textColor: e.target.value });
-                                }
-                              }}
-                              className="w-12 h-8 p-1 cursor-pointer"
-                            />
+                            type="color"
+                            value={activeFollowUp?.textColor || activeStep?.textColor || "#493D34"}
+                            onChange={(e) => {
+                              if (activeFollowUpId) {
+                                updateActiveFollowUp({ textColor: e.target.value });
+                              } else {
+                                updateActiveStep({ textColor: e.target.value });
+                              }
+                            }}
+                            className="w-12 h-8 p-1 cursor-pointer" />
+
                             <Input
-                              value={activeFollowUp?.textColor || activeStep?.textColor || "#493D34"}
-                              onChange={(e) => {
-                                if (activeFollowUpId) {
-                                  updateActiveFollowUp({ textColor: e.target.value });
-                                } else {
-                                  updateActiveStep({ textColor: e.target.value });
-                                }
-                              }}
-                              className="flex-1 text-xs h-8"
-                            />
+                            value={activeFollowUp?.textColor || activeStep?.textColor || "#493D34"}
+                            onChange={(e) => {
+                              if (activeFollowUpId) {
+                                updateActiveFollowUp({ textColor: e.target.value });
+                              } else {
+                                updateActiveStep({ textColor: e.target.value });
+                              }
+                            }}
+                            className="flex-1 text-xs h-8" />
+
                           </div>
                         </div>
 
@@ -1673,28 +1673,28 @@ export default function BuilderPage() {
                           <Label className="text-xs mb-1">Button Color</Label>
                           <div className="flex gap-2">
                             <Input
-                              type="color"
-                              value={activeFollowUp?.buttonColor || activeStep?.buttonColor || "#EC5B31"}
-                              onChange={(e) => {
-                                if (activeFollowUpId) {
-                                  updateActiveFollowUp({ buttonColor: e.target.value });
-                                } else {
-                                  updateActiveStep({ buttonColor: e.target.value });
-                                }
-                              }}
-                              className="w-12 h-8 p-1 cursor-pointer"
-                            />
+                            type="color"
+                            value={activeFollowUp?.buttonColor || activeStep?.buttonColor || "#EC5B31"}
+                            onChange={(e) => {
+                              if (activeFollowUpId) {
+                                updateActiveFollowUp({ buttonColor: e.target.value });
+                              } else {
+                                updateActiveStep({ buttonColor: e.target.value });
+                              }
+                            }}
+                            className="w-12 h-8 p-1 cursor-pointer" />
+
                             <Input
-                              value={activeFollowUp?.buttonColor || activeStep?.buttonColor || "#EC5B31"}
-                              onChange={(e) => {
-                                if (activeFollowUpId) {
-                                  updateActiveFollowUp({ buttonColor: e.target.value });
-                                } else {
-                                  updateActiveStep({ buttonColor: e.target.value });
-                                }
-                              }}
-                              className="flex-1 text-xs h-8"
-                            />
+                            value={activeFollowUp?.buttonColor || activeStep?.buttonColor || "#EC5B31"}
+                            onChange={(e) => {
+                              if (activeFollowUpId) {
+                                updateActiveFollowUp({ buttonColor: e.target.value });
+                              } else {
+                                updateActiveStep({ buttonColor: e.target.value });
+                              }
+                            }}
+                            className="flex-1 text-xs h-8" />
+
                           </div>
                         </div>
                       </div>
@@ -1705,19 +1705,19 @@ export default function BuilderPage() {
                           Border Radius: {activeFollowUp?.borderRadius || activeStep?.borderRadius || 12}px
                         </Label>
                         <Slider
-                          value={[activeFollowUp?.borderRadius || activeStep?.borderRadius || 12]}
-                          onValueChange={(value) => {
-                            if (activeFollowUpId) {
-                              updateActiveFollowUp({ borderRadius: value[0] });
-                            } else {
-                              updateActiveStep({ borderRadius: value[0] });
-                            }
-                          }}
-                          min={0}
-                          max={32}
-                          step={1}
-                          className="mt-2"
-                        />
+                        value={[activeFollowUp?.borderRadius || activeStep?.borderRadius || 12]}
+                        onValueChange={(value) => {
+                          if (activeFollowUpId) {
+                            updateActiveFollowUp({ borderRadius: value[0] });
+                          } else {
+                            updateActiveStep({ borderRadius: value[0] });
+                          }
+                        }}
+                        min={0}
+                        max={32}
+                        step={1}
+                        className="mt-2" />
+
                       </div>
                     </TabsContent>
 
@@ -1728,104 +1728,104 @@ export default function BuilderPage() {
                         
                         <div className="grid grid-cols-2 gap-2 mb-4">
                           <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-8 text-xs justify-start"
-                            onClick={() => addFormField("text")}
-                          >
+                          variant="outline"
+                          size="sm"
+                          className="h-8 text-xs justify-start"
+                          onClick={() => addFormField("text")}>
+
                             <Type className="w-3 h-3 mr-1" />
                             Text
                           </Button>
                           <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-8 text-xs justify-start"
-                            onClick={() => addFormField("textarea")}
-                          >
+                          variant="outline"
+                          size="sm"
+                          className="h-8 text-xs justify-start"
+                          onClick={() => addFormField("textarea")}>
+
                             <AlignLeft className="w-3 h-3 mr-1" />
                             Text Area
                           </Button>
                           <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-8 text-xs justify-start"
-                            onClick={() => addFormField("url")}
-                          >
+                          variant="outline"
+                          size="sm"
+                          className="h-8 text-xs justify-start"
+                          onClick={() => addFormField("url")}>
+
                             <LinkIcon className="w-3 h-3 mr-1" />
                             URL
                           </Button>
                           <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-8 text-xs justify-start"
-                            onClick={() => addFormField("image")}
-                          >
+                          variant="outline"
+                          size="sm"
+                          className="h-8 text-xs justify-start"
+                          onClick={() => addFormField("image")}>
+
                             <ImageIcon className="w-3 h-3 mr-1" />
                             Image
                           </Button>
                           <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-8 text-xs justify-start"
-                            onClick={() => addFormField("video")}
-                          >
+                          variant="outline"
+                          size="sm"
+                          className="h-8 text-xs justify-start"
+                          onClick={() => addFormField("video")}>
+
                             <Video className="w-3 h-3 mr-1" />
                             Video
                           </Button>
                           <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-8 text-xs justify-start"
-                            onClick={() => addFormField("button")}
-                          >
+                          variant="outline"
+                          size="sm"
+                          className="h-8 text-xs justify-start"
+                          onClick={() => addFormField("button")}>
+
                             <Maximize2 className="w-3 h-3 mr-1" />
                             Button
                           </Button>
                           <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-8 text-xs justify-start"
-                            onClick={() => addFormField("socials")}
-                          >
+                          variant="outline"
+                          size="sm"
+                          className="h-8 text-xs justify-start"
+                          onClick={() => addFormField("socials")}>
+
                             <Share2 className="w-3 h-3 mr-1" />
                             Socials
                           </Button>
                           <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-8 text-xs justify-start"
-                            onClick={() => addFormField("checkbox")}
-                          >
+                          variant="outline"
+                          size="sm"
+                          className="h-8 text-xs justify-start"
+                          onClick={() => addFormField("checkbox")}>
+
                             <CheckSquare className="w-3 h-3 mr-1" />
                             Checkbox
                           </Button>
                           <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-8 text-xs justify-start"
-                            onClick={() => addFormField("radio")}
-                          >
+                          variant="outline"
+                          size="sm"
+                          className="h-8 text-xs justify-start"
+                          onClick={() => addFormField("radio")}>
+
                             <Circle className="w-3 h-3 mr-1" />
                             Radio
                           </Button>
                           <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-8 text-xs justify-start"
-                            onClick={() => addFormField("dropdown")}
-                          >
+                          variant="outline"
+                          size="sm"
+                          className="h-8 text-xs justify-start"
+                          onClick={() => addFormField("dropdown")}>
+
                             <ChevronDown className="w-3 h-3 mr-1" />
                             Dropdown
                           </Button>
                         </div>
 
                         {/* Display Added Fields with Edit Functionality */}
-                        {((activeFollowUp?.formFields || activeStep?.formFields) && 
-                          (activeFollowUp?.formFields?.length || activeStep?.formFields?.length || 0) > 0) && (
-                          <div className="space-y-2">
+                        {(activeFollowUp?.formFields || activeStep?.formFields) &&
+                      (activeFollowUp?.formFields?.length || activeStep?.formFields?.length || 0) > 0 &&
+                      <div className="space-y-2">
                             <Label className="text-xs text-muted-foreground">Added Fields:</Label>
-                            {(activeFollowUp?.formFields || activeStep?.formFields || []).map((field) => (
-                              <div key={field.id} className="border border-border rounded-lg p-2">
+                            {(activeFollowUp?.formFields || activeStep?.formFields || []).map((field) =>
+                        <div key={field.id} className="border border-border rounded-lg p-2">
                                 <div className="flex items-center justify-between mb-2">
                                   <div className="flex items-center gap-2">
                                     {field.type === "text" && <Type className="w-3 h-3" />}
@@ -1842,110 +1842,110 @@ export default function BuilderPage() {
                                   </div>
                                   <div className="flex items-center gap-1">
                                     <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      className="h-6 w-6 p-0"
-                                      onClick={() => setEditingFieldId(editingFieldId === field.id ? null : field.id)}
-                                    >
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 w-6 p-0"
+                                onClick={() => setEditingFieldId(editingFieldId === field.id ? null : field.id)}>
+
                                       <Edit className="w-3 h-3" />
                                     </Button>
                                     <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      className="h-6 w-6 p-0"
-                                      onClick={() => removeFormField(field.id)}
-                                    >
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 w-6 p-0"
+                                onClick={() => removeFormField(field.id)}>
+
                                       <Trash2 className="w-3 h-3 text-destructive" />
                                     </Button>
                                   </div>
                                 </div>
                                 
                                 {/* Edit Form when expanded */}
-                                {editingFieldId === field.id && (
-                                  <div className="space-y-2 mt-2 pt-2 border-t border-border">
+                                {editingFieldId === field.id &&
+                          <div className="space-y-2 mt-2 pt-2 border-t border-border">
                                     <div>
                                       <Label className="text-xs mb-1">Label</Label>
                                       <Input
-                                        value={field.label}
-                                        onChange={(e) => updateFormField(field.id, { label: e.target.value })}
-                                        className="text-xs h-7"
-                                        placeholder="Field label"
-                                      />
+                                value={field.label}
+                                onChange={(e) => updateFormField(field.id, { label: e.target.value })}
+                                className="text-xs h-7"
+                                placeholder="Field label" />
+
                                     </div>
                                     
                                     {/* Placeholder for text, textarea, url */}
-                                    {(field.type === "text" || field.type === "textarea" || field.type === "url") && (
-                                      <div>
+                                    {(field.type === "text" || field.type === "textarea" || field.type === "url") &&
+                            <div>
                                         <Label className="text-xs mb-1">Placeholder</Label>
                                         <Input
-                                          value={field.placeholder || ""}
-                                          onChange={(e) => updateFormField(field.id, { placeholder: e.target.value })}
-                                          className="text-xs h-7"
-                                          placeholder="Enter placeholder text"
-                                        />
+                                value={field.placeholder || ""}
+                                onChange={(e) => updateFormField(field.id, { placeholder: e.target.value })}
+                                className="text-xs h-7"
+                                placeholder="Enter placeholder text" />
+
                                       </div>
-                                    )}
+                            }
                                     
                                     {/* File URL for image and video */}
-                                    {(field.type === "image" || field.type === "video") && (
-                                      <div>
+                                    {(field.type === "image" || field.type === "video") &&
+                            <div>
                                         <Label className="text-xs mb-1">{field.type === "image" ? "Image" : "Video"} URL</Label>
                                         <Input
-                                          value={field.fileUrl || ""}
-                                          onChange={(e) => updateFormField(field.id, { fileUrl: e.target.value })}
-                                          className="text-xs h-7"
-                                          placeholder={`https://example.com/${field.type === "image" ? "image.jpg" : "video.mp4"}`}
-                                        />
+                                value={field.fileUrl || ""}
+                                onChange={(e) => updateFormField(field.id, { fileUrl: e.target.value })}
+                                className="text-xs h-7"
+                                placeholder={`https://example.com/${field.type === "image" ? "image.jpg" : "video.mp4"}`} />
+
                                         <p className="text-xs text-muted-foreground mt-1">Enter direct URL to {field.type}</p>
                                       </div>
-                                    )}
+                            }
                                     
                                     {/* Options for dropdown and radio */}
-                                    {(field.type === "dropdown" || field.type === "radio") && (
-                                      <div>
+                                    {(field.type === "dropdown" || field.type === "radio") &&
+                            <div>
                                         <Label className="text-xs mb-1">Options</Label>
                                         <div className="space-y-1">
-                                          {field.options?.map((option, index) => (
-                                            <div key={index} className="flex gap-1">
+                                          {field.options?.map((option, index) =>
+                                <div key={index} className="flex gap-1">
                                               <Input
-                                                value={option}
-                                                onChange={(e) => updateOption(field.id, index, e.target.value)}
-                                                className="text-xs h-7 flex-1"
-                                                placeholder={`Option ${index + 1}`}
-                                              />
+                                    value={option}
+                                    onChange={(e) => updateOption(field.id, index, e.target.value)}
+                                    className="text-xs h-7 flex-1"
+                                    placeholder={`Option ${index + 1}`} />
+
                                               <Button
-                                                variant="ghost"
-                                                size="sm"
-                                                className="h-7 w-7 p-0"
-                                                onClick={() => removeOption(field.id, index)}
-                                              >
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-7 w-7 p-0"
+                                    onClick={() => removeOption(field.id, index)}>
+
                                                 <X className="w-3 h-3" />
                                               </Button>
                                             </div>
-                                          ))}
+                                )}
                                           <Button
-                                            variant="outline"
-                                            size="sm"
-                                            className="w-full h-7 text-xs"
-                                            onClick={() => addOption(field.id)}
-                                          >
+                                  variant="outline"
+                                  size="sm"
+                                  className="w-full h-7 text-xs"
+                                  onClick={() => addOption(field.id)}>
+
                                             <Plus className="w-3 h-3 mr-1" />
                                             Add Option
                                           </Button>
                                         </div>
                                       </div>
-                                    )}
+                            }
                                   </div>
-                                )}
+                          }
                               </div>
-                            ))}
-                          </div>
                         )}
+                          </div>
+                      }
                       </div>
                     </TabsContent>
                   </Tabs>
                 </Card>
-              )}
+              }
             </div>
           </div>
         </div>
@@ -1961,21 +1961,21 @@ export default function BuilderPage() {
             </DialogDescription>
           </DialogHeader>
           <div className="grid grid-cols-3 gap-4 max-h-[500px] overflow-y-auto py-4">
-            {templates.map((template) => (
-              <motion.button
-                key={template.name}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => applyTemplate(template)}
-                className="text-left p-4 rounded-lg border border-border/50 hover:border-primary/50 transition-all"
-              >
+            {templates.map((template) =>
+            <motion.button
+              key={template.name}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => applyTemplate(template)}
+              className="text-left p-4 rounded-lg border border-border/50 hover:border-primary/50 transition-all">
+
                 <div className={`w-full h-24 rounded-lg bg-gradient-to-br ${template.gradient} flex items-center justify-center text-4xl mb-3`}>
                   {template.preview}
                 </div>
                 <div className="font-medium text-sm mb-1">{template.name}</div>
                 <div className="text-xs text-muted-foreground">{template.description}</div>
               </motion.button>
-            ))}
+            )}
           </div>
         </DialogContent>
       </Dialog>
@@ -1991,8 +1991,8 @@ export default function BuilderPage() {
           </DialogHeader>
           <div className="overflow-y-auto max-h-[calc(90vh-120px)] py-4">
             <div className="space-y-8">
-              {popupFlow.steps.map((step, index) => (
-                <div key={step.id} className="space-y-4">
+              {popupFlow.steps.map((step, index) =>
+              <div key={step.id} className="space-y-4">
                   <div className="flex items-center gap-2 mb-3">
                     <div className="w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold">
                       {index + 1}
@@ -2008,30 +2008,30 @@ export default function BuilderPage() {
                     </div>
                     
                     {/* Follow-ups */}
-                    {step.followUps && step.followUps.length > 0 && (
-                      <div className="space-y-4">
+                    {step.followUps && step.followUps.length > 0 &&
+                  <div className="space-y-4">
                         <div className="text-xs text-muted-foreground mb-2">Follow-ups</div>
-                        {step.followUps.map((followUp, fuIndex) => (
-                          <div key={followUp.id}>
+                        {step.followUps.map((followUp, fuIndex) =>
+                    <div key={followUp.id}>
                             <div className="text-xs text-muted-foreground mb-2">Follow-up {fuIndex + 1}</div>
                             {renderStepPreview(followUp, false, true)}
                           </div>
-                        ))}
-                      </div>
                     )}
+                      </div>
+                  }
                   </div>
                   
-                  {index < popupFlow.steps.length - 1 && (
-                    <div className="flex justify-center py-4">
+                  {index < popupFlow.steps.length - 1 &&
+                <div className="flex justify-center py-4">
                       <ArrowDown className="w-5 h-5 text-muted-foreground" />
                     </div>
-                  )}
+                }
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </DialogContent>
       </Dialog>
-    </div>
-  );
+    </div>);
+
 }
