@@ -10,15 +10,15 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetFooter,
-} from "@/components/ui/sheet";
+  SheetFooter } from
+"@/components/ui/sheet";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  SelectValue } from
+"@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Search, MoreVertical, Play, Pause, Copy, Trash2, Check, X } from "lucide-react";
 import { useState } from "react";
@@ -38,7 +38,7 @@ interface Campaign {
 export default function CampaignsPage() {
   const [createSheetOpen, setCreateSheetOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  
+
   // Form state
   const [campaignName, setCampaignName] = useState("");
   const [template, setTemplate] = useState("");
@@ -63,37 +63,37 @@ export default function CampaignsPage() {
 
   // Mock campaigns data
   const [campaigns, setCampaigns] = useState<Campaign[]>([
-    {
-      id: "1",
-      name: "Welcome Email Capture",
-      status: "active",
-      template: "Newsletter Signup",
-      target: "New visitors",
-      views: 1247,
-      conversions: 89,
-      conversionRate: 7.14,
-    },
-    {
-      id: "2",
-      name: "Exit Intent - 15% Off",
-      status: "active",
-      template: "Exit Intent",
-      target: "All visitors",
-      views: 3421,
-      conversions: 267,
-      conversionRate: 7.8,
-    },
-    {
-      id: "3",
-      name: "Free Shipping Offer",
-      status: "paused",
-      template: "Free Shipping",
-      target: "Returning visitors",
-      views: 892,
-      conversions: 43,
-      conversionRate: 4.82,
-    },
-  ]);
+  {
+    id: "1",
+    name: "Welcome Email Capture",
+    status: "active",
+    template: "Newsletter Signup",
+    target: "New visitors",
+    views: 1247,
+    conversions: 89,
+    conversionRate: 7.14
+  },
+  {
+    id: "2",
+    name: "Exit Intent - 15% Off",
+    status: "active",
+    template: "Exit Intent",
+    target: "All visitors",
+    views: 3421,
+    conversions: 267,
+    conversionRate: 7.8
+  },
+  {
+    id: "3",
+    name: "Free Shipping Offer",
+    status: "paused",
+    template: "Free Shipping",
+    target: "Returning visitors",
+    views: 892,
+    conversions: 43,
+    conversionRate: 4.82
+  }]
+  );
 
   const addUrl = () => {
     setUrls([...urls, ""]);
@@ -127,12 +127,12 @@ export default function CampaignsPage() {
       target: target === "new" ? "New visitors" : target === "existing" ? "Returning visitors" : "All visitors",
       views: 0,
       conversions: 0,
-      conversionRate: 0,
+      conversionRate: 0
     };
 
     setCampaigns([newCampaign, ...campaigns]);
     toast.success("Campaign created successfully!");
-    
+
     // Reset form and close sheet
     resetForm();
     setCreateSheetOpen(false);
@@ -162,7 +162,7 @@ export default function CampaignsPage() {
   };
 
   const filteredCampaigns = campaigns.filter((campaign) =>
-    campaign.name.toLowerCase().includes(searchQuery.toLowerCase())
+  campaign.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const showUrlFields = displayWhere === "selected-pages" || displayWhere === "except-pages";
@@ -183,8 +183,8 @@ export default function CampaignsPage() {
             </div>
             <Button
               onClick={() => setCreateSheetOpen(true)}
-              className="bg-[#1DBFAA] hover:bg-[#1DBFAA]/90"
-            >
+              className="bg-[#1DBFAA] hover:bg-[#1DBFAA]/90">
+
               <Plus className="w-4 h-4 mr-2" />
               Create Campaign
             </Button>
@@ -202,8 +202,8 @@ export default function CampaignsPage() {
                   placeholder="Search campaigns..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
+                  className="pl-10" />
+
               </div>
               <Select defaultValue="all">
                 <SelectTrigger className="w-[150px]">
@@ -236,29 +236,29 @@ export default function CampaignsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredCampaigns.map((campaign) => (
-                    <tr
-                      key={campaign.id}
-                      className="border-b border-border/50 hover:bg-muted/30 transition-colors"
-                    >
+                  {filteredCampaigns.map((campaign) =>
+                  <tr
+                    key={campaign.id}
+                    className="border-b border-border/50 hover:bg-muted/30 transition-colors">
+
                       <td className="p-4">
                         <div className="font-medium">{campaign.name}</div>
                       </td>
                       <td className="p-4">
                         <Badge
-                          variant={
-                            campaign.status === "active"
-                              ? "default"
-                              : campaign.status === "paused"
-                              ? "secondary"
-                              : "outline"
-                          }
-                          className={
-                            campaign.status === "active"
-                              ? "bg-green-500/10 text-green-600 hover:bg-green-500/20"
-                              : ""
-                          }
-                        >
+                        variant={
+                        campaign.status === "active" ?
+                        "default" :
+                        campaign.status === "paused" ?
+                        "secondary" :
+                        "outline"
+                        }
+                        className={
+                        campaign.status === "active" ?
+                        "bg-green-500/10 text-green-600 hover:bg-green-500/20" :
+                        ""
+                        }>
+
                           {campaign.status}
                         </Badge>
                       </td>
@@ -276,11 +276,11 @@ export default function CampaignsPage() {
                       <td className="p-4">
                         <div className="flex items-center gap-2">
                           <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                            {campaign.status === "active" ? (
-                              <Pause className="w-4 h-4" />
-                            ) : (
-                              <Play className="w-4 h-4" />
-                            )}
+                            {campaign.status === "active" ?
+                          <Pause className="w-4 h-4" /> :
+
+                          <Play className="w-4 h-4" />
+                          }
                           </Button>
                           <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                             <Copy className="w-4 h-4" />
@@ -294,15 +294,15 @@ export default function CampaignsPage() {
                         </div>
                       </td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
 
-              {filteredCampaigns.length === 0 && (
-                <div className="text-center py-12">
+              {filteredCampaigns.length === 0 &&
+              <div className="text-center py-12">
                   <p className="text-muted-foreground">No campaigns found</p>
                 </div>
-              )}
+              }
             </div>
           </Card>
         </div>
@@ -312,7 +312,7 @@ export default function CampaignsPage() {
       <Sheet open={createSheetOpen} onOpenChange={setCreateSheetOpen}>
         <SheetContent className="w-[500px] sm:max-w-[500px] overflow-y-auto px-6">
           <SheetHeader className="pb-6 pt-2">
-            <SheetTitle className="text-xl font-semibold">Create</SheetTitle>
+            <SheetTitle className="text-xl font-semibold !whitespace-pre-line">Create Campaign </SheetTitle>
           </SheetHeader>
 
           <div className="space-y-6 pb-4">
@@ -326,8 +326,8 @@ export default function CampaignsPage() {
                 value={campaignName}
                 onChange={(e) => setCampaignName(e.target.value)}
                 placeholder="Enter campaign name"
-                className="h-10"
-              />
+                className="h-10" />
+
             </div>
 
             {/* Template */}
@@ -359,8 +359,8 @@ export default function CampaignsPage() {
                     value="new"
                     checked={target === "new"}
                     onChange={(e) => setTarget(e.target.value)}
-                    className="w-4 h-4 accent-[#1DBFAA]"
-                  />
+                    className="w-4 h-4 accent-[#1DBFAA]" />
+
                   <span className="text-sm text-foreground">New</span>
                 </label>
                 <label className="flex items-center gap-2 cursor-pointer">
@@ -370,8 +370,8 @@ export default function CampaignsPage() {
                     value="existing"
                     checked={target === "existing"}
                     onChange={(e) => setTarget(e.target.value)}
-                    className="w-4 h-4 accent-[#1DBFAA]"
-                  />
+                    className="w-4 h-4 accent-[#1DBFAA]" />
+
                   <span className="text-sm text-foreground">Existing</span>
                 </label>
                 <label className="flex items-center gap-2 cursor-pointer">
@@ -381,16 +381,16 @@ export default function CampaignsPage() {
                     value="all"
                     checked={target === "all"}
                     onChange={(e) => setTarget(e.target.value)}
-                    className="w-4 h-4 accent-[#1DBFAA]"
-                  />
+                    className="w-4 h-4 accent-[#1DBFAA]" />
+
                   <span className="text-sm text-foreground">All</span>
                 </label>
               </div>
             </div>
 
             {/* Segment - Only show when target is "existing" */}
-            {target === "existing" && (
-              <div className="space-y-2">
+            {target === "existing" &&
+            <div className="space-y-2">
                 <Label htmlFor="segment" className="text-sm font-medium text-foreground">
                   Segment
                 </Label>
@@ -406,7 +406,7 @@ export default function CampaignsPage() {
                   </SelectContent>
                 </Select>
               </div>
-            )}
+            }
 
             {/* When it has to Trigger */}
             <div className="space-y-2">
@@ -442,49 +442,49 @@ export default function CampaignsPage() {
             </div>
 
             {/* URL Fields - Show when Selected Pages or Except Pages */}
-            {showUrlFields && (
-              <div className="space-y-2">
+            {showUrlFields &&
+            <div className="space-y-2">
                 <Label className="text-sm font-medium text-foreground">URL</Label>
                 <div className="space-y-2">
-                  {urls.map((url, index) => (
-                    <div key={index} className="flex items-center gap-2">
+                  {urls.map((url, index) =>
+                <div key={index} className="flex items-center gap-2">
                       <div className="relative flex-1">
                         <Input
-                          type="url"
-                          value={url}
-                          onChange={(e) => updateUrl(index, e.target.value)}
-                          placeholder="https://zapier.com/blog"
-                          className="h-10 pr-8"
-                        />
-                        {url && (
-                          <Check className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-green-600" />
-                        )}
+                      type="url"
+                      value={url}
+                      onChange={(e) => updateUrl(index, e.target.value)}
+                      placeholder="https://zapier.com/blog"
+                      className="h-10 pr-8" />
+
+                        {url &&
+                    <Check className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-green-600" />
+                    }
                       </div>
-                      {urls.length > 1 && (
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => removeUrl(index)}
-                          className="h-10 w-10 flex-shrink-0"
-                        >
-                          <X className="w-4 h-4" />
-                        </Button>
-                      )}
-                    </div>
-                  ))}
+                      {urls.length > 1 &&
                   <Button
                     type="button"
-                    variant="outline"
+                    variant="ghost"
                     size="icon"
-                    onClick={addUrl}
-                    className="h-10 w-10 bg-[#1DBFAA] text-white hover:bg-[#1DBFAA]/90 hover:text-white"
-                  >
+                    onClick={() => removeUrl(index)}
+                    className="h-10 w-10 flex-shrink-0">
+
+                          <X className="w-4 h-4" />
+                        </Button>
+                  }
+                    </div>
+                )}
+                  <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={addUrl}
+                  className="h-10 w-10 bg-[#1DBFAA] text-white hover:bg-[#1DBFAA]/90 hover:text-white">
+
                     <Plus className="w-4 h-4" />
                   </Button>
                 </div>
               </div>
-            )}
+            }
 
             {/* Sessions Handling */}
             <div className="pt-4 border-t border-border space-y-4">
@@ -501,8 +501,8 @@ export default function CampaignsPage() {
                   value={stopIfContainPage}
                   onChange={(e) => setStopIfContainPage(e.target.value)}
                   placeholder="https://example.com"
-                  className="h-10"
-                />
+                  className="h-10" />
+
               </div>
 
               {/* End campaign options */}
@@ -514,8 +514,8 @@ export default function CampaignsPage() {
                     value="session"
                     checked={endCampaignOption === "session"}
                     onChange={(e) => setEndCampaignOption(e.target.value)}
-                    className="w-4 h-4 mt-0.5 accent-[#1DBFAA]"
-                  />
+                    className="w-4 h-4 mt-0.5 accent-[#1DBFAA]" />
+
                   <span className="text-sm text-foreground leading-relaxed">End campaign after current session ends</span>
                 </label>
 
@@ -526,8 +526,8 @@ export default function CampaignsPage() {
                     value="end-after"
                     checked={endCampaignOption === "end-after"}
                     onChange={(e) => setEndCampaignOption(e.target.value)}
-                    className="w-4 h-4 mt-0.5 accent-[#1DBFAA]"
-                  />
+                    className="w-4 h-4 mt-0.5 accent-[#1DBFAA]" />
+
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="text-sm text-foreground">End After</span>
                     <Input
@@ -535,13 +535,13 @@ export default function CampaignsPage() {
                       value={endAfterValue}
                       onChange={(e) => setEndAfterValue(e.target.value)}
                       disabled={endCampaignOption !== "end-after"}
-                      className="w-20 h-8 text-sm"
-                    />
+                      className="w-20 h-8 text-sm" />
+
                     <Select
                       value={endAfterUnit}
                       onValueChange={setEndAfterUnit}
-                      disabled={endCampaignOption !== "end-after"}
-                    >
+                      disabled={endCampaignOption !== "end-after"}>
+
                       <SelectTrigger className="w-24 h-8 text-sm">
                         <SelectValue />
                       </SelectTrigger>
@@ -567,8 +567,8 @@ export default function CampaignsPage() {
                     value="once-per-session"
                     checked={frequency === "once-per-session"}
                     onChange={(e) => setFrequency(e.target.value)}
-                    className="w-4 h-4 accent-[#1DBFAA]"
-                  />
+                    className="w-4 h-4 accent-[#1DBFAA]" />
+
                   <span className="text-sm text-foreground">Start once per session</span>
                 </label>
 
@@ -579,8 +579,8 @@ export default function CampaignsPage() {
                     value="once-every"
                     checked={frequency === "once-every"}
                     onChange={(e) => setFrequency(e.target.value)}
-                    className="w-4 h-4 mt-0.5 accent-[#1DBFAA]"
-                  />
+                    className="w-4 h-4 mt-0.5 accent-[#1DBFAA]" />
+
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="text-sm text-foreground">Start once every</span>
                     <Input
@@ -588,13 +588,13 @@ export default function CampaignsPage() {
                       value={frequencyValue}
                       onChange={(e) => setFrequencyValue(e.target.value)}
                       disabled={frequency !== "once-every"}
-                      className="w-20 h-8 text-sm"
-                    />
+                      className="w-20 h-8 text-sm" />
+
                     <Select
                       value={frequencyUnit}
                       onValueChange={setFrequencyUnit}
-                      disabled={frequency !== "once-every"}
-                    >
+                      disabled={frequency !== "once-every"}>
+
                       <SelectTrigger className="w-24 h-8 text-sm">
                         <SelectValue />
                       </SelectTrigger>
@@ -614,8 +614,8 @@ export default function CampaignsPage() {
                     value="once-lifetime"
                     checked={frequency === "once-lifetime"}
                     onChange={(e) => setFrequency(e.target.value)}
-                    className="w-4 h-4 accent-[#1DBFAA]"
-                  />
+                    className="w-4 h-4 accent-[#1DBFAA]" />
+
                   <span className="text-sm text-foreground">Start only once in lifetime</span>
                 </label>
               </div>
@@ -630,8 +630,8 @@ export default function CampaignsPage() {
                     type="checkbox"
                     checked={preventIfSeenCampaign}
                     onChange={(e) => setPreventIfSeenCampaign(e.target.checked)}
-                    className="w-4 h-4 mt-0.5 accent-[#1DBFAA]"
-                  />
+                    className="w-4 h-4 mt-0.5 accent-[#1DBFAA]" />
+
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="text-sm text-foreground">Do not show if visitor has seen another campaign in last</span>
                     <Input
@@ -639,13 +639,13 @@ export default function CampaignsPage() {
                       value={displayWhenValue}
                       onChange={(e) => setDisplayWhenValue(e.target.value)}
                       disabled={!preventIfSeenCampaign}
-                      className="w-20 h-8 text-sm"
-                    />
+                      className="w-20 h-8 text-sm" />
+
                     <Select
                       value={displayWhenUnit}
                       onValueChange={setDisplayWhenUnit}
-                      disabled={!preventIfSeenCampaign}
-                    >
+                      disabled={!preventIfSeenCampaign}>
+
                       <SelectTrigger className="w-24 h-8 text-sm">
                         <SelectValue />
                       </SelectTrigger>
@@ -665,8 +665,8 @@ export default function CampaignsPage() {
                     value="over-take-replace"
                     checked={displayWhenOption === "over-take-replace"}
                     onChange={(e) => setDisplayWhenOption(e.target.value)}
-                    className="w-4 h-4 accent-[#1DBFAA]"
-                  />
+                    className="w-4 h-4 accent-[#1DBFAA]" />
+
                   <span className="text-sm text-foreground">Over take and replace any other campaign</span>
                 </label>
 
@@ -677,8 +677,8 @@ export default function CampaignsPage() {
                     value="over-take-contains"
                     checked={displayWhenOption === "over-take-contains"}
                     onChange={(e) => setDisplayWhenOption(e.target.value)}
-                    className="w-4 h-4 accent-[#1DBFAA]"
-                  />
+                    className="w-4 h-4 accent-[#1DBFAA]" />
+
                   <span className="text-sm text-foreground">Over take and replace campaign contains</span>
                 </label>
 
@@ -689,8 +689,8 @@ export default function CampaignsPage() {
                     value="do-not-trigger"
                     checked={displayWhenOption === "do-not-trigger"}
                     onChange={(e) => setDisplayWhenOption(e.target.value)}
-                    className="w-4 h-4 accent-[#1DBFAA]"
-                  />
+                    className="w-4 h-4 accent-[#1DBFAA]" />
+
                   <span className="text-sm text-foreground">Do not trigger if another campaign is running</span>
                 </label>
               </div>
@@ -704,19 +704,19 @@ export default function CampaignsPage() {
                 resetForm();
                 setCreateSheetOpen(false);
               }}
-              className="flex-1"
-            >
+              className="flex-1">
+
               Cancel
             </Button>
             <Button
               onClick={handleCreateCampaign}
-              className="flex-1 bg-[#1DBFAA] hover:bg-[#1DBFAA]/90"
-            >
+              className="flex-1 bg-[#1DBFAA] hover:bg-[#1DBFAA]/90">
+
               Save
             </Button>
           </SheetFooter>
         </SheetContent>
       </Sheet>
-    </div>
-  );
+    </div>);
+
 }
