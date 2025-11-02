@@ -735,6 +735,23 @@ export default function BuilderPage() {
                   variant="outline"
                   size="sm"
                   className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // Remove headline
+                    if (isFollowUp && activeFollowUpId) {
+                      updateActiveFollowUp({ headline: "" });
+                    } else {
+                      updateActiveStep({ headline: "" });
+                    }
+                    setEditingElement(null);
+                  }}
+                  title="Remove headline">
+                  <X className="w-3 h-3 text-destructive" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
                   title="Reorder">
                   <GripVertical className="w-3 h-3" />
                 </Button>
@@ -782,6 +799,23 @@ export default function BuilderPage() {
             {/* Action icons on click */}
             {isActive && editingElement === "subheadline" &&
               <div className="absolute -top-3 -right-3 flex gap-1 z-20">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // Remove subheadline
+                    if (isFollowUp && activeFollowUpId) {
+                      updateActiveFollowUp({ subheadline: "" });
+                    } else {
+                      updateActiveStep({ subheadline: "" });
+                    }
+                    setEditingElement(null);
+                  }}
+                  title="Remove subheadline">
+                  <X className="w-3 h-3 text-destructive" />
+                </Button>
                 <Button
                   variant="outline"
                   size="sm"
@@ -971,6 +1005,23 @@ export default function BuilderPage() {
             {/* Action icons on click */}
             {isActive && editingElement === "button" &&
               <div className="absolute -top-3 -right-3 flex gap-1 z-20">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // Remove button text (set to empty)
+                    if (isFollowUp && activeFollowUpId) {
+                      updateActiveFollowUp({ buttonText: "" });
+                    } else {
+                      updateActiveStep({ buttonText: "" });
+                    }
+                    setEditingElement(null);
+                  }}
+                  title="Remove button text">
+                  <X className="w-3 h-3 text-destructive" />
+                </Button>
                 <Button
                   variant="outline"
                   size="sm"
