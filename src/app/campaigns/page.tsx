@@ -310,14 +310,14 @@ export default function CampaignsPage() {
 
       {/* Create Campaign Sheet (Slides from right) */}
       <Sheet open={createSheetOpen} onOpenChange={setCreateSheetOpen}>
-        <SheetContent className="w-[500px] sm:max-w-[500px] overflow-y-auto">
-          <SheetHeader className="pb-6">
+        <SheetContent className="w-[500px] sm:max-w-[500px] overflow-y-auto px-6">
+          <SheetHeader className="pb-6 pt-2">
             <SheetTitle className="text-xl font-semibold">Create</SheetTitle>
           </SheetHeader>
 
-          <div className="space-y-5 py-2">
+          <div className="space-y-6 pb-4">
             {/* Campaign Name */}
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               <Label htmlFor="campaign-name" className="text-sm font-medium text-foreground">
                 Campaign Name
               </Label>
@@ -331,7 +331,7 @@ export default function CampaignsPage() {
             </div>
 
             {/* Template */}
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               <Label htmlFor="template" className="text-sm font-medium text-foreground">
                 Template
               </Label>
