@@ -202,6 +202,9 @@ export default function BuilderPage() {
   const [cursorPosition, setCursorPosition] = useState<number | null>(null);
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
   const [settingsFollowUpId, setSettingsFollowUpId] = useState<string | null>(null);
+  const [draggedFieldType, setDraggedFieldType] = useState<FormField["type"] | null>(null);
+  const [dropTargetIndex, setDropTargetIndex] = useState<number | null>(null);
+  const [dropTargetColumnId, setDropTargetColumnId] = useState<string | null>(null);
 
   // Save to history whenever popupFlow changes
   const saveToHistory = (newFlow: PopupFlow) => {
@@ -806,6 +809,69 @@ export default function BuilderPage() {
       toast.error("Failed to save popup");
     } finally {
       setSaving(false);
+    }
+  };
+
+  // Handle drag from sidebar
+  const handleFieldDragStart = (fieldType: FormField["type"]) => {
+    setDraggedFieldType(fieldType);
+  };
+
+  // Handle drop into canvas
+  const handleCanvasDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (draggedFieldType) {
+      addFormField(draggedFieldType);
+      setDraggedFieldType(null);
+      setDropTargetIndex(null);
+    }
+  };
+
+  // Handle drop into specific position
+  const handleFieldDrop = (targetIndex: number) => {
+    if (draggedFieldType) {
+      const newField: FormField = {
+        id: `field-${Date.now()}`,
+        type: draggedFieldType,
+        label: `${draggedFieldType.charAt(0).toUpperCase() + draggedFieldType.slice(1)} Field`,
+        placeholder: draggedFieldType === "text" || draggedFieldType === "textarea" || draggedFieldType === "url" ? "Enter value..." : undefined,
+        options: draggedFieldType === "dropdown" || draggedFieldType === "radio" ? ["Option 1", "Option 2", "Option 3"] : undefined,
+        columnCount: draggedFieldType === "columns" ? 2 : undefined,
+        columnVariant: draggedFieldType === "columns" ? "equal" : undefined,
+        fields: draggedFieldType === "columns" ? [] : undefined
+      };
+
+      const currentFields = activeFollowUpId && activeFollowUp ?
+        activeFollowUp.formFields || [] :
+        activeStep?.formFields || [];
+
+      const newFields = [...currentFields];
+      newFields.splice(targetIndex, 0, newField);
+
+      if (activeFollowUpId && activeFollowUp) {
+        updateActiveFollowUp({ formFields: newFields });
+      } else if (activeStep) {
+        updateActiveStep({ formFields: newFields });
+      }
+
+      setDraggedFieldType(null);
+      setDropTargetIndex(null);
+      toast.success(`Added ${draggedFieldType} field`);
+    } else if (draggedFieldIndex !== null && draggedFieldIndex !== targetIndex) {
+      reorderFormField(draggedFieldIndex, targetIndex);
+      setDraggedFieldIndex(null);
+      setDropTargetIndex(null);
+    }
+  };
+
+  // Handle drop into column
+  const handleColumnDrop = (columnFieldId: string) => {
+    if (draggedFieldType) {
+      addFieldToColumn(columnFieldId, draggedFieldType);
+      setDraggedFieldType(null);
+      setDropTargetColumnId(null);
     }
   };
 
