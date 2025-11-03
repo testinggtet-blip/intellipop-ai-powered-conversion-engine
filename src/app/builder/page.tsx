@@ -79,6 +79,11 @@ interface FollowUpStep {
   showImage: boolean;
   backgroundImage?: string;
   formFields?: FormField[];
+  condition?: {
+    type: "button_click" | "form_submit" | "field_interaction" | "checkbox_check" | "element_click";
+    targetElement?: string; // ID or label of the element
+    targetType?: "button" | "headline" | "subheadline" | "form_field" | "checkbox" | "radio" | "dropdown";
+  };
 }
 
 interface FormField {
@@ -1942,6 +1947,130 @@ export default function BuilderPage() {
                     </TabsContent>
 
                     <TabsContent value="layout" className="space-y-3 mt-3">
+                      {/* Conditional Logic Section - Only show for follow-ups */}
+                      {activeFollowUpId && activeFollowUp && (
+                        <div className="pb-4 mb-4 border-b border-border">
+                          <Label className="text-xs font-semibold mb-2 block">⚡ Conditional Logic</Label>
+                          <p className="text-xs text-muted-foreground mb-3">
+                            Set when this follow-up should appear
+                          </p>
+                          
+                          <div className="space-y-3">
+                            <div>
+                              <Label className="text-xs mb-1">Trigger Type</Label>
+                              <Select
+                                value={activeFollowUp.condition?.type || "button_click"}
+                                onValueChange={(value: any) => {
+                                  updateActiveFollowUp({
+                                    condition: {
+                                      ...activeFollowUp.condition,
+                                      type: value,
+                                      targetElement: "",
+                                      targetType: value === "button_click" ? "button" : 
+                                                  value === "form_submit" ? "form_field" :
+                                                  value === "checkbox_check" ? "checkbox" : "button"
+                                    }
+                                  });
+                                }}>
+                                <SelectTrigger className="text-xs h-8">
+                                  <SelectValue placeholder="Select trigger" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="button_click">Button Click</SelectItem>
+                                  <SelectItem value="form_submit">Form Submit</SelectItem>
+                                  <SelectItem value="field_interaction">Field Interaction</SelectItem>
+                                  <SelectItem value="checkbox_check">Checkbox Check</SelectItem>
+                                  <SelectItem value="element_click">Element Click</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+
+                            {/* Target Element Type */}
+                            {activeFollowUp.condition?.type && (
+                              <div>
+                                <Label className="text-xs mb-1">Target Element Type</Label>
+                                <Select
+                                  value={activeFollowUp.condition?.targetType || "button"}
+                                  onValueChange={(value: any) => {
+                                    updateActiveFollowUp({
+                                      condition: {
+                                        ...activeFollowUp.condition!,
+                                        targetType: value
+                                      }
+                                    });
+                                  }}>
+                                  <SelectTrigger className="text-xs h-8">
+                                    <SelectValue placeholder="Select element" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="button">Button</SelectItem>
+                                    <SelectItem value="headline">Headline</SelectItem>
+                                    <SelectItem value="subheadline">Subheadline</SelectItem>
+                                    <SelectItem value="form_field">Form Field</SelectItem>
+                                    <SelectItem value="checkbox">Checkbox</SelectItem>
+                                    <SelectItem value="radio">Radio Button</SelectItem>
+                                    <SelectItem value="dropdown">Dropdown</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            )}
+
+                            {/* Target Element Selector */}
+                            {activeFollowUp.condition?.type && (
+                              <div>
+                                <Label className="text-xs mb-1">Element Identifier</Label>
+                                <Input
+                                  value={activeFollowUp.condition?.targetElement || ""}
+                                  onChange={(e) => {
+                                    updateActiveFollowUp({
+                                      condition: {
+                                        ...activeFollowUp.condition!,
+                                        targetElement: e.target.value
+                                      }
+                                    });
+                                  }}
+                                  placeholder="e.g., claim-offer-button, email-field"
+                                  className="text-xs h-8" />
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  {activeFollowUp.condition?.targetType === "button" && "Enter button text or ID"}
+                                  {activeFollowUp.condition?.targetType === "form_field" && "Enter field label or ID"}
+                                  {activeFollowUp.condition?.targetType === "headline" && "Clicking on headline text"}
+                                  {activeFollowUp.condition?.targetType === "subheadline" && "Clicking on subheadline text"}
+                                  {(activeFollowUp.condition?.targetType === "checkbox" || 
+                                    activeFollowUp.condition?.targetType === "radio" ||
+                                    activeFollowUp.condition?.targetType === "dropdown") && 
+                                    "Enter field label or ID"}
+                                </p>
+                              </div>
+                            )}
+
+                            {/* Visual Preview of Condition */}
+                            {activeFollowUp.condition?.type && (
+                              <div className="bg-muted/50 rounded-lg p-3 mt-3">
+                                <div className="flex items-start gap-2">
+                                  <Sparkles className="w-4 h-4 text-[#1DBFAA] mt-0.5 flex-shrink-0" />
+                                  <div className="flex-1">
+                                    <p className="text-xs font-medium mb-1">Condition Summary:</p>
+                                    <p className="text-xs text-muted-foreground">
+                                      {activeFollowUp.condition.type === "button_click" && 
+                                        `Show this follow-up when user clicks on ${activeFollowUp.condition.targetElement || "the button"}`}
+                                      {activeFollowUp.condition.type === "form_submit" && 
+                                        `Show this follow-up when user submits ${activeFollowUp.condition.targetElement || "the form"}`}
+                                      {activeFollowUp.condition.type === "field_interaction" && 
+                                        `Show this follow-up when user interacts with ${activeFollowUp.condition.targetElement || "a field"}`}
+                                      {activeFollowUp.condition.type === "checkbox_check" && 
+                                        `Show this follow-up when user checks ${activeFollowUp.condition.targetElement || "a checkbox"}`}
+                                      {activeFollowUp.condition.type === "element_click" && 
+                                        `Show this follow-up when user clicks ${activeFollowUp.condition.targetElement || "an element"}`}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                      
                       <div>
                         <Label className="text-xs mb-2">Form Fields</Label>
                         <p className="text-xs text-muted-foreground mb-3">Add fields to your popup</p>
