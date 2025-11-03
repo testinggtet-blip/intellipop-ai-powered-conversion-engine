@@ -60,7 +60,8 @@ import {
   Edit,
   GripVertical,
   Upload,
-  Video } from
+  Video,
+  Settings } from
 "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -192,6 +193,8 @@ export default function BuilderPage() {
   const [editingElement, setEditingElement] = useState<string | null>(null);
   const [draggedFieldIndex, setDraggedFieldIndex] = useState<number | null>(null);
   const [cursorPosition, setCursorPosition] = useState<number | null>(null);
+  const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
+  const [settingsFollowUpId, setSettingsFollowUpId] = useState<string | null>(null);
 
   // Save to history whenever popupFlow changes
   const saveToHistory = (newFlow: PopupFlow) => {
@@ -1380,6 +1383,23 @@ export default function BuilderPage() {
                               }
                               onClick={(e) => {
                                 e.stopPropagation();
+                                setSettingsFollowUpId(followUp.id);
+                                setSettingsDialogOpen(true);
+                              }}
+                              title="Configure settings">
+
+                                    <Settings className="w-3 h-3 text-[#1DBFAA]" />
+                                  </Button>
+                                  <Button
+                              variant="ghost"
+                              size="sm"
+                              className={`h-6 w-6 p-0 hover:bg-[#1DBFAA]/10 transition-opacity ${
+                              activeFollowUpId === followUp.id ?
+                              "opacity-100" :
+                              "opacity-0 group-hover:opacity-100"}`
+                              }
+                              onClick={(e) => {
+                                e.stopPropagation();
                                 duplicateFollowUp(step.id, followUp.id);
                               }}
                               title="Duplicate follow-up">
@@ -2410,6 +2430,253 @@ export default function BuilderPage() {
               )}
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Follow-up Settings Dialog */}
+      <Dialog open={settingsDialogOpen} onOpenChange={setSettingsDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh]">
+          <DialogHeader>
+            <DialogTitle>Follow-up Settings</DialogTitle>
+            <DialogDescription>
+              Configure advanced settings for this follow-up step
+            </DialogDescription>
+          </DialogHeader>
+          <div className="overflow-y-auto max-h-[calc(90vh-180px)] py-4">
+            {settingsFollowUpId && (() => {
+              const parentStep = popupFlow.steps.find(s => 
+                s.followUps?.some(fu => fu.id === settingsFollowUpId)
+              );
+              const followUp = parentStep?.followUps?.find(fu => fu.id === settingsFollowUpId);
+              
+              if (!followUp) return null;
+              
+              return (
+                <div className="space-y-6">
+                  {/* Follow-up Name */}
+                  <div>
+                    <Label className="text-sm mb-2 block">Follow-up Name</Label>
+                    <Input
+                      value={followUp.name}
+                      onChange={(e) => {
+                        setPopupFlow({
+                          ...popupFlow,
+                          steps: popupFlow.steps.map(step => ({
+                            ...step,
+                            followUps: step.followUps?.map(fu =>
+                              fu.id === settingsFollowUpId
+                                ? { ...fu, name: e.target.value }
+                                : fu
+                            )
+                          }))
+                        });
+                      }}
+                      placeholder="Enter follow-up name"
+                      className="text-sm h-9"
+                    />
+                  </div>
+
+                  {/* Conditional Logic Configuration */}
+                  <div className="border border-border rounded-lg p-4">
+                    <Label className="text-sm font-semibold mb-2 block">⚡ Conditional Logic</Label>
+                    <p className="text-xs text-muted-foreground mb-4">
+                      Set when this follow-up should appear based on user interactions
+                    </p>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <Label className="text-xs mb-2 block">Trigger Type</Label>
+                        <Select
+                          value={followUp.condition?.type || "button_click"}
+                          onValueChange={(value: any) => {
+                            setPopupFlow({
+                              ...popupFlow,
+                              steps: popupFlow.steps.map(step => ({
+                                ...step,
+                                followUps: step.followUps?.map(fu =>
+                                  fu.id === settingsFollowUpId
+                                    ? {
+                                        ...fu,
+                                        condition: {
+                                          ...fu.condition,
+                                          type: value,
+                                          targetElement: "",
+                                          targetType: value === "button_click" ? "button" :
+                                                      value === "form_submit" ? "form_field" :
+                                                      value === "checkbox_check" ? "checkbox" : "button"
+                                        }
+                                      }
+                                    : fu
+                                )
+                              }))
+                            });
+                          }}>
+                          <SelectTrigger className="text-xs h-9">
+                            <SelectValue placeholder="Select trigger type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="button_click">Button Click</SelectItem>
+                            <SelectItem value="form_submit">Form Submit</SelectItem>
+                            <SelectItem value="field_interaction">Field Interaction</SelectItem>
+                            <SelectItem value="checkbox_check">Checkbox Check</SelectItem>
+                            <SelectItem value="element_click">Element Click</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {followUp.condition?.type && (
+                        <>
+                          <div>
+                            <Label className="text-xs mb-2 block">Target Element Type</Label>
+                            <Select
+                              value={followUp.condition?.targetType || "button"}
+                              onValueChange={(value: any) => {
+                                setPopupFlow({
+                                  ...popupFlow,
+                                  steps: popupFlow.steps.map(step => ({
+                                    ...step,
+                                    followUps: step.followUps?.map(fu =>
+                                      fu.id === settingsFollowUpId
+                                        ? {
+                                            ...fu,
+                                            condition: {
+                                              ...fu.condition!,
+                                              targetType: value
+                                            }
+                                          }
+                                        : fu
+                                    )
+                                  }))
+                                });
+                              }}>
+                              <SelectTrigger className="text-xs h-9">
+                                <SelectValue placeholder="Select element type" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="button">Button</SelectItem>
+                                <SelectItem value="headline">Headline</SelectItem>
+                                <SelectItem value="subheadline">Subheadline</SelectItem>
+                                <SelectItem value="form_field">Form Field</SelectItem>
+                                <SelectItem value="checkbox">Checkbox</SelectItem>
+                                <SelectItem value="radio">Radio Button</SelectItem>
+                                <SelectItem value="dropdown">Dropdown</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          <div>
+                            <Label className="text-xs mb-2 block">Element Identifier</Label>
+                            <Input
+                              value={followUp.condition?.targetElement || ""}
+                              onChange={(e) => {
+                                setPopupFlow({
+                                  ...popupFlow,
+                                  steps: popupFlow.steps.map(step => ({
+                                    ...step,
+                                    followUps: step.followUps?.map(fu =>
+                                      fu.id === settingsFollowUpId
+                                        ? {
+                                            ...fu,
+                                            condition: {
+                                              ...fu.condition!,
+                                              targetElement: e.target.value
+                                            }
+                                          }
+                                        : fu
+                                    )
+                                  }))
+                                });
+                              }}
+                              placeholder="e.g., claim-offer-button, email-field"
+                              className="text-sm h-9"
+                            />
+                            <p className="text-xs text-muted-foreground mt-2">
+                              {followUp.condition?.targetType === "button" && "Enter the button text or unique ID"}
+                              {followUp.condition?.targetType === "form_field" && "Enter the field label or unique ID"}
+                              {followUp.condition?.targetType === "headline" && "This will trigger when user clicks the headline"}
+                              {followUp.condition?.targetType === "subheadline" && "This will trigger when user clicks the subheadline"}
+                              {(followUp.condition?.targetType === "checkbox" || 
+                                followUp.condition?.targetType === "radio" ||
+                                followUp.condition?.targetType === "dropdown") && 
+                                "Enter the field label or unique ID"}
+                            </p>
+                          </div>
+
+                          {/* Preview */}
+                          <div className="bg-muted/50 rounded-lg p-4 mt-4">
+                            <div className="flex items-start gap-3">
+                              <Sparkles className="w-5 h-5 text-[#1DBFAA] mt-0.5 flex-shrink-0" />
+                              <div className="flex-1">
+                                <p className="text-sm font-medium mb-2">Condition Summary:</p>
+                                <p className="text-sm text-muted-foreground">
+                                  {followUp.condition.type === "button_click" && 
+                                    `This follow-up will appear when user clicks on ${followUp.condition.targetElement || "the button"}`}
+                                  {followUp.condition.type === "form_submit" && 
+                                    `This follow-up will appear when user submits ${followUp.condition.targetElement || "the form"}`}
+                                  {followUp.condition.type === "field_interaction" && 
+                                    `This follow-up will appear when user interacts with ${followUp.condition.targetElement || "a field"}`}
+                                  {followUp.condition.type === "checkbox_check" && 
+                                    `This follow-up will appear when user checks ${followUp.condition.targetElement || "a checkbox"}`}
+                                  {followUp.condition.type === "element_click" && 
+                                    `This follow-up will appear when user clicks ${followUp.condition.targetElement || "an element"}`}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Display Settings */}
+                  <div className="border border-border rounded-lg p-4">
+                    <Label className="text-sm font-semibold mb-2 block">Display Settings</Label>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <Label className="text-sm">Show Background Image</Label>
+                          <p className="text-xs text-muted-foreground">Display background image in this follow-up</p>
+                        </div>
+                        <Switch
+                          checked={followUp.showImage}
+                          onCheckedChange={(checked) => {
+                            setPopupFlow({
+                              ...popupFlow,
+                              steps: popupFlow.steps.map(step => ({
+                                ...step,
+                                followUps: step.followUps?.map(fu =>
+                                  fu.id === settingsFollowUpId
+                                    ? { ...fu, showImage: checked }
+                                    : fu
+                                )
+                              }))
+                            });
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setSettingsDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="bg-[#1DBFAA] hover:bg-[#1DBFAA]/90"
+              onClick={() => {
+                setSettingsDialogOpen(false);
+                toast.success("Settings saved successfully");
+              }}
+            >
+              Save Settings
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>);
