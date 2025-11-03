@@ -1180,10 +1180,22 @@ export default function BuilderPage() {
                             {field.fields && field.fields.filter((_, i) => i % (field.columnCount || 2) === colIndex).map((nestedField) => (
                               <div key={nestedField.id} className="mb-2 last:mb-0">
                                 {nestedField.type === "text" && (
-                                  <Input placeholder={nestedField.label} className="text-xs h-6" disabled />
+                                  <div>
+                                    <Label className="text-xs mb-1 block">{nestedField.label}</Label>
+                                    <Input placeholder={nestedField.placeholder} className="text-xs h-6" disabled />
+                                  </div>
                                 )}
                                 {nestedField.type === "textarea" && (
-                                  <Textarea placeholder={nestedField.label} className="text-xs min-h-[40px]" disabled />
+                                  <div>
+                                    <Label className="text-xs mb-1 block">{nestedField.label}</Label>
+                                    <Textarea placeholder={nestedField.placeholder} className="text-xs min-h-[40px]" disabled />
+                                  </div>
+                                )}
+                                {nestedField.type === "url" && (
+                                  <div>
+                                    <Label className="text-xs mb-1 block">{nestedField.label}</Label>
+                                    <Input type="url" placeholder={nestedField.placeholder} className="text-xs h-6" disabled />
+                                  </div>
                                 )}
                                 {nestedField.type === "checkbox" && (
                                   <div className="flex items-center gap-1">
@@ -1191,10 +1203,70 @@ export default function BuilderPage() {
                                     <span className="text-xs">{nestedField.label}</span>
                                   </div>
                                 )}
+                                {nestedField.type === "radio" && (
+                                  <div className="space-y-1">
+                                    <Label className="text-xs mb-1 block">{nestedField.label}</Label>
+                                    {nestedField.options?.map((opt, i) => (
+                                      <div key={i} className="flex items-center gap-1">
+                                        <input type="radio" name={nestedField.id} disabled className="w-3 h-3" />
+                                        <span className="text-xs">{opt}</span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                                {nestedField.type === "dropdown" && (
+                                  <div>
+                                    <Label className="text-xs mb-1 block">{nestedField.label}</Label>
+                                    <Select disabled>
+                                      <SelectTrigger className="text-xs h-6">
+                                        <SelectValue placeholder="Select option" />
+                                      </SelectTrigger>
+                                    </Select>
+                                  </div>
+                                )}
+                                {nestedField.type === "button" && (
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="w-full text-xs h-6"
+                                    disabled>
+                                    {nestedField.label}
+                                  </Button>
+                                )}
+                                {nestedField.type === "image" && (
+                                  <div>
+                                    <Label className="text-xs mb-1 block">{nestedField.label}</Label>
+                                    {nestedField.fileUrl ? (
+                                      <div className="relative w-full h-16 rounded border border-border overflow-hidden">
+                                        <img src={nestedField.fileUrl} alt="Preview" className="w-full h-full object-cover" />
+                                      </div>
+                                    ) : (
+                                      <div className="flex items-center justify-center h-16 border border-dashed border-border rounded bg-muted/30">
+                                        <ImageIcon className="w-4 h-4 text-muted-foreground" />
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                                {nestedField.type === "video" && (
+                                  <div>
+                                    <Label className="text-xs mb-1 block">{nestedField.label}</Label>
+                                    {nestedField.fileUrl ? (
+                                      <div className="relative w-full h-20 rounded border border-border overflow-hidden bg-black">
+                                        <video src={nestedField.fileUrl} className="w-full h-full object-cover" controls />
+                                      </div>
+                                    ) : (
+                                      <div className="flex items-center justify-center h-20 border border-dashed border-border rounded bg-muted/30">
+                                        <Video className="w-4 h-4 text-muted-foreground" />
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
                               </div>
                             ))}
                             {(!field.fields || field.fields.filter((_, i) => i % (field.columnCount || 2) === colIndex).length === 0) && (
-                              <span className="text-xs text-muted-foreground">Column {colIndex + 1}</span>
+                              <div className="flex items-center justify-center h-full">
+                                <span className="text-xs text-muted-foreground">Column {colIndex + 1}</span>
+                              </div>
                             )}
                           </div>
                         ))}
