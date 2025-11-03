@@ -15,15 +15,15 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogFooter } from
-"@/components/ui/dialog";
+  DialogFooter
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue } from
-"@/components/ui/select";
+  SelectValue
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -61,8 +61,8 @@ import {
   GripVertical,
   Upload,
   Video,
-  Settings } from
-"lucide-react";
+  Settings
+} from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
@@ -876,10 +876,10 @@ export default function BuilderPage() {
   };
 
   const renderStepPreview = (
-  config: StepConfig | FollowUpStep,
-  isActive: boolean,
-  isFollowUp: boolean = false) =>
-  {
+    config: StepConfig | FollowUpStep,
+    isActive: boolean,
+    isFollowUp: boolean = false
+  ) => {
     return (
       <div
         className="bg-background rounded-lg shadow-lg border border-border overflow-hidden transition-all hover:shadow-xl relative"
@@ -890,24 +890,25 @@ export default function BuilderPage() {
           backgroundImage: config.backgroundImage ? `url(${config.backgroundImage})` : undefined,
           backgroundSize: 'cover',
           backgroundPosition: 'center'
-        }}>
-
+        }}
+      >
         <div className="p-6 text-center relative z-10" style={config.backgroundImage ? { backgroundColor: 'rgba(0,0,0,0.4)' } : {}}>
-          {config.showImage &&
-          <div 
-            className={`w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center relative group ${
-              isActive ? "cursor-pointer" : ""
-            }`}
-            onClick={(e) => {
-              if (isActive) {
-                e.stopPropagation();
-                setEditingElement("icon");
-              }
-            }}>
+          {/* Icon */}
+          {config.showImage && (
+            <div 
+              className={`w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center relative group ${
+                isActive ? "cursor-pointer" : ""
+              }`}
+              onClick={(e) => {
+                if (isActive) {
+                  e.stopPropagation();
+                  setEditingElement("icon");
+                }
+              }}
+            >
               <Sparkles className="w-8 h-8 text-white" />
               
-              {/* Action icons on click/hover */}
-              {isActive && editingElement === "icon" &&
+              {isActive && editingElement === "icon" && (
                 <div className="absolute -top-2 -right-2 flex gap-1 z-20">
                   <Button
                     variant="outline"
@@ -915,7 +916,6 @@ export default function BuilderPage() {
                     className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
                     onClick={(e) => {
                       e.stopPropagation();
-                      // Toggle icon visibility
                       if (isFollowUp && activeFollowUpId) {
                         updateActiveFollowUp({ showImage: false });
                       } else {
@@ -923,19 +923,20 @@ export default function BuilderPage() {
                       }
                       setEditingElement(null);
                     }}
-                    title="Remove icon">
+                    title="Remove icon"
+                  >
                     <X className="w-3 h-3 text-destructive" />
                   </Button>
                 </div>
-              }
+              )}
             </div>
-          }
+          )}
           
-          {/* Editable Headline */}
+          {/* Headline */}
           <div
             className={`text-lg font-bold mb-2 !whitespace-pre-line relative group ${isActive ? "cursor-text hover:ring-2 hover:ring-[#1DBFAA]/50 rounded px-2 py-1 transition-all" : ""} ${
-            editingElement === "headline" && isActive ? "ring-2 ring-[#1DBFAA]" : ""}`
-            }
+              editingElement === "headline" && isActive ? "ring-2 ring-[#1DBFAA]" : ""
+            }`}
             style={{
               color: config.backgroundImage ? '#ffffff' : config.textColor,
               fontSize: `${popupFlow.typography.headingSize}px`,
@@ -946,10 +947,9 @@ export default function BuilderPage() {
                 e.stopPropagation();
                 setEditingElement("headline");
               }
-            }}>
-
-            {/* Action icons on click */}
-            {isActive && editingElement === "headline" && !editingElement.includes("input") &&
+            }}
+          >
+            {isActive && editingElement === "headline" && !editingElement.includes("input") && (
               <div className="absolute -top-3 -right-3 flex gap-1 z-20">
                 <Button
                   variant="outline"
@@ -957,7 +957,6 @@ export default function BuilderPage() {
                   className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
                   onClick={(e) => {
                     e.stopPropagation();
-                    // Remove headline
                     if (isFollowUp && activeFollowUpId) {
                       updateActiveFollowUp({ headline: "" });
                     } else {
@@ -965,56 +964,58 @@ export default function BuilderPage() {
                     }
                     setEditingElement(null);
                   }}
-                  title="Remove headline">
+                  title="Remove headline"
+                >
                   <X className="w-3 h-3 text-destructive" />
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
                   className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
-                  title="Reorder">
+                  title="Reorder"
+                >
                   <GripVertical className="w-3 h-3" />
                 </Button>
               </div>
-            }
+            )}
 
-            {editingElement === "headline" && isActive ?
-            <Input
-              value={config.headline}
-              onChange={(e) => {
-                if (isFollowUp && activeFollowUpId) {
-                  updateActiveFollowUp({ headline: e.target.value });
-                } else {
-                  updateActiveStep({ headline: e.target.value });
-                }
-              }}
-              onSelect={(e) => {
-                const target = e.target as HTMLInputElement;
-                setCursorPosition(target.selectionStart);
-              }}
-              onClick={(e) => {
-                const target = e.target as HTMLInputElement;
-                setCursorPosition(target.selectionStart);
-              }}
-              onKeyUp={(e) => {
-                const target = e.target as HTMLInputElement;
-                setCursorPosition(target.selectionStart);
-              }}
-              onBlur={() => setEditingElement(null)}
-              autoFocus
-              className="text-lg font-bold text-center"
-              style={{ color: config.backgroundImage ? '#ffffff' : config.textColor }} /> :
-
-
-            config.headline
-            }
+            {editingElement === "headline" && isActive ? (
+              <Input
+                value={config.headline}
+                onChange={(e) => {
+                  if (isFollowUp && activeFollowUpId) {
+                    updateActiveFollowUp({ headline: e.target.value });
+                  } else {
+                    updateActiveStep({ headline: e.target.value });
+                  }
+                }}
+                onSelect={(e) => {
+                  const target = e.target as HTMLInputElement;
+                  setCursorPosition(target.selectionStart);
+                }}
+                onClick={(e) => {
+                  const target = e.target as HTMLInputElement;
+                  setCursorPosition(target.selectionStart);
+                }}
+                onKeyUp={(e) => {
+                  const target = e.target as HTMLInputElement;
+                  setCursorPosition(target.selectionStart);
+                }}
+                onBlur={() => setEditingElement(null)}
+                autoFocus
+                className="text-lg font-bold text-center"
+                style={{ color: config.backgroundImage ? '#ffffff' : config.textColor }}
+              />
+            ) : (
+              config.headline
+            )}
           </div>
           
-          {/* Editable Subheadline */}
+          {/* Subheadline */}
           <div
             className={`text-sm mb-4 !whitespace-pre-line relative group ${isActive ? "cursor-text hover:ring-2 hover:ring-[#1DBFAA]/50 rounded px-2 py-1 transition-all" : ""} ${
-            editingElement === "subheadline" && isActive ? "ring-2 ring-[#1DBFAA]" : ""}`
-            }
+              editingElement === "subheadline" && isActive ? "ring-2 ring-[#1DBFAA]" : ""
+            }`}
             style={{
               color: config.backgroundImage ? '#ffffff' : config.textColor,
               opacity: 0.9,
@@ -1026,10 +1027,9 @@ export default function BuilderPage() {
                 e.stopPropagation();
                 setEditingElement("subheadline");
               }
-            }}>
-
-            {/* Action icons on click */}
-            {isActive && editingElement === "subheadline" &&
+            }}
+          >
+            {isActive && editingElement === "subheadline" && (
               <div className="absolute -top-3 -right-3 flex gap-1 z-20">
                 <Button
                   variant="outline"
@@ -1037,7 +1037,6 @@ export default function BuilderPage() {
                   className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
                   onClick={(e) => {
                     e.stopPropagation();
-                    // Remove subheadline
                     if (isFollowUp && activeFollowUpId) {
                       updateActiveFollowUp({ subheadline: "" });
                     } else {
@@ -1045,164 +1044,149 @@ export default function BuilderPage() {
                     }
                     setEditingElement(null);
                   }}
-                  title="Remove subheadline">
+                  title="Remove subheadline"
+                >
                   <X className="w-3 h-3 text-destructive" />
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
                   className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
-                  title="Reorder">
+                  title="Reorder"
+                >
                   <GripVertical className="w-3 h-3" />
                 </Button>
               </div>
-            }
+            )}
 
-            {editingElement === "subheadline" && isActive ?
-            <Input
-              value={config.subheadline}
-              onChange={(e) => {
-                if (isFollowUp && activeFollowUpId) {
-                  updateActiveFollowUp({ subheadline: e.target.value });
-                } else {
-                  updateActiveStep({ subheadline: e.target.value });
-                }
-              }}
-              onSelect={(e) => {
-                const target = e.target as HTMLInputElement;
-                setCursorPosition(target.selectionStart);
-              }}
-              onClick={(e) => {
-                const target = e.target as HTMLInputElement;
-                setCursorPosition(target.selectionStart);
-              }}
-              onKeyUp={(e) => {
-                const target = e.target as HTMLInputElement;
-                setCursorPosition(target.selectionStart);
-              }}
-              onBlur={() => setEditingElement(null)}
-              autoFocus
-              className="text-sm text-center"
-              style={{ color: config.backgroundImage ? '#ffffff' : config.textColor }} /> :
-
-
-            config.subheadline
-            }
+            {editingElement === "subheadline" && isActive ? (
+              <Input
+                value={config.subheadline}
+                onChange={(e) => {
+                  if (isFollowUp && activeFollowUpId) {
+                    updateActiveFollowUp({ subheadline: e.target.value });
+                  } else {
+                    updateActiveStep({ subheadline: e.target.value });
+                  }
+                }}
+                onSelect={(e) => {
+                  const target = e.target as HTMLInputElement;
+                  setCursorPosition(target.selectionStart);
+                }}
+                onClick={(e) => {
+                  const target = e.target as HTMLInputElement;
+                  setCursorPosition(target.selectionStart);
+                }}
+                onKeyUp={(e) => {
+                  const target = e.target as HTMLInputElement;
+                  setCursorPosition(target.selectionStart);
+                }}
+                onBlur={() => setEditingElement(null)}
+                autoFocus
+                className="text-sm text-center"
+                style={{ color: config.backgroundImage ? '#ffffff' : config.textColor }}
+              />
+            ) : (
+              config.subheadline
+            )}
           </div>
           
           {/* Render custom form fields with drag and drop */}
           {config.formFields && config.formFields.length > 0 && (
-          <div 
-            className="space-y-2 mb-4"
-            onDragOver={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-            onDrop={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              if (isActive) {
-                handleCanvasDrop(e);
-              }
-            }}>
-              {config.formFields.map((field, index) =>
-            <div
-              key={field.id}
-              draggable={isActive}
-              onDragStart={() => setDraggedFieldIndex(index)}
+            <div 
+              className="space-y-2 mb-4"
               onDragOver={(e) => {
                 e.preventDefault();
-                if (draggedFieldIndex !== null && draggedFieldIndex !== index) {
-                  reorderFormField(draggedFieldIndex, index);
-                  setDraggedFieldIndex(index);
+                e.stopPropagation();
+              }}
+              onDrop={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (isActive) {
+                  handleCanvasDrop(e);
                 }
               }}
-              onDragEnd={() => setDraggedFieldIndex(null)}
-              className={`text-left relative group ${isActive ? "cursor-move" : ""}`}>
-
-                  {isActive &&
-              <div className="absolute -left-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+            >
+              {config.formFields.map((field, index) => (
+                <div
+                  key={field.id}
+                  draggable={isActive}
+                  onDragStart={() => setDraggedFieldIndex(index)}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    if (draggedFieldIndex !== null && draggedFieldIndex !== index) {
+                      reorderFormField(draggedFieldIndex, index);
+                      setDraggedFieldIndex(index);
+                    }
+                  }}
+                  onDragEnd={() => setDraggedFieldIndex(null)}
+                  className={`text-left relative group ${isActive ? "cursor-move" : ""}`}
+                >
+                  {isActive && (
+                    <div className="absolute -left-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
                       <GripVertical className="w-4 h-4 text-muted-foreground" />
                     </div>
-              }
+                  )}
                   
-                  {field.type === "text" &&
-              <div>
+                  {field.type === "text" && (
+                    <div>
                       <Label className="text-xs mb-1">{field.label}</Label>
-                      <Input
-                  placeholder={field.placeholder}
-                  className="text-xs h-8"
-                  disabled />
-
+                      <Input placeholder={field.placeholder} className="text-xs h-8" disabled />
                     </div>
-              }
-                  {field.type === "textarea" &&
-              <div>
+                  )}
+                  {field.type === "textarea" && (
+                    <div>
                       <Label className="text-xs mb-1">{field.label}</Label>
-                      <Textarea
-                  placeholder={field.placeholder}
-                  className="text-xs min-h-[60px]"
-                  disabled />
-
+                      <Textarea placeholder={field.placeholder} className="text-xs min-h-[60px]" disabled />
                     </div>
-              }
-                  {field.type === "url" &&
-              <div>
+                  )}
+                  {field.type === "url" && (
+                    <div>
                       <Label className="text-xs mb-1">{field.label}</Label>
-                      <Input
-                  type="url"
-                  placeholder={field.placeholder}
-                  className="text-xs h-8"
-                  disabled />
-
+                      <Input type="url" placeholder={field.placeholder} className="text-xs h-8" disabled />
                     </div>
-              }
-                  {field.type === "image" &&
-              <div>
+                  )}
+                  {field.type === "image" && (
+                    <div>
                       <Label className="text-xs mb-1">{field.label}</Label>
-                      {field.fileUrl ?
-                <div className="relative w-full h-24 rounded border border-border overflow-hidden">
+                      {field.fileUrl ? (
+                        <div className="relative w-full h-24 rounded border border-border overflow-hidden">
                           <img src={field.fileUrl} alt="Preview" className="w-full h-full object-cover" />
-                        </div> :
-
-                <div className="flex items-center gap-2">
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2">
                           <Button variant="outline" size="sm" className="h-8 text-xs" disabled>
                             <ImageIcon className="w-3 h-3 mr-1" />
                             Upload Image
                           </Button>
                         </div>
-                }
+                      )}
                     </div>
-              }
-                  {field.type === "video" &&
-              <div>
+                  )}
+                  {field.type === "video" && (
+                    <div>
                       <Label className="text-xs mb-1">{field.label}</Label>
-                      {field.fileUrl ?
-                <div className="relative w-full h-32 rounded border border-border overflow-hidden bg-black">
+                      {field.fileUrl ? (
+                        <div className="relative w-full h-32 rounded border border-border overflow-hidden bg-black">
                           <video src={field.fileUrl} className="w-full h-full object-cover" controls />
-                        </div> :
-
-                <div className="flex items-center gap-2">
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2">
                           <Button variant="outline" size="sm" className="h-8 text-xs" disabled>
                             <Video className="w-3 h-3 mr-1" />
                             Upload Video
                           </Button>
                         </div>
-                }
+                      )}
                     </div>
-              }
-                  {field.type === "button" &&
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full text-xs"
-                disabled>
-
+                  )}
+                  {field.type === "button" && (
+                    <Button variant="outline" size="sm" className="w-full text-xs" disabled>
                       {field.label}
                     </Button>
-              }
-                  {field.type === "socials" &&
-              <div className="flex gap-2 justify-center">
+                  )}
+                  {field.type === "socials" && (
+                    <div className="flex gap-2 justify-center">
                       <Button variant="outline" size="sm" className="h-8 w-8 p-0" disabled>
                         <Share2 className="w-4 h-4" />
                       </Button>
@@ -1213,26 +1197,26 @@ export default function BuilderPage() {
                         <Share2 className="w-4 h-4" />
                       </Button>
                     </div>
-              }
-                  {field.type === "checkbox" &&
-              <div className="flex items-center gap-2">
+                  )}
+                  {field.type === "checkbox" && (
+                    <div className="flex items-center gap-2">
                       <input type="checkbox" disabled className="w-4 h-4" />
                       <span className="text-xs">{field.label}</span>
                     </div>
-              }
-                  {field.type === "radio" &&
-              <div className="space-y-1">
+                  )}
+                  {field.type === "radio" && (
+                    <div className="space-y-1">
                       <Label className="text-xs mb-1">{field.label}</Label>
-                      {field.options?.map((opt, i) =>
-                <div key={i} className="flex items-center gap-2">
+                      {field.options?.map((opt, i) => (
+                        <div key={i} className="flex items-center gap-2">
                           <input type="radio" name={field.id} disabled className="w-4 h-4" />
                           <span className="text-xs">{opt}</span>
                         </div>
-                )}
+                      ))}
                     </div>
-              }
-                  {field.type === "dropdown" &&
-              <div>
+                  )}
+                  {field.type === "dropdown" && (
+                    <div>
                       <Label className="text-xs mb-1">{field.label}</Label>
                       <Select disabled>
                         <SelectTrigger className="text-xs h-8">
@@ -1240,9 +1224,9 @@ export default function BuilderPage() {
                         </SelectTrigger>
                       </Select>
                     </div>
-              }
-                  {field.type === "columns" &&
-              <div className="border border-border/50 rounded p-2 bg-muted/20">
+                  )}
+                  {field.type === "columns" && (
+                    <div className="border border-border/50 rounded p-2 bg-muted/20">
                       <div 
                         className={`grid gap-2 ${
                           field.columnCount === 1 ? "grid-cols-1" :
@@ -1252,7 +1236,8 @@ export default function BuilderPage() {
                             "grid-cols-2" :
                           field.columnCount === 3 ? "grid-cols-3" :
                           "grid-cols-4"
-                        }`}>
+                        }`}
+                      >
                         {Array.from({ length: field.columnCount || 2 }).map((_, colIndex) => (
                           <div key={colIndex} className="border border-dashed border-border rounded p-2 min-h-[60px] bg-background/50">
                             {field.fields && field.fields.filter((_, i) => i % (field.columnCount || 2) === colIndex).map((nestedField) => (
@@ -1303,11 +1288,7 @@ export default function BuilderPage() {
                                   </div>
                                 )}
                                 {nestedField.type === "button" && (
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="w-full text-xs h-6"
-                                    disabled>
+                                  <Button variant="outline" size="sm" className="w-full text-xs h-6" disabled>
                                     {nestedField.label}
                                   </Button>
                                 )}
@@ -1350,26 +1331,25 @@ export default function BuilderPage() {
                         ))}
                       </div>
                     </div>
-              }
+                  )}
                 </div>
-            )}
+              ))}
             </div>
-          </div>
+          )}
           
-          {/* Editable Button */}
+          {/* Button */}
           <div
             className={`relative ${isActive ? "cursor-text hover:ring-2 hover:ring-[#1DBFAA]/50 rounded transition-all" : ""} ${
-            editingElement === "button" && isActive ? "ring-2 ring-[#1DBFAA]" : ""}`
-            }
+              editingElement === "button" && isActive ? "ring-2 ring-[#1DBFAA]" : ""
+            }`}
             onClick={(e) => {
               if (isActive) {
                 e.stopPropagation();
                 setEditingElement("button");
               }
-            }}>
-
-            {/* Action icons on click */}
-            {isActive && editingElement === "button" &&
+            }}
+          >
+            {isActive && editingElement === "button" && (
               <div className="absolute -top-3 -right-3 flex gap-1 z-20">
                 <Button
                   variant="outline"
@@ -1377,7 +1357,6 @@ export default function BuilderPage() {
                   className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
                   onClick={(e) => {
                     e.stopPropagation();
-                    // Remove button text (set to empty)
                     if (isFollowUp && activeFollowUpId) {
                       updateActiveFollowUp({ buttonText: "" });
                     } else {
@@ -1385,63 +1364,65 @@ export default function BuilderPage() {
                     }
                     setEditingElement(null);
                   }}
-                  title="Remove button text">
+                  title="Remove button text"
+                >
                   <X className="w-3 h-3 text-destructive" />
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
                   className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
-                  title="Reorder">
+                  title="Reorder"
+                >
                   <GripVertical className="w-3 h-3" />
                 </Button>
               </div>
-            }
+            )}
 
-            {editingElement === "button" && isActive ?
-            <Input
-              value={config.buttonText}
-              onChange={(e) => {
-                if (isFollowUp && activeFollowUpId) {
-                  updateActiveFollowUp({ buttonText: e.target.value });
-                } else {
-                  updateActiveStep({ buttonText: e.target.value });
-                }
-              }}
-              onSelect={(e) => {
-                const target = e.target as HTMLInputElement;
-                setCursorPosition(target.selectionStart);
-              }}
-              onClick={(e) => {
-                const target = e.target as HTMLInputElement;
-                setCursorPosition(target.selectionStart);
-              }}
-              onKeyUp={(e) => {
-                const target = e.target as HTMLInputElement;
-                setCursorPosition(target.selectionStart);
-              }}
-              onBlur={() => setEditingElement(null)}
-              autoFocus
-              className="w-full text-xs text-center" /> :
-
-
-            <Button
-              size="sm"
-              className="w-full text-xs pointer-events-none"
-              style={{
-                backgroundColor: config.buttonColor,
-                borderRadius: `${config.borderRadius}px`,
-                fontSize: `${popupFlow.typography.buttonSize}px`,
-                fontWeight: popupFlow.typography.buttonWeight
-              }}>
-
+            {editingElement === "button" && isActive ? (
+              <Input
+                value={config.buttonText}
+                onChange={(e) => {
+                  if (isFollowUp && activeFollowUpId) {
+                    updateActiveFollowUp({ buttonText: e.target.value });
+                  } else {
+                    updateActiveStep({ buttonText: e.target.value });
+                  }
+                }}
+                onSelect={(e) => {
+                  const target = e.target as HTMLInputElement;
+                  setCursorPosition(target.selectionStart);
+                }}
+                onClick={(e) => {
+                  const target = e.target as HTMLInputElement;
+                  setCursorPosition(target.selectionStart);
+                }}
+                onKeyUp={(e) => {
+                  const target = e.target as HTMLInputElement;
+                  setCursorPosition(target.selectionStart);
+                }}
+                onBlur={() => setEditingElement(null)}
+                autoFocus
+                className="w-full text-xs text-center"
+              />
+            ) : (
+              <Button
+                size="sm"
+                className="w-full text-xs pointer-events-none"
+                style={{
+                  backgroundColor: config.buttonColor,
+                  borderRadius: `${config.borderRadius}px`,
+                  fontSize: `${popupFlow.typography.buttonSize}px`,
+                  fontWeight: popupFlow.typography.buttonWeight
+                }}
+              >
                 {config.buttonText}
               </Button>
-            }
+            )}
           </div>
         </div>
-      </div>);
-
+      </div>
+    );
   };
 
   return (
