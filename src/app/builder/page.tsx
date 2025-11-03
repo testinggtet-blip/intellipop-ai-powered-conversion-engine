@@ -90,12 +90,15 @@ interface FollowUpStep {
 
 interface FormField {
   id: string;
-  type: "text" | "textarea" | "url" | "button" | "socials" | "checkbox" | "radio" | "dropdown" | "image" | "video";
+  type: "text" | "textarea" | "url" | "button" | "socials" | "checkbox" | "radio" | "dropdown" | "image" | "video" | "columns";
   label: string;
   placeholder?: string;
   options?: string[];
   fileUrl?: string;
   buttonUrl?: string;
+  columnCount?: 1 | 2 | 3 | 4; // For column layouts
+  columnVariant?: "equal" | "left-large" | "right-large"; // For 2-column variants
+  fields?: FormField[]; // Nested fields for column layouts
 }
 
 interface StepConfig {
@@ -475,7 +478,10 @@ export default function BuilderPage() {
       type: fieldType,
       label: `${fieldType.charAt(0).toUpperCase() + fieldType.slice(1)} Field`,
       placeholder: fieldType === "text" || fieldType === "textarea" || fieldType === "url" ? "Enter value..." : undefined,
-      options: fieldType === "dropdown" || fieldType === "radio" ? ["Option 1", "Option 2", "Option 3"] : undefined
+      options: fieldType === "dropdown" || fieldType === "radio" ? ["Option 1", "Option 2", "Option 3"] : undefined,
+      columnCount: fieldType === "columns" ? 2 : undefined,
+      columnVariant: fieldType === "columns" ? "equal" : undefined,
+      fields: fieldType === "columns" ? [] : undefined
     };
 
     if (activeFollowUpId && activeFollowUp) {
@@ -489,6 +495,72 @@ export default function BuilderPage() {
     }
 
     toast.success(`Added ${fieldType} field`);
+  };
+
+  const addFieldToColumn = (columnFieldId: string, fieldType: FormField["type"]) => {
+    const newField: FormField = {
+      id: `field-${Date.now()}`,
+      type: fieldType,
+      label: `${fieldType.charAt(0).toUpperCase() + fieldType.slice(1)}`,
+      placeholder: fieldType === "text" || fieldType === "textarea" || fieldType === "url" ? "Enter value..." : undefined,
+      options: fieldType === "dropdown" || fieldType === "radio" ? ["Option 1", "Option 2"] : undefined
+    };
+
+    if (activeFollowUpId && activeFollowUp) {
+      updateActiveFollowUp({
+        formFields: (activeFollowUp.formFields || []).map((f) =>
+          f.id === columnFieldId ? { ...f, fields: [...(f.fields || []), newField] } : f
+        )
+      });
+    } else if (activeStep) {
+      updateActiveStep({
+        formFields: (activeStep.formFields || []).map((f) =>
+          f.id === columnFieldId ? { ...f, fields: [...(f.fields || []), newField] } : f
+        )
+      });
+    }
+
+    toast.success(`Added ${fieldType} to column`);
+  };
+
+  const removeFieldFromColumn = (columnFieldId: string, fieldId: string) => {
+    if (activeFollowUpId && activeFollowUp) {
+      updateActiveFollowUp({
+        formFields: (activeFollowUp.formFields || []).map((f) =>
+          f.id === columnFieldId ? { ...f, fields: (f.fields || []).filter(cf => cf.id !== fieldId) } : f
+        )
+      });
+    } else if (activeStep) {
+      updateActiveStep({
+        formFields: (activeStep.formFields || []).map((f) =>
+          f.id === columnFieldId ? { ...f, fields: (f.fields || []).filter(cf => cf.id !== fieldId) } : f
+        )
+      });
+    }
+    
+    toast.success("Field removed from column");
+  };
+
+  const updateColumnField = (columnFieldId: string, fieldId: string, updates: Partial<FormField>) => {
+    if (activeFollowUpId && activeFollowUp) {
+      updateActiveFollowUp({
+        formFields: (activeFollowUp.formFields || []).map((f) =>
+          f.id === columnFieldId ? {
+            ...f,
+            fields: (f.fields || []).map(cf => cf.id === fieldId ? { ...cf, ...updates } : cf)
+          } : f
+        )
+      });
+    } else if (activeStep) {
+      updateActiveStep({
+        formFields: (activeStep.formFields || []).map((f) =>
+          f.id === columnFieldId ? {
+            ...f,
+            fields: (f.fields || []).map(cf => cf.id === fieldId ? { ...cf, ...updates } : cf)
+          } : f
+        )
+      });
+    }
   };
 
   const insertMergeTag = (tag: string) => {
@@ -1089,6 +1161,44 @@ export default function BuilderPage() {
                           <SelectValue placeholder="Select option" />
                         </SelectTrigger>
                       </Select>
+                    </div>
+              }
+                  {field.type === "columns" &&
+              <div className="border border-border/50 rounded p-2 bg-muted/20">
+                      <div 
+                        className={`grid gap-2 ${
+                          field.columnCount === 1 ? "grid-cols-1" :
+                          field.columnCount === 2 ? 
+                            field.columnVariant === "left-large" ? "grid-cols-[2fr_1fr]" :
+                            field.columnVariant === "right-large" ? "grid-cols-[1fr_2fr]" :
+                            "grid-cols-2" :
+                          field.columnCount === 3 ? "grid-cols-3" :
+                          "grid-cols-4"
+                        }`}>
+                        {Array.from({ length: field.columnCount || 2 }).map((_, colIndex) => (
+                          <div key={colIndex} className="border border-dashed border-border rounded p-2 min-h-[60px] bg-background/50">
+                            {field.fields && field.fields.filter((_, i) => i % (field.columnCount || 2) === colIndex).map((nestedField) => (
+                              <div key={nestedField.id} className="mb-2 last:mb-0">
+                                {nestedField.type === "text" && (
+                                  <Input placeholder={nestedField.label} className="text-xs h-6" disabled />
+                                )}
+                                {nestedField.type === "textarea" && (
+                                  <Textarea placeholder={nestedField.label} className="text-xs min-h-[40px]" disabled />
+                                )}
+                                {nestedField.type === "checkbox" && (
+                                  <div className="flex items-center gap-1">
+                                    <input type="checkbox" disabled className="w-3 h-3" />
+                                    <span className="text-xs">{nestedField.label}</span>
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                            {(!field.fields || field.fields.filter((_, i) => i % (field.columnCount || 2) === colIndex).length === 0) && (
+                              <span className="text-xs text-muted-foreground">Column {colIndex + 1}</span>
+                            )}
+                          </div>
+                        ))}
+                      </div>
                     </div>
               }
                 </div>
@@ -2119,6 +2229,107 @@ export default function BuilderPage() {
                         </div>
                       )}
                       
+                      {/* Column Layout Section */}
+                      <div className="pb-4 mb-4 border-b border-border">
+                        <Label className="text-xs font-semibold mb-2 block">📐 Column Layout</Label>
+                        <p className="text-xs text-muted-foreground mb-3">Organize fields in columns</p>
+                        
+                        <div className="grid grid-cols-2 gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-16 text-xs flex-col justify-center gap-1"
+                            onClick={() => addFormField("columns")}>
+                            <div className="flex gap-1 items-center justify-center">
+                              <div className="w-8 h-6 border-2 border-current rounded" />
+                            </div>
+                            <span>1 Column</span>
+                          </Button>
+                          
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-16 text-xs flex-col justify-center gap-1"
+                            onClick={() => {
+                              const newField: FormField = {
+                                id: `field-${Date.now()}`,
+                                type: "columns",
+                                label: "2 Columns",
+                                columnCount: 2,
+                                columnVariant: "equal",
+                                fields: []
+                              };
+                              if (activeFollowUpId && activeFollowUp) {
+                                updateActiveFollowUp({ formFields: [...(activeFollowUp.formFields || []), newField] });
+                              } else if (activeStep) {
+                                updateActiveStep({ formFields: [...(activeStep.formFields || []), newField] });
+                              }
+                              toast.success("Added 2 columns layout");
+                            }}>
+                            <div className="flex gap-1 items-center justify-center">
+                              <div className="w-3.5 h-6 border-2 border-current rounded" />
+                              <div className="w-3.5 h-6 border-2 border-current rounded" />
+                            </div>
+                            <span>2 Columns</span>
+                          </Button>
+                          
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-16 text-xs flex-col justify-center gap-1"
+                            onClick={() => {
+                              const newField: FormField = {
+                                id: `field-${Date.now()}`,
+                                type: "columns",
+                                label: "3 Columns",
+                                columnCount: 3,
+                                columnVariant: "equal",
+                                fields: []
+                              };
+                              if (activeFollowUpId && activeFollowUp) {
+                                updateActiveFollowUp({ formFields: [...(activeFollowUp.formFields || []), newField] });
+                              } else if (activeStep) {
+                                updateActiveStep({ formFields: [...(activeStep.formFields || []), newField] });
+                              }
+                              toast.success("Added 3 columns layout");
+                            }}>
+                            <div className="flex gap-1 items-center justify-center">
+                              <div className="w-2.5 h-6 border-2 border-current rounded" />
+                              <div className="w-2.5 h-6 border-2 border-current rounded" />
+                              <div className="w-2.5 h-6 border-2 border-current rounded" />
+                            </div>
+                            <span>3 Columns</span>
+                          </Button>
+                          
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-16 text-xs flex-col justify-center gap-1"
+                            onClick={() => {
+                              const newField: FormField = {
+                                id: `field-${Date.now()}`,
+                                type: "columns",
+                                label: "2 Columns (Wide Left)",
+                                columnCount: 2,
+                                columnVariant: "left-large",
+                                fields: []
+                              };
+                              if (activeFollowUpId && activeFollowUp) {
+                                updateActiveFollowUp({ formFields: [...(activeFollowUp.formFields || []), newField] });
+                              } else if (activeStep) {
+                                updateActiveStep({ formFields: [...(activeStep.formFields || []), newField] });
+                              }
+                              toast.success("Added 2 columns (wide left) layout");
+                            }}>
+                            <div className="flex gap-1 items-center justify-center">
+                              <div className="w-5 h-6 border-2 border-current rounded" />
+                              <div className="w-2.5 h-6 border-2 border-current rounded" />
+                            </div>
+                            <span>2 Columns ...</span>
+                          </Button>
+                        </div>
+                      </div>
+                      
                       <div>
                         <Label className="text-xs mb-2">Form Fields</Label>
                         <p className="text-xs text-muted-foreground mb-3">Add fields to your popup</p>
@@ -2235,6 +2446,7 @@ export default function BuilderPage() {
                                     {field.type === "checkbox" && <CheckSquare className="w-3 h-3" />}
                                     {field.type === "radio" && <Circle className="w-3 h-3" />}
                                     {field.type === "dropdown" && <ChevronDown className="w-3 h-3" />}
+                                    {field.type === "columns" && <Layout className="w-3 h-3" />}
                                     <span className="text-xs font-medium">{field.type}</span>
                                   </div>
                                   <div className="flex items-center gap-1">
@@ -2269,6 +2481,110 @@ export default function BuilderPage() {
                                 placeholder="Field label" />
 
                                     </div>
+                                    
+                                    {/* Column Configuration */}
+                                    {field.type === "columns" && (
+                                      <>
+                                        <div>
+                                          <Label className="text-xs mb-1">Column Count</Label>
+                                          <Select
+                                            value={field.columnCount?.toString() || "2"}
+                                            onValueChange={(value) => {
+                                              updateFormField(field.id, { 
+                                                columnCount: parseInt(value) as 1 | 2 | 3 | 4,
+                                                columnVariant: parseInt(value) === 2 ? field.columnVariant || "equal" : "equal"
+                                              });
+                                            }}>
+                                            <SelectTrigger className="text-xs h-7">
+                                              <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                              <SelectItem value="1">1 Column</SelectItem>
+                                              <SelectItem value="2">2 Columns</SelectItem>
+                                              <SelectItem value="3">3 Columns</SelectItem>
+                                            </SelectContent>
+                                          </Select>
+                                        </div>
+                                        
+                                        {field.columnCount === 2 && (
+                                          <div>
+                                            <Label className="text-xs mb-1">Column Variant</Label>
+                                            <Select
+                                              value={field.columnVariant || "equal"}
+                                              onValueChange={(value: any) => {
+                                                updateFormField(field.id, { columnVariant: value });
+                                              }}>
+                                              <SelectTrigger className="text-xs h-7">
+                                                <SelectValue />
+                                              </SelectTrigger>
+                                              <SelectContent>
+                                                <SelectItem value="equal">Equal Width</SelectItem>
+                                                <SelectItem value="left-large">Left Larger</SelectItem>
+                                                <SelectItem value="right-large">Right Larger</SelectItem>
+                                              </SelectContent>
+                                            </Select>
+                                          </div>
+                                        )}
+
+                                        {/* Add Fields to Columns */}
+                                        <div className="pt-2 border-t border-border/50">
+                                          <Label className="text-xs mb-2 block">Add Fields to Columns</Label>
+                                          <div className="grid grid-cols-2 gap-1 mb-3">
+                                            <Button
+                                              variant="outline"
+                                              size="sm"
+                                              className="h-7 text-xs"
+                                              onClick={() => addFieldToColumn(field.id, "text")}>
+                                              <Type className="w-3 h-3 mr-1" />
+                                              Text
+                                            </Button>
+                                            <Button
+                                              variant="outline"
+                                              size="sm"
+                                              className="h-7 text-xs"
+                                              onClick={() => addFieldToColumn(field.id, "textarea")}>
+                                              <AlignLeft className="w-3 h-3 mr-1" />
+                                              Textarea
+                                            </Button>
+                                            <Button
+                                              variant="outline"
+                                              size="sm"
+                                              className="h-7 text-xs"
+                                              onClick={() => addFieldToColumn(field.id, "checkbox")}>
+                                              <CheckSquare className="w-3 h-3 mr-1" />
+                                              Checkbox
+                                            </Button>
+                                            <Button
+                                              variant="outline"
+                                              size="sm"
+                                              className="h-7 text-xs"
+                                              onClick={() => addFieldToColumn(field.id, "url")}>
+                                              <LinkIcon className="w-3 h-3 mr-1" />
+                                              URL
+                                            </Button>
+                                          </div>
+
+                                          {/* Display Nested Fields */}
+                                          {field.fields && field.fields.length > 0 && (
+                                            <div className="space-y-1 max-h-32 overflow-y-auto">
+                                              <Label className="text-xs text-muted-foreground mb-1 block">Fields in Columns:</Label>
+                                              {field.fields.map((nestedField) => (
+                                                <div key={nestedField.id} className="flex items-center justify-between p-1.5 bg-muted/30 rounded text-xs">
+                                                  <span className="truncate">{nestedField.label}</span>
+                                                  <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="h-5 w-5 p-0"
+                                                    onClick={() => removeFieldFromColumn(field.id, nestedField.id)}>
+                                                    <X className="w-3 h-3 text-destructive" />
+                                                  </Button>
+                                                </div>
+                                              ))}
+                                            </div>
+                                          )}
+                                        </div>
+                                      </>
+                                    )}
                                     
                                     {/* Placeholder for text, textarea, url */}
                                     {(field.type === "text" || field.type === "textarea" || field.type === "url") &&
