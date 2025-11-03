@@ -73,6 +73,7 @@ interface FollowUpStep {
   headline: string;
   subheadline: string;
   buttonText: string;
+  buttonUrl?: string;
   backgroundColor: string;
   textColor: string;
   buttonColor: string;
@@ -94,6 +95,7 @@ interface FormField {
   placeholder?: string;
   options?: string[];
   fileUrl?: string;
+  buttonUrl?: string;
 }
 
 interface StepConfig {
@@ -103,6 +105,7 @@ interface StepConfig {
   headline: string;
   subheadline: string;
   buttonText: string;
+  buttonUrl?: string;
   backgroundColor: string;
   textColor: string;
   buttonColor: string;
@@ -146,6 +149,7 @@ export default function BuilderPage() {
       headline: "",
       subheadline: "",
       buttonText: "Claim Offer",
+      buttonUrl: "",
       backgroundColor: "#FFFFFF",
       textColor: "#493D34",
       buttonColor: "#EC5B31",
@@ -242,6 +246,7 @@ export default function BuilderPage() {
       headline: "Your Headline Here",
       subheadline: "Add your message here",
       buttonText: "Click Here",
+      buttonUrl: "",
       backgroundColor: "#ffffff",
       textColor: "#000000",
       buttonColor: "#000000",
@@ -259,6 +264,7 @@ export default function BuilderPage() {
       headline: "Join Our Newsletter",
       subheadline: "Get weekly updates and exclusive offers",
       buttonText: "Subscribe Now",
+      buttonUrl: "",
       backgroundColor: "#ffffff",
       textColor: "#1f2937",
       buttonColor: "#3b82f6",
@@ -276,6 +282,7 @@ export default function BuilderPage() {
       headline: "Wait! Don't Leave Yet",
       subheadline: "Get 15% off before you go",
       buttonText: "Claim Discount",
+      buttonUrl: "",
       backgroundColor: "#a855f7",
       textColor: "#ffffff",
       buttonColor: "#ffffff",
@@ -293,6 +300,7 @@ export default function BuilderPage() {
       headline: "⚡ Flash Sale - 50% Off!",
       subheadline: "Limited time offer. Hurry before it ends!",
       buttonText: "Shop Now",
+      buttonUrl: "",
       backgroundColor: "#ef4444",
       textColor: "#ffffff",
       buttonColor: "#fbbf24",
@@ -310,6 +318,7 @@ export default function BuilderPage() {
       headline: "Watch Our Demo",
       subheadline: "See how it works in 2 minutes",
       buttonText: "Play Video",
+      buttonUrl: "",
       backgroundColor: "#10b981",
       textColor: "#ffffff",
       buttonColor: "#ffffff",
@@ -327,6 +336,7 @@ export default function BuilderPage() {
       headline: "Thank You!",
       subheadline: "Check your email for your discount code",
       buttonText: "Continue Shopping",
+      buttonUrl: "",
       backgroundColor: "#f3f4f6",
       textColor: "#111827",
       buttonColor: "#10b981",
@@ -344,6 +354,7 @@ export default function BuilderPage() {
       headline: "You've Got Free Shipping",
       subheadline: "Get free shipping on your order today",
       buttonText: "Claim Offer",
+      buttonUrl: "",
       backgroundColor: "#FFFFFF",
       textColor: "#493D34",
       buttonColor: "#EC5B31",
@@ -392,6 +403,7 @@ export default function BuilderPage() {
       headline: parentStep.headline,
       subheadline: parentStep.subheadline,
       buttonText: parentStep.buttonText,
+      buttonUrl: parentStep.buttonUrl,
       backgroundColor: parentStep.backgroundColor,
       textColor: parentStep.textColor,
       buttonColor: parentStep.buttonColor,
@@ -1687,6 +1699,22 @@ export default function BuilderPage() {
 
                       </div>
 
+                      <div>
+                        <Label className="text-xs mb-1">Button URL</Label>
+                        <Input
+                        value={activeFollowUp?.buttonUrl || activeStep?.buttonUrl || ""}
+                        onChange={(e) => {
+                          if (activeFollowUpId) {
+                            updateActiveFollowUp({ buttonUrl: e.target.value });
+                          } else {
+                            updateActiveStep({ buttonUrl: e.target.value });
+                          }
+                        }}
+                        placeholder="https://example.com"
+                        className="text-xs h-8" />
+                        <p className="text-xs text-muted-foreground mt-1">URL to redirect when button is clicked</p>
+                      </div>
+
                       <div className="flex items-center justify-between">
                         <Label className="text-xs">Show Icon</Label>
                         <Switch
@@ -2252,6 +2280,19 @@ export default function BuilderPage() {
                                 className="text-xs h-7"
                                 placeholder="Enter placeholder text" />
 
+                                      </div>
+                            }
+                                    
+                                    {/* Button URL for button type */}
+                                    {field.type === "button" &&
+                            <div>
+                                        <Label className="text-xs mb-1">Button URL</Label>
+                                        <Input
+                                value={field.buttonUrl || ""}
+                                onChange={(e) => updateFormField(field.id, { buttonUrl: e.target.value })}
+                                className="text-xs h-7"
+                                placeholder="https://example.com" />
+                                        <p className="text-xs text-muted-foreground mt-1">URL to redirect when button is clicked</p>
                                       </div>
                             }
                                     
