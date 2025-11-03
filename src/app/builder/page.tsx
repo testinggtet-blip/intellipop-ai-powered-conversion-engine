@@ -1091,8 +1091,20 @@ export default function BuilderPage() {
           </div>
           
           {/* Render custom form fields with drag and drop */}
-          {config.formFields && config.formFields.length > 0 &&
-          <div className="space-y-2 mb-4">
+          {config.formFields && config.formFields.length > 0 && (
+          <div 
+            className="space-y-2 mb-4"
+            onDragOver={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            onDrop={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (isActive) {
+                handleCanvasDrop(e);
+              }
+            }}>
               {config.formFields.map((field, index) =>
             <div
               key={field.id}
@@ -1342,7 +1354,7 @@ export default function BuilderPage() {
                 </div>
             )}
             </div>
-          }
+          </div>
           
           {/* Editable Button */}
           <div
@@ -2470,94 +2482,154 @@ export default function BuilderPage() {
                       
                       <div>
                         <Label className="text-xs mb-2">Form Fields</Label>
-                        <p className="text-xs text-muted-foreground mb-3">Add fields to your popup</p>
+                        <p className="text-xs text-muted-foreground mb-3">Drag fields to canvas or click to add</p>
                         
                         <div className="grid grid-cols-2 gap-2 mb-4">
                           <Button
+                          draggable={true}
+                          onDragStart={(e) => {
+                            e.dataTransfer.effectAllowed = "copy";
+                            handleFieldDragStart("text");
+                          }}
+                          onDragEnd={() => setDraggedFieldType(null)}
                           variant="outline"
                           size="sm"
-                          className="h-8 text-xs justify-start"
+                          className="h-8 text-xs justify-start cursor-grab active:cursor-grabbing"
                           onClick={() => addFormField("text")}>
 
                             <Type className="w-3 h-3 mr-1" />
                             Text
                           </Button>
                           <Button
+                          draggable={true}
+                          onDragStart={(e) => {
+                            e.dataTransfer.effectAllowed = "copy";
+                            handleFieldDragStart("textarea");
+                          }}
+                          onDragEnd={() => setDraggedFieldType(null)}
                           variant="outline"
                           size="sm"
-                          className="h-8 text-xs justify-start"
+                          className="h-8 text-xs justify-start cursor-grab active:cursor-grabbing"
                           onClick={() => addFormField("textarea")}>
 
                             <AlignLeft className="w-3 h-3 mr-1" />
                             Text Area
                           </Button>
                           <Button
+                          draggable={true}
+                          onDragStart={(e) => {
+                            e.dataTransfer.effectAllowed = "copy";
+                            handleFieldDragStart("url");
+                          }}
+                          onDragEnd={() => setDraggedFieldType(null)}
                           variant="outline"
                           size="sm"
-                          className="h-8 text-xs justify-start"
+                          className="h-8 text-xs justify-start cursor-grab active:cursor-grabbing"
                           onClick={() => addFormField("url")}>
 
                             <LinkIcon className="w-3 h-3 mr-1" />
                             URL
                           </Button>
                           <Button
+                          draggable={true}
+                          onDragStart={(e) => {
+                            e.dataTransfer.effectAllowed = "copy";
+                            handleFieldDragStart("image");
+                          }}
+                          onDragEnd={() => setDraggedFieldType(null)}
                           variant="outline"
                           size="sm"
-                          className="h-8 text-xs justify-start"
+                          className="h-8 text-xs justify-start cursor-grab active:cursor-grabbing"
                           onClick={() => addFormField("image")}>
 
                             <ImageIcon className="w-3 h-3 mr-1" />
                             Image
                           </Button>
                           <Button
+                          draggable={true}
+                          onDragStart={(e) => {
+                            e.dataTransfer.effectAllowed = "copy";
+                            handleFieldDragStart("video");
+                          }}
+                          onDragEnd={() => setDraggedFieldType(null)}
                           variant="outline"
                           size="sm"
-                          className="h-8 text-xs justify-start"
+                          className="h-8 text-xs justify-start cursor-grab active:cursor-grabbing"
                           onClick={() => addFormField("video")}>
 
                             <Video className="w-3 h-3 mr-1" />
                             Video
                           </Button>
                           <Button
+                          draggable={true}
+                          onDragStart={(e) => {
+                            e.dataTransfer.effectAllowed = "copy";
+                            handleFieldDragStart("button");
+                          }}
+                          onDragEnd={() => setDraggedFieldType(null)}
                           variant="outline"
                           size="sm"
-                          className="h-8 text-xs justify-start"
+                          className="h-8 text-xs justify-start cursor-grab active:cursor-grabbing"
                           onClick={() => addFormField("button")}>
 
                             <Maximize2 className="w-3 h-3 mr-1" />
                             Button
                           </Button>
                           <Button
+                          draggable={true}
+                          onDragStart={(e) => {
+                            e.dataTransfer.effectAllowed = "copy";
+                            handleFieldDragStart("socials");
+                          }}
+                          onDragEnd={() => setDraggedFieldType(null)}
                           variant="outline"
                           size="sm"
-                          className="h-8 text-xs justify-start"
+                          className="h-8 text-xs justify-start cursor-grab active:cursor-grabbing"
                           onClick={() => addFormField("socials")}>
 
                             <Share2 className="w-3 h-3 mr-1" />
                             Socials
                           </Button>
                           <Button
+                          draggable={true}
+                          onDragStart={(e) => {
+                            e.dataTransfer.effectAllowed = "copy";
+                            handleFieldDragStart("checkbox");
+                          }}
+                          onDragEnd={() => setDraggedFieldType(null)}
                           variant="outline"
                           size="sm"
-                          className="h-8 text-xs justify-start"
+                          className="h-8 text-xs justify-start cursor-grab active:cursor-grabbing"
                           onClick={() => addFormField("checkbox")}>
 
                             <CheckSquare className="w-3 h-3 mr-1" />
                             Checkbox
                           </Button>
                           <Button
+                          draggable={true}
+                          onDragStart={(e) => {
+                            e.dataTransfer.effectAllowed = "copy";
+                            handleFieldDragStart("radio");
+                          }}
+                          onDragEnd={() => setDraggedFieldType(null)}
                           variant="outline"
                           size="sm"
-                          className="h-8 text-xs justify-start"
+                          className="h-8 text-xs justify-start cursor-grab active:cursor-grabbing"
                           onClick={() => addFormField("radio")}>
 
                             <Circle className="w-3 h-3 mr-1" />
                             Radio
                           </Button>
                           <Button
+                          draggable={true}
+                          onDragStart={(e) => {
+                            e.dataTransfer.effectAllowed = "copy";
+                            handleFieldDragStart("dropdown");
+                          }}
+                          onDragEnd={() => setDraggedFieldType(null)}
                           variant="outline"
                           size="sm"
-                          className="h-8 text-xs justify-start"
+                          className="h-8 text-xs justify-start cursor-grab active:cursor-grabbing"
                           onClick={() => addFormField("dropdown")}>
 
                             <ChevronDown className="w-3 h-3 mr-1" />
