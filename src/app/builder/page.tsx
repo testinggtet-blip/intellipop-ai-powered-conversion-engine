@@ -66,87 +66,8 @@ import {
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
-interface FollowUpStep {
-  id: string;
-  name: string;
-  type: "follow-up";
-  headline: string;
-  subheadline: string;
-  buttonText: string;
-  buttonUrl?: string;
-  backgroundColor: string;
-  textColor: string;
-  buttonColor: string;
-  borderRadius: number;
-  showImage: boolean;
-  backgroundImage?: string;
-  formFields?: FormField[];
-  condition?: {
-    type: "button_click" | "form_submit" | "field_interaction" | "checkbox_check" | "element_click";
-    targetElement?: string; // ID or label of the element
-    targetType?: "button" | "headline" | "subheadline" | "form_field" | "checkbox" | "radio" | "dropdown";
-  };
-}
-
-interface FormField {
-  id: string;
-  type: "text" | "textarea" | "url" | "button" | "socials" | "checkbox" | "radio" | "dropdown" | "image" | "video" | "columns" | "heading" | "textblock" | "link" | "linkbox" | "imagebox" | "map" | "icon";
-  label: string;
-  placeholder?: string;
-  options?: string[];
-  fileUrl?: string;
-  buttonUrl?: string;
-  columnCount?: 1 | 2 | 3 | 4; // For column layouts
-  columnVariant?: "equal" | "left-large" | "right-large"; // For 2-column variants
-  fields?: FormField[]; // Nested fields for column layouts
-  content?: string; // For heading, textblock, link
-  href?: string; // For link, linkbox
-  iconName?: string; // For icon field
-  mapUrl?: string; // For map embed URL
-}
-
-interface StepConfig {
-  id: string;
-  name: string;
-  type: "offer" | "email-capture" | "confirmation" | "custom";
-  headline: string;
-  subheadline: string;
-  buttonText: string;
-  buttonUrl?: string;
-  backgroundColor: string;
-  textColor: string;
-  buttonColor: string;
-  borderRadius: number;
-  showImage: boolean;
-  backgroundImage?: string;
-  template?: string;
-  followUps?: FollowUpStep[];
-  formFields?: FormField[];
-}
-
-interface PopupFlow {
-  id?: number;
-  name: string;
-  steps: StepConfig[];
-  typography: {
-    headingFont: string;
-    headingWeight: number;
-    headingSize: number;
-    subheadingFont: string;
-    subheadingWeight: number;
-    subheadingSize: number;
-    bodyFont: string;
-    bodyWeight: number;
-    bodySize: number;
-    buttonFont: string;
-    buttonWeight: number;
-    buttonSize: number;
-  };
-  colors: Array<{name: string;value: string;percentage: number;}>;
-}
-
 export default function BuilderPage() {
-  const [popupFlow, setPopupFlow] = useState<PopupFlow>({
+  const [popupFlow, setPopupFlow] = useState({
     name: "Sitewide Email Capture | Free Shipping",
     steps: [
     {
@@ -191,27 +112,27 @@ export default function BuilderPage() {
   });
 
   // History management for undo/redo
-  const [history, setHistory] = useState<PopupFlow[]>([]);
+  const [history, setHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
 
   const [activeStepId, setActiveStepId] = useState("1");
-  const [activeFollowUpId, setActiveFollowUpId] = useState<string | null>(null);
+  const [activeFollowUpId, setActiveFollowUpId] = useState(null);
   const [zoomLevel, setZoomLevel] = useState(100);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [templateDialogOpen, setTemplateDialogOpen] = useState(false);
-  const [editingFieldId, setEditingFieldId] = useState<string | null>(null);
-  const [editingElement, setEditingElement] = useState<string | null>(null);
-  const [draggedFieldIndex, setDraggedFieldIndex] = useState<number | null>(null);
-  const [cursorPosition, setCursorPosition] = useState<number | null>(null);
+  const [editingFieldId, setEditingFieldId] = useState(null);
+  const [editingElement, setEditingElement] = useState(null);
+  const [draggedFieldIndex, setDraggedFieldIndex] = useState(null);
+  const [cursorPosition, setCursorPosition] = useState(null);
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
-  const [settingsFollowUpId, setSettingsFollowUpId] = useState<string | null>(null);
-  const [draggedFieldType, setDraggedFieldType] = useState<FormField["type"] | null>(null);
-  const [dropTargetIndex, setDropTargetIndex] = useState<number | null>(null);
-  const [dropTargetColumnId, setDropTargetColumnId] = useState<string | null>(null);
+  const [settingsFollowUpId, setSettingsFollowUpId] = useState(null);
+  const [draggedFieldType, setDraggedFieldType] = useState(null);
+  const [dropTargetIndex, setDropTargetIndex] = useState(null);
+  const [dropTargetColumnId, setDropTargetColumnId] = useState(null);
 
   // Save to history whenever popupFlow changes
-  const saveToHistory = (newFlow: PopupFlow) => {
+  const saveToHistory = (newFlow) => {
     const newHistory = history.slice(0, historyIndex + 1);
     newHistory.push(newFlow);
     setHistory(newHistory);
@@ -251,7 +172,7 @@ export default function BuilderPage() {
     preview: "📝",
     description: "Start from scratch with a blank popup",
     gradient: "from-gray-400 to-gray-600",
-    type: "custom" as const,
+    type: "custom",
     config: {
       headline: "Your Headline Here",
       subheadline: "Add your message here",
@@ -269,7 +190,7 @@ export default function BuilderPage() {
     preview: "📧",
     description: "Clean, minimal design for email collection",
     gradient: "from-blue-500 to-cyan-500",
-    type: "email-capture" as const,
+    type: "email-capture",
     config: {
       headline: "Join Our Newsletter",
       subheadline: "Get weekly updates and exclusive offers",
@@ -287,7 +208,7 @@ export default function BuilderPage() {
     preview: "🚪",
     description: "Catch visitors before they leave",
     gradient: "from-purple-500 to-pink-500",
-    type: "offer" as const,
+    type: "offer",
     config: {
       headline: "Wait! Don't Leave Yet",
       subheadline: "Get 15% off before you go",
@@ -305,7 +226,7 @@ export default function BuilderPage() {
     preview: "⚡",
     description: "Urgency-driven conversion template",
     gradient: "from-orange-500 to-red-500",
-    type: "offer" as const,
+    type: "offer",
     config: {
       headline: "⚡ Flash Sale - 50% Off!",
       subheadline: "Limited time offer. Hurry before it ends!",
@@ -323,7 +244,7 @@ export default function BuilderPage() {
     preview: "🎥",
     description: "Engage with video content",
     gradient: "from-green-500 to-emerald-500",
-    type: "custom" as const,
+    type: "custom",
     config: {
       headline: "Watch Our Demo",
       subheadline: "See how it works in 2 minutes",
@@ -341,7 +262,7 @@ export default function BuilderPage() {
     preview: "✅",
     description: "Confirmation message",
     gradient: "from-green-400 to-emerald-600",
-    type: "confirmation" as const,
+    type: "confirmation",
     config: {
       headline: "Thank You!",
       subheadline: "Check your email for your discount code",
@@ -359,7 +280,7 @@ export default function BuilderPage() {
     preview: "📦",
     description: "Free shipping offer",
     gradient: "from-orange-400 to-red-500",
-    type: "offer" as const,
+    type: "offer",
     config: {
       headline: "You've Got Free Shipping",
       subheadline: "Get free shipping on your order today",
@@ -374,8 +295,8 @@ export default function BuilderPage() {
   }];
 
 
-  const applyTemplate = (template: typeof templates[0]) => {
-    const newStep: StepConfig = {
+  const applyTemplate = (template) => {
+    const newStep = {
       id: Date.now().toString(),
       name: template.name,
       type: template.type,
@@ -400,13 +321,13 @@ export default function BuilderPage() {
     setTemplateDialogOpen(true);
   };
 
-  const addFollowUpStep = (parentStepId: string) => {
+  const addFollowUpStep = (parentStepId) => {
     const parentStep = popupFlow.steps.find((s) => s.id === parentStepId);
     if (!parentStep) return;
 
     // Duplicate the parent step's config for the follow-up
     const newFollowUpId = `${parentStepId}-fu-${Date.now()}`;
-    const newFollowUp: FollowUpStep = {
+    const newFollowUp = {
       id: newFollowUpId,
       name: "Follow-up",
       type: "follow-up",
@@ -440,7 +361,7 @@ export default function BuilderPage() {
     toast.success("Follow-up step added (duplicated from main step)");
   };
 
-  const deleteStep = (stepId: string) => {
+  const deleteStep = (stepId) => {
     if (popupFlow.steps.length === 1) {
       toast.error("Cannot delete the only step");
       return;
@@ -457,7 +378,7 @@ export default function BuilderPage() {
     toast.success("Step deleted");
   };
 
-  const deleteFollowUp = (stepId: string, followUpId: string) => {
+  const deleteFollowUp = (stepId, followUpId) => {
     setPopupFlow({
       ...popupFlow,
       steps: popupFlow.steps.map((step) =>
@@ -477,10 +398,10 @@ export default function BuilderPage() {
     toast.success("Follow-up deleted");
   };
 
-  const addFormField = (fieldType: FormField["type"]) => {
+  const addFormField = (fieldType) => {
     if (!activeStep && !activeFollowUp) return;
 
-    const newField: FormField = {
+    const newField = {
       id: `field-${Date.now()}`,
       type: fieldType,
       label: `${fieldType.charAt(0).toUpperCase() + fieldType.slice(1)} Field`,
@@ -504,8 +425,8 @@ export default function BuilderPage() {
     toast.success(`Added ${fieldType} field`);
   };
 
-  const addFieldToColumn = (columnFieldId: string, fieldType: FormField["type"]) => {
-    const newField: FormField = {
+  const addFieldToColumn = (columnFieldId, fieldType) => {
+    const newField = {
       id: `field-${Date.now()}`,
       type: fieldType,
       label: `${fieldType.charAt(0).toUpperCase() + fieldType.slice(1)}`,
@@ -530,7 +451,7 @@ export default function BuilderPage() {
     toast.success(`Added ${fieldType} to column`);
   };
 
-  const removeFieldFromColumn = (columnFieldId: string, fieldId: string) => {
+  const removeFieldFromColumn = (columnFieldId, fieldId) => {
     if (activeFollowUpId && activeFollowUp) {
       updateActiveFollowUp({
         formFields: (activeFollowUp.formFields || []).map((f) =>
@@ -548,7 +469,7 @@ export default function BuilderPage() {
     toast.success("Field removed from column");
   };
 
-  const updateColumnField = (columnFieldId: string, fieldId: string, updates: Partial<FormField>) => {
+  const updateColumnField = (columnFieldId, fieldId, updates) => {
     if (activeFollowUpId && activeFollowUp) {
       updateActiveFollowUp({
         formFields: (activeFollowUp.formFields || []).map((f) =>
@@ -570,7 +491,7 @@ export default function BuilderPage() {
     }
   };
 
-  const insertMergeTag = (tag: string) => {
+  const insertMergeTag = (tag) => {
     // Check what element is currently being edited
     if (editingElement === "headline") {
       const currentValue = activeFollowUp?.headline || activeStep?.headline || "";
@@ -631,7 +552,7 @@ export default function BuilderPage() {
     }
   };
 
-  const removeFormField = (fieldId: string) => {
+  const removeFormField = (fieldId) => {
     if (activeFollowUpId && activeFollowUp) {
       updateActiveFollowUp({
         formFields: (activeFollowUp.formFields || []).filter((f) => f.id !== fieldId)
@@ -646,7 +567,7 @@ export default function BuilderPage() {
     toast.success("Field removed");
   };
 
-  const updateFormField = (fieldId: string, updates: Partial<FormField>) => {
+  const updateFormField = (fieldId, updates) => {
     if (activeFollowUpId && activeFollowUp) {
       updateActiveFollowUp({
         formFields: (activeFollowUp.formFields || []).map((f) =>
@@ -662,7 +583,7 @@ export default function BuilderPage() {
     }
   };
 
-  const reorderFormField = (fromIndex: number, toIndex: number) => {
+  const reorderFormField = (fromIndex, toIndex) => {
     const fields = activeFollowUpId && activeFollowUp ?
     activeFollowUp.formFields || [] :
     activeStep?.formFields || [];
@@ -678,7 +599,7 @@ export default function BuilderPage() {
     }
   };
 
-  const addOption = (fieldId: string) => {
+  const addOption = (fieldId) => {
     const field = activeFollowUpId && activeFollowUp ?
     activeFollowUp.formFields?.find((f) => f.id === fieldId) :
     activeStep?.formFields?.find((f) => f.id === fieldId);
@@ -689,7 +610,7 @@ export default function BuilderPage() {
     updateFormField(fieldId, { options: newOptions });
   };
 
-  const removeOption = (fieldId: string, optionIndex: number) => {
+  const removeOption = (fieldId, optionIndex) => {
     const field = activeFollowUpId && activeFollowUp ?
     activeFollowUp.formFields?.find((f) => f.id === fieldId) :
     activeStep?.formFields?.find((f) => f.id === fieldId);
@@ -700,7 +621,7 @@ export default function BuilderPage() {
     updateFormField(fieldId, { options: newOptions });
   };
 
-  const updateOption = (fieldId: string, optionIndex: number, value: string) => {
+  const updateOption = (fieldId, optionIndex, value) => {
     const field = activeFollowUpId && activeFollowUp ?
     activeFollowUp.formFields?.find((f) => f.id === fieldId) :
     activeStep?.formFields?.find((f) => f.id === fieldId);
@@ -711,11 +632,11 @@ export default function BuilderPage() {
     updateFormField(fieldId, { options: newOptions });
   };
 
-  const duplicateStep = (stepId: string) => {
+  const duplicateStep = (stepId) => {
     const stepToDuplicate = popupFlow.steps.find((s) => s.id === stepId);
     if (!stepToDuplicate) return;
 
-    const newStep: StepConfig = {
+    const newStep = {
       ...stepToDuplicate,
       id: Date.now().toString(),
       name: `${stepToDuplicate.name} (Copy)`,
@@ -735,13 +656,13 @@ export default function BuilderPage() {
     toast.success("Step duplicated successfully");
   };
 
-  const duplicateFollowUp = (stepId: string, followUpId: string) => {
+  const duplicateFollowUp = (stepId, followUpId) => {
     const parentStep = popupFlow.steps.find((s) => s.id === stepId);
     const followUpToDuplicate = parentStep?.followUps?.find((fu) => fu.id === followUpId);
 
     if (!followUpToDuplicate || !parentStep) return;
 
-    const newFollowUp: FollowUpStep = {
+    const newFollowUp = {
       ...followUpToDuplicate,
       id: `${stepId}-fu-${Date.now()}`,
       name: `${followUpToDuplicate.name} (Copy)`
@@ -762,7 +683,7 @@ export default function BuilderPage() {
     toast.success("Follow-up duplicated successfully");
   };
 
-  const updateActiveStep = (updates: Partial<StepConfig>) => {
+  const updateActiveStep = (updates) => {
     const newFlow = {
       ...popupFlow,
       steps: popupFlow.steps.map((step) =>
@@ -772,7 +693,7 @@ export default function BuilderPage() {
     saveToHistory(newFlow);
   };
 
-  const updateActiveFollowUp = (updates: Partial<FollowUpStep>) => {
+  const updateActiveFollowUp = (updates) => {
     const newFlow = {
       ...popupFlow,
       steps: popupFlow.steps.map((step) =>
@@ -817,12 +738,12 @@ export default function BuilderPage() {
   };
 
   // Handle drag from sidebar
-  const handleFieldDragStart = (fieldType: FormField["type"]) => {
+  const handleFieldDragStart = (fieldType) => {
     setDraggedFieldType(fieldType);
   };
 
   // Handle drop into canvas
-  const handleCanvasDrop = (e: React.DragEvent) => {
+  const handleCanvasDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
     
@@ -834,9 +755,9 @@ export default function BuilderPage() {
   };
 
   // Handle drop into specific position
-  const handleFieldDrop = (targetIndex: number) => {
+  const handleFieldDrop = (targetIndex) => {
     if (draggedFieldType) {
-      const newField: FormField = {
+      const newField = {
         id: `field-${Date.now()}`,
         type: draggedFieldType,
         label: `${draggedFieldType.charAt(0).toUpperCase() + draggedFieldType.slice(1)} Field`,
@@ -871,7 +792,7 @@ export default function BuilderPage() {
   };
 
   // Handle drop into column
-  const handleColumnDrop = (columnFieldId: string) => {
+  const handleColumnDrop = (columnFieldId) => {
     if (draggedFieldType) {
       addFieldToColumn(columnFieldId, draggedFieldType);
       setDraggedFieldType(null);
@@ -880,9 +801,9 @@ export default function BuilderPage() {
   };
 
   const renderStepPreview = (
-    config: StepConfig | FollowUpStep,
-    isActive: boolean,
-    isFollowUp: boolean = false
+    config,
+    isActive,
+    isFollowUp = false
   ) => {
     return (
       <div
