@@ -90,7 +90,7 @@ interface FollowUpStep {
 
 interface FormField {
   id: string;
-  type: "text" | "textarea" | "url" | "button" | "socials" | "checkbox" | "radio" | "dropdown" | "image" | "video" | "columns";
+  type: "text" | "textarea" | "url" | "button" | "socials" | "checkbox" | "radio" | "dropdown" | "image" | "video" | "columns" | "heading" | "textblock" | "link" | "linkbox" | "imagebox" | "map" | "icon";
   label: string;
   placeholder?: string;
   options?: string[];
@@ -99,6 +99,10 @@ interface FormField {
   columnCount?: 1 | 2 | 3 | 4; // For column layouts
   columnVariant?: "equal" | "left-large" | "right-large"; // For 2-column variants
   fields?: FormField[]; // Nested fields for column layouts
+  content?: string; // For heading, textblock, link
+  href?: string; // For link, linkbox
+  iconName?: string; // For icon field
+  mapUrl?: string; // For map embed URL
 }
 
 interface StepConfig {
@@ -1332,6 +1336,73 @@ export default function BuilderPage() {
                       </div>
                     </div>
                   )}
+                  {field.type === "heading" && (
+                    <div className="text-left">
+                      <h3 className="text-base font-bold" style={{ color: config.textColor }}>
+                        {field.content || "Heading Text"}
+                      </h3>
+                    </div>
+                  )}
+                  {field.type === "textblock" && (
+                    <div className="text-left">
+                      <p className="text-xs" style={{ color: config.textColor, opacity: 0.9 }}>
+                        {field.content || "Text content goes here..."}
+                      </p>
+                    </div>
+                  )}
+                  {field.type === "link" && (
+                    <div className="text-left">
+                      <a href={field.href || "#"} className="text-xs underline" style={{ color: config.buttonColor }}>
+                        {field.content || "Link text"}
+                      </a>
+                    </div>
+                  )}
+                  {field.type === "linkbox" && (
+                    <div className="border border-border rounded p-2 bg-muted/20 text-center">
+                      <a href={field.href || "#"} className="text-xs font-medium" style={{ color: config.buttonColor }}>
+                        {field.content || "Link Box"}
+                      </a>
+                    </div>
+                  )}
+                  {field.type === "imagebox" && (
+                    <div>
+                      <Label className="text-xs mb-1">{field.label}</Label>
+                      {field.fileUrl ? (
+                        <div className="relative w-full h-32 rounded-lg border-2 border-border overflow-hidden shadow-sm">
+                          <img src={field.fileUrl} alt="Preview" className="w-full h-full object-cover" />
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-center h-32 border-2 border-dashed border-border rounded-lg bg-muted/30">
+                          <ImageIcon className="w-6 h-6 text-muted-foreground" />
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {field.type === "map" && (
+                    <div>
+                      <Label className="text-xs mb-1">{field.label}</Label>
+                      {field.mapUrl ? (
+                        <iframe 
+                          src={field.mapUrl} 
+                          className="w-full h-32 rounded border border-border"
+                          allowFullScreen
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center h-32 border border-dashed border-border rounded bg-muted/30">
+                          <Layout className="w-6 h-6 text-muted-foreground" />
+                          <span className="ml-2 text-xs text-muted-foreground">Map Embed</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {field.type === "icon" && (
+                    <div className="flex justify-center">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
+                        <Sparkles className="w-6 h-6 text-white" />
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -2360,6 +2431,149 @@ export default function BuilderPage() {
                         </div>
                       )}
                       
+                      {/* Basic Elements Section */}
+                      <div className="pb-4 mb-4 border-b border-border">
+                        <Label className="text-xs font-semibold mb-2 block">📝 Basic</Label>
+                        <p className="text-xs text-muted-foreground mb-3">Add basic content elements</p>
+                        
+                        <div className="grid grid-cols-2 gap-2">
+                          <Button
+                            draggable={true}
+                            onDragStart={(e) => {
+                              e.dataTransfer.effectAllowed = "copy";
+                              handleFieldDragStart("heading");
+                            }}
+                            onDragEnd={() => setDraggedFieldType(null)}
+                            variant="outline"
+                            size="sm"
+                            className="h-12 text-xs flex-col justify-center gap-1 cursor-grab active:cursor-grabbing"
+                            onClick={() => addFormField("heading")}>
+                            <Type className="w-4 h-4" />
+                            <span>Heading</span>
+                          </Button>
+                          
+                          <Button
+                            draggable={true}
+                            onDragStart={(e) => {
+                              e.dataTransfer.effectAllowed = "copy";
+                              handleFieldDragStart("textblock");
+                            }}
+                            onDragEnd={() => setDraggedFieldType(null)}
+                            variant="outline"
+                            size="sm"
+                            className="h-12 text-xs flex-col justify-center gap-1 cursor-grab active:cursor-grabbing"
+                            onClick={() => addFormField("textblock")}>
+                            <Type className="w-4 h-4" />
+                            <span>Text</span>
+                          </Button>
+                          
+                          <Button
+                            draggable={true}
+                            onDragStart={(e) => {
+                              e.dataTransfer.effectAllowed = "copy";
+                              handleFieldDragStart("link");
+                            }}
+                            onDragEnd={() => setDraggedFieldType(null)}
+                            variant="outline"
+                            size="sm"
+                            className="h-12 text-xs flex-col justify-center gap-1 cursor-grab active:cursor-grabbing"
+                            onClick={() => addFormField("link")}>
+                            <LinkIcon className="w-4 h-4" />
+                            <span>Link</span>
+                          </Button>
+                          
+                          <Button
+                            draggable={true}
+                            onDragStart={(e) => {
+                              e.dataTransfer.effectAllowed = "copy";
+                              handleFieldDragStart("linkbox");
+                            }}
+                            onDragEnd={() => setDraggedFieldType(null)}
+                            variant="outline"
+                            size="sm"
+                            className="h-12 text-xs flex-col justify-center gap-1 cursor-grab active:cursor-grabbing"
+                            onClick={() => addFormField("linkbox")}>
+                            <Maximize2 className="w-4 h-4" />
+                            <span>Link Box</span>
+                          </Button>
+                          
+                          <Button
+                            draggable={true}
+                            onDragStart={(e) => {
+                              e.dataTransfer.effectAllowed = "copy";
+                              handleFieldDragStart("image");
+                            }}
+                            onDragEnd={() => setDraggedFieldType(null)}
+                            variant="outline"
+                            size="sm"
+                            className="h-12 text-xs flex-col justify-center gap-1 cursor-grab active:cursor-grabbing"
+                            onClick={() => addFormField("image")}>
+                            <ImageIcon className="w-4 h-4" />
+                            <span>Image</span>
+                          </Button>
+                          
+                          <Button
+                            draggable={true}
+                            onDragStart={(e) => {
+                              e.dataTransfer.effectAllowed = "copy";
+                              handleFieldDragStart("imagebox");
+                            }}
+                            onDragEnd={() => setDraggedFieldType(null)}
+                            variant="outline"
+                            size="sm"
+                            className="h-12 text-xs flex-col justify-center gap-1 cursor-grab active:cursor-grabbing"
+                            onClick={() => addFormField("imagebox")}>
+                            <ImageIcon className="w-4 h-4" />
+                            <span>Image Box</span>
+                          </Button>
+                          
+                          <Button
+                            draggable={true}
+                            onDragStart={(e) => {
+                              e.dataTransfer.effectAllowed = "copy";
+                              handleFieldDragStart("video");
+                            }}
+                            onDragEnd={() => setDraggedFieldType(null)}
+                            variant="outline"
+                            size="sm"
+                            className="h-12 text-xs flex-col justify-center gap-1 cursor-grab active:cursor-grabbing"
+                            onClick={() => addFormField("video")}>
+                            <Video className="w-4 h-4" />
+                            <span>Video</span>
+                          </Button>
+                          
+                          <Button
+                            draggable={true}
+                            onDragStart={(e) => {
+                              e.dataTransfer.effectAllowed = "copy";
+                              handleFieldDragStart("map");
+                            }}
+                            onDragEnd={() => setDraggedFieldType(null)}
+                            variant="outline"
+                            size="sm"
+                            className="h-12 text-xs flex-col justify-center gap-1 cursor-grab active:cursor-grabbing"
+                            onClick={() => addFormField("map")}>
+                            <Layout className="w-4 h-4" />
+                            <span>Map</span>
+                          </Button>
+                          
+                          <Button
+                            draggable={true}
+                            onDragStart={(e) => {
+                              e.dataTransfer.effectAllowed = "copy";
+                              handleFieldDragStart("icon");
+                            }}
+                            onDragEnd={() => setDraggedFieldType(null)}
+                            variant="outline"
+                            size="sm"
+                            className="h-12 text-xs flex-col justify-center gap-1 cursor-grab active:cursor-grabbing"
+                            onClick={() => addFormField("icon")}>
+                            <Sparkles className="w-4 h-4" />
+                            <span>Icon</span>
+                          </Button>
+                        </div>
+                      </div>
+                      
                       {/* Column Layout Section */}
                       <div className="pb-4 mb-4 border-b border-border">
                         <Label className="text-xs font-semibold mb-2 block">📐 Column Layout</Label>
@@ -2638,6 +2852,13 @@ export default function BuilderPage() {
                                     {field.type === "radio" && <Circle className="w-3 h-3" />}
                                     {field.type === "dropdown" && <ChevronDown className="w-3 h-3" />}
                                     {field.type === "columns" && <Layout className="w-3 h-3" />}
+                                    {field.type === "heading" && <Type className="w-3 h-3" />}
+                                    {field.type === "textblock" && <Type className="w-3 h-3" />}
+                                    {field.type === "link" && <LinkIcon className="w-3 h-3" />}
+                                    {field.type === "linkbox" && <Maximize2 className="w-3 h-3" />}
+                                    {field.type === "imagebox" && <ImageIcon className="w-3 h-3" />}
+                                    {field.type === "map" && <Layout className="w-3 h-3" />}
+                                    {field.type === "icon" && <Sparkles className="w-3 h-3" />}
                                     <span className="text-xs font-medium">{field.type}</span>
                                   </div>
                                   <div className="flex items-center gap-1">
