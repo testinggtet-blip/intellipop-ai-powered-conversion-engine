@@ -1337,69 +1337,390 @@ export default function BuilderPage() {
                     </div>
                   )}
                   {field.type === "heading" && (
-                    <div className="text-left">
-                      <h3 className="text-base font-bold" style={{ color: config.textColor }}>
-                        {field.content || "Heading Text"}
-                      </h3>
+                    <div
+                      className={`text-left relative group ${isActive ? "cursor-text hover:ring-2 hover:ring-[#1DBFAA]/50 rounded px-2 py-1 transition-all" : ""} ${
+                        editingFieldId === field.id && isActive ? "ring-2 ring-[#1DBFAA]" : ""
+                      }`}
+                      onClick={(e) => {
+                        if (isActive) {
+                          e.stopPropagation();
+                          setEditingFieldId(field.id);
+                        }
+                      }}
+                    >
+                      {isActive && editingFieldId === field.id && (
+                        <div className="absolute -top-3 -right-3 flex gap-1 z-20">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeFormField(field.id);
+                            }}
+                            title="Remove heading"
+                          >
+                            <X className="w-3 h-3 text-destructive" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
+                            title="Reorder"
+                          >
+                            <GripVertical className="w-3 h-3" />
+                          </Button>
+                        </div>
+                      )}
+                      {editingFieldId === field.id && isActive ? (
+                        <Input
+                          value={field.content || ""}
+                          onChange={(e) => updateFormField(field.id, { content: e.target.value })}
+                          onBlur={() => setEditingFieldId(null)}
+                          autoFocus
+                          className="text-base font-bold"
+                          style={{ color: config.textColor }}
+                          placeholder="Enter heading text"
+                        />
+                      ) : (
+                        <h3 className="text-base font-bold" style={{ color: config.textColor }}>
+                          {field.content || "Heading Text"}
+                        </h3>
+                      )}
                     </div>
                   )}
                   {field.type === "textblock" && (
-                    <div className="text-left">
-                      <p className="text-xs" style={{ color: config.textColor, opacity: 0.9 }}>
-                        {field.content || "Text content goes here..."}
-                      </p>
+                    <div
+                      className={`text-left relative group ${isActive ? "cursor-text hover:ring-2 hover:ring-[#1DBFAA]/50 rounded px-2 py-1 transition-all" : ""} ${
+                        editingFieldId === field.id && isActive ? "ring-2 ring-[#1DBFAA]" : ""
+                      }`}
+                      onClick={(e) => {
+                        if (isActive) {
+                          e.stopPropagation();
+                          setEditingFieldId(field.id);
+                        }
+                      }}
+                    >
+                      {isActive && editingFieldId === field.id && (
+                        <div className="absolute -top-3 -right-3 flex gap-1 z-20">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeFormField(field.id);
+                            }}
+                            title="Remove text"
+                          >
+                            <X className="w-3 h-3 text-destructive" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
+                            title="Reorder"
+                          >
+                            <GripVertical className="w-3 h-3" />
+                          </Button>
+                        </div>
+                      )}
+                      {editingFieldId === field.id && isActive ? (
+                        <Textarea
+                          value={field.content || ""}
+                          onChange={(e) => updateFormField(field.id, { content: e.target.value })}
+                          onBlur={() => setEditingFieldId(null)}
+                          autoFocus
+                          className="text-xs min-h-[60px]"
+                          style={{ color: config.textColor }}
+                          placeholder="Enter text content"
+                        />
+                      ) : (
+                        <p className="text-xs" style={{ color: config.textColor, opacity: 0.9 }}>
+                          {field.content || "Text content goes here..."}
+                        </p>
+                      )}
                     </div>
                   )}
                   {field.type === "link" && (
-                    <div className="text-left">
-                      <a href={field.href || "#"} className="text-xs underline" style={{ color: config.buttonColor }}>
-                        {field.content || "Link text"}
-                      </a>
+                    <div
+                      className={`text-left relative group ${isActive ? "cursor-text hover:ring-2 hover:ring-[#1DBFAA]/50 rounded px-2 py-1 transition-all" : ""} ${
+                        editingFieldId === field.id && isActive ? "ring-2 ring-[#1DBFAA]" : ""
+                      }`}
+                      onClick={(e) => {
+                        if (isActive) {
+                          e.stopPropagation();
+                          setEditingFieldId(field.id);
+                        }
+                      }}
+                    >
+                      {isActive && editingFieldId === field.id && (
+                        <div className="absolute -top-3 -right-3 flex gap-1 z-20">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeFormField(field.id);
+                            }}
+                            title="Remove link"
+                          >
+                            <X className="w-3 h-3 text-destructive" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
+                            title="Reorder"
+                          >
+                            <GripVertical className="w-3 h-3" />
+                          </Button>
+                        </div>
+                      )}
+                      {editingFieldId === field.id && isActive ? (
+                        <div className="space-y-1">
+                          <Input
+                            value={field.content || ""}
+                            onChange={(e) => updateFormField(field.id, { content: e.target.value })}
+                            className="text-xs h-7"
+                            placeholder="Link text"
+                          />
+                          <Input
+                            value={field.href || ""}
+                            onChange={(e) => updateFormField(field.id, { href: e.target.value })}
+                            onBlur={() => setEditingFieldId(null)}
+                            className="text-xs h-7"
+                            placeholder="https://example.com"
+                          />
+                        </div>
+                      ) : (
+                        <a href={field.href || "#"} className="text-xs underline" style={{ color: config.buttonColor }}>
+                          {field.content || "Link text"}
+                        </a>
+                      )}
                     </div>
                   )}
                   {field.type === "linkbox" && (
-                    <div className="border border-border rounded p-2 bg-muted/20 text-center">
-                      <a href={field.href || "#"} className="text-xs font-medium" style={{ color: config.buttonColor }}>
-                        {field.content || "Link Box"}
-                      </a>
+                    <div
+                      className={`relative group ${isActive ? "cursor-text hover:ring-2 hover:ring-[#1DBFAA]/50 rounded transition-all" : ""} ${
+                        editingFieldId === field.id && isActive ? "ring-2 ring-[#1DBFAA]" : ""
+                      }`}
+                      onClick={(e) => {
+                        if (isActive) {
+                          e.stopPropagation();
+                          setEditingFieldId(field.id);
+                        }
+                      }}
+                    >
+                      {isActive && editingFieldId === field.id && (
+                        <div className="absolute -top-3 -right-3 flex gap-1 z-20">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeFormField(field.id);
+                            }}
+                            title="Remove link box"
+                          >
+                            <X className="w-3 h-3 text-destructive" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
+                            title="Reorder"
+                          >
+                            <GripVertical className="w-3 h-3" />
+                          </Button>
+                        </div>
+                      )}
+                      {editingFieldId === field.id && isActive ? (
+                        <div className="border border-border rounded p-2 bg-muted/20 space-y-1">
+                          <Input
+                            value={field.content || ""}
+                            onChange={(e) => updateFormField(field.id, { content: e.target.value })}
+                            className="text-xs h-7"
+                            placeholder="Link box text"
+                          />
+                          <Input
+                            value={field.href || ""}
+                            onChange={(e) => updateFormField(field.id, { href: e.target.value })}
+                            onBlur={() => setEditingFieldId(null)}
+                            className="text-xs h-7"
+                            placeholder="https://example.com"
+                          />
+                        </div>
+                      ) : (
+                        <div className="border border-border rounded p-2 bg-muted/20 text-center">
+                          <a href={field.href || "#"} className="text-xs font-medium" style={{ color: config.buttonColor }}>
+                            {field.content || "Link Box"}
+                          </a>
+                        </div>
+                      )}
                     </div>
                   )}
                   {field.type === "imagebox" && (
-                    <div>
-                      <Label className="text-xs mb-1">{field.label}</Label>
-                      {field.fileUrl ? (
-                        <div className="relative w-full h-32 rounded-lg border-2 border-border overflow-hidden shadow-sm">
-                          <img src={field.fileUrl} alt="Preview" className="w-full h-full object-cover" />
+                    <div
+                      className={`relative group ${isActive ? "cursor-pointer hover:ring-2 hover:ring-[#1DBFAA]/50 rounded transition-all" : ""} ${
+                        editingFieldId === field.id && isActive ? "ring-2 ring-[#1DBFAA]" : ""
+                      }`}
+                      onClick={(e) => {
+                        if (isActive) {
+                          e.stopPropagation();
+                          setEditingFieldId(field.id);
+                        }
+                      }}
+                    >
+                      {isActive && editingFieldId === field.id && (
+                        <div className="absolute -top-3 -right-3 flex gap-1 z-20">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeFormField(field.id);
+                            }}
+                            title="Remove image box"
+                          >
+                            <X className="w-3 h-3 text-destructive" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
+                            title="Reorder"
+                          >
+                            <GripVertical className="w-3 h-3" />
+                          </Button>
+                        </div>
+                      )}
+                      {editingFieldId === field.id && isActive ? (
+                        <div className="space-y-1">
+                          <Label className="text-xs">Image URL</Label>
+                          <Input
+                            value={field.fileUrl || ""}
+                            onChange={(e) => updateFormField(field.id, { fileUrl: e.target.value })}
+                            onBlur={() => setEditingFieldId(null)}
+                            className="text-xs h-7"
+                            placeholder="https://example.com/image.jpg"
+                          />
                         </div>
                       ) : (
-                        <div className="flex items-center justify-center h-32 border-2 border-dashed border-border rounded-lg bg-muted/30">
-                          <ImageIcon className="w-6 h-6 text-muted-foreground" />
-                        </div>
+                        <>
+                          {field.fileUrl ? (
+                            <div className="relative w-full h-32 rounded-lg border-2 border-border overflow-hidden shadow-sm">
+                              <img src={field.fileUrl} alt="Preview" className="w-full h-full object-cover" />
+                            </div>
+                          ) : (
+                            <div className="flex items-center justify-center h-32 border-2 border-dashed border-border rounded-lg bg-muted/30">
+                              <ImageIcon className="w-6 h-6 text-muted-foreground" />
+                            </div>
+                          )}
+                        </>
                       )}
                     </div>
                   )}
                   {field.type === "map" && (
-                    <div>
-                      <Label className="text-xs mb-1">{field.label}</Label>
-                      {field.mapUrl ? (
-                        <iframe 
-                          src={field.mapUrl} 
-                          className="w-full h-32 rounded border border-border"
-                          allowFullScreen
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className="flex items-center justify-center h-32 border border-dashed border-border rounded bg-muted/30">
-                          <Layout className="w-6 h-6 text-muted-foreground" />
-                          <span className="ml-2 text-xs text-muted-foreground">Map Embed</span>
+                    <div
+                      className={`relative group ${isActive ? "cursor-pointer hover:ring-2 hover:ring-[#1DBFAA]/50 rounded transition-all" : ""} ${
+                        editingFieldId === field.id && isActive ? "ring-2 ring-[#1DBFAA]" : ""
+                      }`}
+                      onClick={(e) => {
+                        if (isActive) {
+                          e.stopPropagation();
+                          setEditingFieldId(field.id);
+                        }
+                      }}
+                    >
+                      {isActive && editingFieldId === field.id && (
+                        <div className="absolute -top-3 -right-3 flex gap-1 z-20">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeFormField(field.id);
+                            }}
+                            title="Remove map"
+                          >
+                            <X className="w-3 h-3 text-destructive" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
+                            title="Reorder"
+                          >
+                            <GripVertical className="w-3 h-3" />
+                          </Button>
                         </div>
+                      )}
+                      {editingFieldId === field.id && isActive ? (
+                        <div className="space-y-1">
+                          <Label className="text-xs">Map Embed URL</Label>
+                          <Input
+                            value={field.mapUrl || ""}
+                            onChange={(e) => updateFormField(field.id, { mapUrl: e.target.value })}
+                            onBlur={() => setEditingFieldId(null)}
+                            className="text-xs h-7"
+                            placeholder="https://maps.google.com/..."
+                          />
+                          <p className="text-xs text-muted-foreground">Paste Google Maps embed URL</p>
+                        </div>
+                      ) : (
+                        <>
+                          {field.mapUrl ? (
+                            <iframe
+                              src={field.mapUrl}
+                              className="w-full h-32 rounded border border-border"
+                              allowFullScreen
+                              loading="lazy"
+                            />
+                          ) : (
+                            <div className="flex items-center justify-center h-32 border border-dashed border-border rounded bg-muted/30">
+                              <Layout className="w-6 h-6 text-muted-foreground" />
+                              <span className="ml-2 text-xs text-muted-foreground">Map Embed</span>
+                            </div>
+                          )}
+                        </>
                       )}
                     </div>
                   )}
                   {field.type === "icon" && (
-                    <div className="flex justify-center">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
-                        <Sparkles className="w-6 h-6 text-white" />
+                    <div
+                      className={`relative group ${isActive ? "cursor-pointer" : ""}`}
+                      onClick={(e) => {
+                        if (isActive) {
+                          e.stopPropagation();
+                          setEditingFieldId(field.id);
+                        }
+                      }}
+                    >
+                      {isActive && editingFieldId === field.id && (
+                        <div className="absolute -top-3 -right-3 flex gap-1 z-20">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-6 w-6 p-0 rounded-full shadow-lg bg-background border-border hover:bg-muted"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeFormField(field.id);
+                            }}
+                            title="Remove icon"
+                          >
+                            <X className="w-3 h-3 text-destructive" />
+                          </Button>
+                        </div>
+                      )}
+                      <div className="flex justify-center">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
+                          <Sparkles className="w-6 h-6 text-white" />
+                        </div>
                       </div>
                     </div>
                   )}
