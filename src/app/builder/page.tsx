@@ -3609,7 +3609,7 @@ export default function BuilderPage() {
                         <Label className="text-xs mb-2 block">Trigger Type</Label>
                         <Select
                           value={followUp.condition?.type || "button_click"}
-                          onValueChange={(value: any) => {
+                          onValueChange={(value) => {
                             setPopupFlow({
                               ...popupFlow,
                               steps: popupFlow.steps.map(step => ({
@@ -3651,7 +3651,7 @@ export default function BuilderPage() {
                             <Label className="text-xs mb-2 block">Target Element Type</Label>
                             <Select
                               value={followUp.condition?.targetType || "button"}
-                              onValueChange={(value: any) => {
+                              onValueChange={(value) => {
                                 setPopupFlow({
                                   ...popupFlow,
                                   steps: popupFlow.steps.map(step => ({
