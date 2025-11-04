@@ -915,16 +915,13 @@ export default function BuilderPage() {
                   }
                 }}
                 onSelect={(e) => {
-                  const target = e.target as HTMLInputElement;
-                  setCursorPosition(target.selectionStart);
+                  setCursorPosition(e.target.selectionStart);
                 }}
                 onClick={(e) => {
-                  const target = e.target as HTMLInputElement;
-                  setCursorPosition(target.selectionStart);
+                  setCursorPosition(e.target.selectionStart);
                 }}
                 onKeyUp={(e) => {
-                  const target = e.target as HTMLInputElement;
-                  setCursorPosition(target.selectionStart);
+                  setCursorPosition(e.target.selectionStart);
                 }}
                 onBlur={() => setEditingElement(null)}
                 autoFocus
@@ -995,16 +992,13 @@ export default function BuilderPage() {
                   }
                 }}
                 onSelect={(e) => {
-                  const target = e.target as HTMLInputElement;
-                  setCursorPosition(target.selectionStart);
+                  setCursorPosition(e.target.selectionStart);
                 }}
                 onClick={(e) => {
-                  const target = e.target as HTMLInputElement;
-                  setCursorPosition(target.selectionStart);
+                  setCursorPosition(e.target.selectionStart);
                 }}
                 onKeyUp={(e) => {
-                  const target = e.target as HTMLInputElement;
-                  setCursorPosition(target.selectionStart);
+                  setCursorPosition(e.target.selectionStart);
                 }}
                 onBlur={() => setEditingElement(null)}
                 autoFocus
@@ -1807,16 +1801,13 @@ export default function BuilderPage() {
                   }
                 }}
                 onSelect={(e) => {
-                  const target = e.target as HTMLInputElement;
-                  setCursorPosition(target.selectionStart);
+                  setCursorPosition(e.target.selectionStart);
                 }}
                 onClick={(e) => {
-                  const target = e.target as HTMLInputElement;
-                  setCursorPosition(target.selectionStart);
+                  setCursorPosition(e.target.selectionStart);
                 }}
                 onKeyUp={(e) => {
-                  const target = e.target as HTMLInputElement;
-                  setCursorPosition(target.selectionStart);
+                  setCursorPosition(e.target.selectionStart);
                 }}
                 onBlur={() => setEditingElement(null)}
                 autoFocus
@@ -2666,7 +2657,7 @@ export default function BuilderPage() {
                               <Label className="text-xs mb-1">Trigger Type</Label>
                               <Select
                                 value={activeFollowUp.condition?.type || "button_click"}
-                                onValueChange={(value: any) => {
+                                onValueChange={(value) => {
                                   updateActiveFollowUp({
                                     condition: {
                                       ...activeFollowUp.condition,
@@ -2697,10 +2688,10 @@ export default function BuilderPage() {
                                 <Label className="text-xs mb-1">Target Element Type</Label>
                                 <Select
                                   value={activeFollowUp.condition?.targetType || "button"}
-                                  onValueChange={(value: any) => {
+                                  onValueChange={(value) => {
                                     updateActiveFollowUp({
                                       condition: {
-                                        ...activeFollowUp.condition!,
+                                        ...activeFollowUp.condition,
                                         targetType: value
                                       }
                                     });
@@ -2730,7 +2721,7 @@ export default function BuilderPage() {
                                   onChange={(e) => {
                                     updateActiveFollowUp({
                                       condition: {
-                                        ...activeFollowUp.condition!,
+                                        ...activeFollowUp.condition,
                                         targetElement: e.target.value
                                       }
                                     });
@@ -2957,7 +2948,7 @@ export default function BuilderPage() {
                             size="sm"
                             className="h-16 text-xs flex-col justify-center gap-1"
                             onClick={() => {
-                              const newField: FormField = {
+                              const newField = {
                                 id: `field-${Date.now()}`,
                                 type: "columns",
                                 label: "2 Columns",
@@ -2984,7 +2975,7 @@ export default function BuilderPage() {
                             size="sm"
                             className="h-16 text-xs flex-col justify-center gap-1"
                             onClick={() => {
-                              const newField: FormField = {
+                              const newField = {
                                 id: `field-${Date.now()}`,
                                 type: "columns",
                                 label: "3 Columns",
@@ -3012,7 +3003,7 @@ export default function BuilderPage() {
                             size="sm"
                             className="h-16 text-xs flex-col justify-center gap-1"
                             onClick={() => {
-                              const newField: FormField = {
+                              const newField = {
                                 id: `field-${Date.now()}`,
                                 type: "columns",
                                 label: "2 Columns (Wide Left)",
@@ -3264,7 +3255,7 @@ export default function BuilderPage() {
                                             value={field.columnCount?.toString() || "2"}
                                             onValueChange={(value) => {
                                               updateFormField(field.id, { 
-                                                columnCount: parseInt(value) as 1 | 2 | 3 | 4,
+                                                columnCount: parseInt(value),
                                                 columnVariant: parseInt(value) === 2 ? field.columnVariant || "equal" : "equal"
                                               });
                                             }}>
@@ -3284,7 +3275,7 @@ export default function BuilderPage() {
                                             <Label className="text-xs mb-1">Column Variant</Label>
                                             <Select
                                               value={field.columnVariant || "equal"}
-                                              onValueChange={(value: any) => {
+                                              onValueChange={(value) => {
                                                 updateFormField(field.id, { columnVariant: value });
                                               }}>
                                               <SelectTrigger className="text-xs h-7">
@@ -3670,7 +3661,7 @@ export default function BuilderPage() {
                                         ? {
                                             ...fu,
                                             condition: {
-                                              ...fu.condition!,
+                                              ...fu.condition,
                                               targetType: value
                                             }
                                           }
@@ -3708,7 +3699,7 @@ export default function BuilderPage() {
                                         ? {
                                             ...fu,
                                             condition: {
-                                              ...fu.condition!,
+                                              ...fu.condition,
                                               targetElement: e.target.value
                                             }
                                           }
