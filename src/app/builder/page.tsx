@@ -832,6 +832,18 @@ export default function BuilderPage() {
   const activeStep = popupFlow.steps.find((s) => s.id === activeStepId);
   const activeFollowUp = activeStep?.followUps?.find((fu) => fu.id === activeFollowUpId);
 
+  // Debug useEffect
+  useEffect(() => {
+    console.log("🔍 DEBUG INFO:");
+    console.log("- activeStepId:", activeStepId);
+    console.log("- activeFollowUpId:", activeFollowUpId);
+    console.log("- activeStep exists:", !!activeStep);
+    console.log("- activeFollowUp exists:", !!activeFollowUp);
+    if (activeStep?.followUps) {
+      console.log("- Available follow-ups:", activeStep.followUps.map(f => ({ id: f.id, name: f.name })));
+    }
+  }, [activeStepId, activeFollowUpId, activeStep, activeFollowUp]);
+
   const handleSave = async () => {
     setSaving(true);
     try {
@@ -1968,6 +1980,13 @@ export default function BuilderPage() {
 
               <Badge variant="secondary" className="text-xs">Initial Design</Badge>
               
+              {/* DEBUG BADGE */}
+              {activeFollowUpId && (
+                <Badge variant="default" className="text-xs bg-[#1DBFAA]">
+                  Follow-up Active: {activeFollowUpId}
+                </Badge>
+              )}
+              
               {/* Popup Type Selector */}
               <div className="flex items-center gap-2 ml-4 border-l border-border pl-4">
                 <Label className="text-xs text-muted-foreground">Type:</Label>
@@ -2310,10 +2329,20 @@ export default function BuilderPage() {
               </Card>
             </div>
 
-            {/* Center - Canvas with Dynamic Dimensions */}
+            {/* Center - Canvas */}
             <div className="flex flex-col">
               <Card className="flex-1 p-6 bg-muted/20 min-h-[600px]">
-                {/* Canvas with backdrop simulation */}
+                
+                {/* DEBUG INFO */}
+                <div className="mb-4 p-2 bg-yellow-100 dark:bg-yellow-900/20 rounded text-xs">
+                  <strong>Debug:</strong>
+                  <div>Active Step: {activeStepId} ({activeStep ? "✅ Found" : "❌ Not Found"})</div>
+                  <div>Active Follow-up: {activeFollowUpId || "None"} ({activeFollowUp ? "✅ Found" : "❌ Not Found"})</div>
+                  {activeStep?.followUps && (
+                    <div>Follow-ups available: {activeStep.followUps.length}</div>
+                  )}
+                </div>
+
                 <div 
                   className="h-full flex items-center justify-center py-8 px-4"
                   style={{
@@ -2333,144 +2362,127 @@ export default function BuilderPage() {
                       zoom: `${zoomLevel}%`
                     }}
                   >
-                    <AnimatePresence mode="popLayout">
-                      {popupFlow.steps.filter(step => step.id === activeStepId).map((step) => {
-                        return (
-                          <motion.div
-                            key={step.id}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.9 }}
-                            className="w-full h-full">
-
-                            <div className="flex items-start gap-8 h-full">
-                              {/* Main Step Preview */}
-                              <div
-                                onClick={() => {
-                                  setActiveStepId(step.id);
-                                  setActiveFollowUpId(null);
+                    {activeStep && (
+                      <motion.div
+                        key={activeStep.id}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="w-full h-full"
+                      >
+                        <div className="flex items-start gap-8 h-full">
+                          {/* Main Step Preview */}
+                          <div
+                            onClick={() => {
+                              setActiveStepId(activeStep.id);
+                              setActiveFollowUpId(null);
+                            }}
+                            style={{ 
+                              width: getDimensions().singleWidth,
+                              flexShrink: 0
+                            }}
+                            className={`cursor-pointer transition-all relative group h-full ${
+                              !activeFollowUpId ?
+                              "ring-2 ring-[#1DBFAA] ring-offset-2" :
+                              "hover:ring-2 hover:ring-border hover:ring-offset-2"
+                            }`}
+                          >
+                            <div className={`absolute -top-3 -right-3 flex gap-1 z-20 transition-opacity ${
+                              !activeFollowUpId ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                            }`}>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-7 w-7 p-0 rounded-full shadow-lg bg-background border-[#1DBFAA] hover:bg-[#1DBFAA]/10"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  duplicateStep(activeStep.id);
                                 }}
-                                style={{ 
-                                  width: getDimensions().singleWidth,
-                                  flexShrink: 0
-                                }}
-                                className={`cursor-pointer transition-all relative group h-full ${
-                                  activeStepId === step.id && !activeFollowUpId ?
-                                  "ring-2 ring-[#1DBFAA] ring-offset-2" :
-                                  "hover:ring-2 hover:ring-border hover:ring-offset-2"
-                                }`}>
-
-                                {/* Action buttons */}
-                                <div className={`absolute -top-3 -right-3 flex gap-1 z-20 transition-opacity ${
-                                  activeStepId === step.id && !activeFollowUpId ?
-                                  "opacity-100" :
-                                  "opacity-0 group-hover:opacity-100"
-                                }`}>
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="h-7 w-7 p-0 rounded-full shadow-lg bg-background border-[#1DBFAA] hover:bg-[#1DBFAA]/10"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      duplicateStep(step.id);
-                                    }}
-                                    title="Duplicate step">
-                                    <Copy className="w-3.5 h-3.5 text-[#1DBFAA]" />
-                                  </Button>
-                                  {popupFlow.steps.length > 1 &&
-                                    <Button
-                                      variant="destructive"
-                                      size="sm"
-                                      className="h-7 w-7 p-0 rounded-full shadow-lg"
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        deleteStep(step.id);
-                                      }}>
-                                      <Trash2 className="w-3.5 h-3.5" />
-                                    </Button>
-                                  }
-                                </div>
-                                {renderStepPreview(step, activeStepId === step.id && !activeFollowUpId, false)}
-                                
-                                {/* Step Number Badge */}
-                                <div className="absolute -top-3 -left-3 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold shadow-lg">
-                                  {popupFlow.steps.findIndex(s => s.id === step.id) + 1}
-                                </div>
+                                title="Duplicate step"
+                              >
+                                <Copy className="w-3.5 h-3.5 text-[#1DBFAA]" />
+                              </Button>
+                              {popupFlow.steps.length > 1 && (
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  className="h-7 w-7 p-0 rounded-full shadow-lg"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    deleteStep(activeStep.id);
+                                  }}
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </Button>
+                              )}
+                            </div>
+                            {renderStepPreview(activeStep, !activeFollowUpId, false)}
+                            <div className="absolute -top-3 -left-3 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold shadow-lg">
+                              {popupFlow.steps.findIndex(s => s.id === activeStep.id) + 1}
+                            </div>
+                          </div>
+                          
+                          {/* Follow-up Preview */}
+                          {activeFollowUpId && activeFollowUp && (
+                            <div
+                              onClick={() => {
+                                setActiveStepId(activeStep.id);
+                                setActiveFollowUpId(activeFollowUp.id);
+                              }}
+                              style={{ 
+                                width: getDimensions().singleWidth,
+                                flexShrink: 0
+                              }}
+                              className="cursor-pointer transition-all relative group h-full ring-2 ring-[#1DBFAA] ring-offset-2"
+                            >
+                              <div className="absolute -top-3 -right-3 flex gap-1 z-20">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="h-7 w-7 p-0 rounded-full shadow-lg bg-background border-[#1DBFAA] hover:bg-[#1DBFAA]/10"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setSettingsFollowUpId(activeFollowUp.id);
+                                    setSettingsDialogOpen(true);
+                                  }}
+                                  title="Configure settings"
+                                >
+                                  <Settings className="w-3.5 h-3.5 text-[#1DBFAA]" />
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="h-7 w-7 p-0 rounded-full shadow-lg bg-background border-[#1DBFAA] hover:bg-[#1DBFAA]/10"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    duplicateFollowUp(activeStep.id, activeFollowUp.id);
+                                  }}
+                                  title="Duplicate follow-up"
+                                >
+                                  <Copy className="w-3.5 h-3.5 text-[#1DBFAA]" />
+                                </Button>
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  className="h-7 w-7 p-0 rounded-full shadow-lg"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    deleteFollowUp(activeStep.id, activeFollowUp.id);
+                                  }}
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </Button>
                               </div>
                               
-                              {/* Follow-up Preview - Show when activeFollowUpId is set */}
-                              {activeFollowUpId && step.followUps && step.followUps.length > 0 && (() => {
-                                const followUpToShow = step.followUps.find(fu => fu.id === activeFollowUpId);
-                                
-                                if (!followUpToShow) {
-                                  console.log('Follow-up not found:', activeFollowUpId);
-                                  console.log('Available follow-ups:', step.followUps.map(fu => fu.id));
-                                  return null;
-                                }
-                                
-                                return (
-                                  <div
-                                    onClick={() => {
-                                      setActiveStepId(step.id);
-                                      setActiveFollowUpId(followUpToShow.id);
-                                    }}
-                                    style={{ 
-                                      width: getDimensions().singleWidth,
-                                      flexShrink: 0
-                                    }}
-                                    className="cursor-pointer transition-all relative group h-full ring-2 ring-[#1DBFAA] ring-offset-2">
-                                    
-                                    {/* Action buttons */}
-                                    <div className="absolute -top-3 -right-3 flex gap-1 z-20">
-                                      <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className="h-7 w-7 p-0 rounded-full shadow-lg bg-background border-[#1DBFAA] hover:bg-[#1DBFAA]/10"
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          setSettingsFollowUpId(followUpToShow.id);
-                                          setSettingsDialogOpen(true);
-                                        }}
-                                        title="Configure settings">
-                                        <Settings className="w-3.5 h-3.5 text-[#1DBFAA]" />
-                                      </Button>
-                                      <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className="h-7 w-7 p-0 rounded-full shadow-lg bg-background border-[#1DBFAA] hover:bg-[#1DBFAA]/10"
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          duplicateFollowUp(step.id, followUpToShow.id);
-                                        }}
-                                        title="Duplicate follow-up">
-                                        <Copy className="w-3.5 h-3.5 text-[#1DBFAA]" />
-                                      </Button>
-                                      <Button
-                                        variant="destructive"
-                                        size="sm"
-                                        className="h-7 w-7 p-0 rounded-full shadow-lg"
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          deleteFollowUp(step.id, followUpToShow.id);
-                                        }}>
-                                        <Trash2 className="w-3.5 h-3.5" />
-                                      </Button>
-                                    </div>
-                                    
-                                    {renderStepPreview(followUpToShow, true, true)}
-                                    
-                                    {/* Follow-up Badge */}
-                                    <div className="absolute -top-3 -left-3 px-3 h-8 bg-[#1DBFAA] text-white rounded-full flex items-center justify-center text-xs font-bold shadow-lg">
-                                      Follow-up
-                                    </div>
-                                  </div>
-                                );
-                              })()}
+                              {renderStepPreview(activeFollowUp, true, true)}
+                              
+                              <div className="absolute -top-3 -left-3 px-3 h-8 bg-[#1DBFAA] text-white rounded-full flex items-center justify-center text-xs font-bold shadow-lg">
+                                Follow-up
+                              </div>
                             </div>
-                          </motion.div>
-                        );
-                      })}
-                    </AnimatePresence>
+                          )}
+                        </div>
+                      </motion.div>
+                    )}
                   </div>
                 </div>
               </Card>
@@ -3990,6 +4002,6 @@ export default function BuilderPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>);
-
+    </div>
+  );
 }
