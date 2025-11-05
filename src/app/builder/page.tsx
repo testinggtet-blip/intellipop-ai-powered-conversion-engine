@@ -210,11 +210,23 @@ export default function BuilderPage() {
   // Get dimensions based on view mode
   const getDimensions = () => {
     const config = viewMode === "desktop" ? currentPopupConfig.desktop : currentPopupConfig.mobile;
+    const baseWidth = typeof config.width === "string" ? config.width : `${config.width}px`;
+    const baseHeight = typeof config.height === "string" ? config.height : `${config.height}px`;
+    
+    // If follow-up is active, double the width (or add extra space) to show side-by-side
+    const isFollowUpActive = activeFollowUpId !== null;
+    let finalWidth = baseWidth;
+    
+    if (isFollowUpActive && typeof config.width === "number") {
+      finalWidth = `${config.width * 2 + 32}px`; // Double width + gap
+    }
+    
     return {
-      width: typeof config.width === "string" ? config.width : `${config.width}px`,
-      height: typeof config.height === "string" ? config.height : `${config.height}px`,
-      maxWidth: typeof config.width === "string" ? "100%" : `${config.width}px`,
-      maxHeight: typeof config.height === "string" ? "auto" : `${config.height}px`
+      width: finalWidth,
+      height: baseHeight,
+      maxWidth: typeof config.width === "string" ? "100%" : isFollowUpActive ? `${config.width * 2 + 32}px` : `${config.width}px`,
+      maxHeight: typeof config.height === "string" ? "auto" : `${config.height}px`,
+      singleWidth: baseWidth // Original width for individual popup
     };
   };
 
@@ -2321,7 +2333,7 @@ export default function BuilderPage() {
                     }}
                   >
                     <AnimatePresence mode="popLayout">
-                      {popupFlow.steps.map((step, index) =>
+                      {popupFlow.steps.filter(step => step.id === activeStepId).map((step, index) =>
                       <motion.div
                         key={step.id}
                         initial={{ opacity: 0, scale: 0.9 }}
@@ -2336,7 +2348,8 @@ export default function BuilderPage() {
                               setActiveStepId(step.id);
                               setActiveFollowUpId(null);
                             }}
-                            className={`cursor-pointer transition-all relative flex-1 group h-full ${
+                            style={{ width: getDimensions().singleWidth }}
+                            className={`cursor-pointer transition-all relative group h-full ${
                             activeStepId === step.id && !activeFollowUpId ?
                             "ring-2 ring-[#1DBFAA] ring-offset-2" :
                             "hover:ring-2 hover:ring-border hover:ring-offset-2"}`
@@ -2376,7 +2389,7 @@ export default function BuilderPage() {
                               
                               {/* Step Number Badge */}
                               <div className="absolute -top-3 -left-3 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold shadow-lg">
-                                {index + 1}
+                                {popupFlow.steps.findIndex(s => s.id === step.id) + 1}
                               </div>
                             </div>
                             
@@ -2391,7 +2404,8 @@ export default function BuilderPage() {
                                     setActiveStepId(step.id);
                                     setActiveFollowUpId(activeFollowUp.id);
                                   }}
-                                  className="cursor-pointer transition-all relative flex-1 group h-full ring-2 ring-[#1DBFAA] ring-offset-2">
+                                  style={{ width: getDimensions().singleWidth }}
+                                  className="cursor-pointer transition-all relative group h-full ring-2 ring-[#1DBFAA] ring-offset-2">
                                   
                                   {/* Action buttons */}
                                   <div className="absolute -top-3 -right-3 flex gap-1 z-20">
