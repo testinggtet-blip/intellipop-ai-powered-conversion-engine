@@ -547,7 +547,7 @@ export default function CampaignsPage() {
                       type="checkbox"
                       checked={stopPageOption}
                       onChange={(e) => setStopPageOption(e.target.checked)}
-                      className="w-4 h-4 mt-2.5 accent-[#1DBFAA]" />
+                      className="w-4 h-4 mt-0.5 accent-[#1DBFAA]" />
                     <div className="flex-1 space-y-2">
                       <span className="text-sm text-foreground">Stop campaign if page URL contains</span>
                       {stopPageOption && (
