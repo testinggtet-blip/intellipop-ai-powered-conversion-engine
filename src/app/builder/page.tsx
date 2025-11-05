@@ -2379,6 +2379,66 @@ export default function BuilderPage() {
                                 {index + 1}
                               </div>
                             </div>
+                            
+                            {/* Follow-up Preview - Show when activeFollowUpId is set */}
+                            {activeStepId === step.id && activeFollowUpId && step.followUps && step.followUps.length > 0 && (() => {
+                              const activeFollowUp = step.followUps.find(fu => fu.id === activeFollowUpId);
+                              if (!activeFollowUp) return null;
+                              
+                              return (
+                                <div
+                                  onClick={() => {
+                                    setActiveStepId(step.id);
+                                    setActiveFollowUpId(activeFollowUp.id);
+                                  }}
+                                  className="cursor-pointer transition-all relative flex-1 group h-full ring-2 ring-[#1DBFAA] ring-offset-2">
+                                  
+                                  {/* Action buttons */}
+                                  <div className="absolute -top-3 -right-3 flex gap-1 z-20">
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      className="h-7 w-7 p-0 rounded-full shadow-lg bg-background border-[#1DBFAA] hover:bg-[#1DBFAA]/10"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setSettingsFollowUpId(activeFollowUp.id);
+                                        setSettingsDialogOpen(true);
+                                      }}
+                                      title="Configure settings">
+                                      <Settings className="w-3.5 h-3.5 text-[#1DBFAA]" />
+                                    </Button>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      className="h-7 w-7 p-0 rounded-full shadow-lg bg-background border-[#1DBFAA] hover:bg-[#1DBFAA]/10"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        duplicateFollowUp(step.id, activeFollowUp.id);
+                                      }}
+                                      title="Duplicate follow-up">
+                                      <Copy className="w-3.5 h-3.5 text-[#1DBFAA]" />
+                                    </Button>
+                                    <Button
+                                      variant="destructive"
+                                      size="sm"
+                                      className="h-7 w-7 p-0 rounded-full shadow-lg"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        deleteFollowUp(step.id, activeFollowUp.id);
+                                      }}>
+                                      <Trash2 className="w-3.5 h-3.5" />
+                                    </Button>
+                                  </div>
+                                  
+                                  {renderStepPreview(activeFollowUp, true, true)}
+                                  
+                                  {/* Follow-up Badge */}
+                                  <div className="absolute -top-3 -left-3 px-3 h-8 bg-[#1DBFAA] text-white rounded-full flex items-center justify-center text-xs font-bold shadow-lg">
+                                    Follow-up
+                                  </div>
+                                </div>
+                              );
+                            })()}
                           </div>
                         </motion.div>
                       )}
