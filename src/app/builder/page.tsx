@@ -2333,16 +2333,6 @@ export default function BuilderPage() {
             <div className="flex flex-col">
               <Card className="flex-1 p-6 bg-muted/20 min-h-[600px]">
                 
-                {/* DEBUG INFO */}
-                <div className="mb-4 p-2 bg-yellow-100 dark:bg-yellow-900/20 rounded text-xs">
-                  <strong>Debug:</strong>
-                  <div>Active Step: {activeStepId} ({activeStep ? "✅ Found" : "❌ Not Found"})</div>
-                  <div>Active Follow-up: {activeFollowUpId || "None"} ({activeFollowUp ? "✅ Found" : "❌ Not Found"})</div>
-                  {activeStep?.followUps && (
-                    <div>Follow-ups available: {activeStep.followUps.length}</div>
-                  )}
-                </div>
-
                 <div 
                   className="h-full flex items-center justify-center py-8 px-4"
                   style={{
