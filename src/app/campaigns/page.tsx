@@ -51,7 +51,7 @@ export default function CampaignsPage() {
   const [triggerUnit, setTriggerUnit] = useState("sec");
   const [displayWhere, setDisplayWhere] = useState("all-pages");
   const [urls, setUrls] = useState<string[]>(["https://zapier.com/blog"]);
-  const [stopPageOption, setStopPageOption] = useState("no");
+  const [stopPageOption, setStopPageOption] = useState(false);
   const [stopIfContainPage, setStopIfContainPage] = useState("https://zapier.com/blog");
   const [endCampaignOption, setEndCampaignOption] = useState("session");
   const [endAfterValue, setEndAfterValue] = useState("3");
@@ -153,7 +153,7 @@ export default function CampaignsPage() {
     setTriggerUnit("sec");
     setDisplayWhere("all-pages");
     setUrls(["https://zapier.com/blog"]);
-    setStopPageOption("no");
+    setStopPageOption(false);
     setStopIfContainPage("https://zapier.com/blog");
     setEndCampaignOption("session");
     setEndAfterValue("3");
@@ -542,28 +542,15 @@ export default function CampaignsPage() {
                   Stop if contain page
                 </Label>
                 <div className="space-y-2">
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="stop-page"
-                      value="no"
-                      checked={stopPageOption === "no"}
-                      onChange={(e) => setStopPageOption(e.target.value)}
-                      className="w-4 h-4 accent-[#1DBFAA]" />
-                    <span className="text-sm text-foreground">No</span>
-                  </label>
-                  
                   <label className="flex items-start gap-3 cursor-pointer">
                     <input
-                      type="radio"
-                      name="stop-page"
-                      value="yes"
-                      checked={stopPageOption === "yes"}
-                      onChange={(e) => setStopPageOption(e.target.value)}
+                      type="checkbox"
+                      checked={stopPageOption}
+                      onChange={(e) => setStopPageOption(e.target.checked)}
                       className="w-4 h-4 mt-2.5 accent-[#1DBFAA]" />
                     <div className="flex-1 space-y-2">
-                      <span className="text-sm text-foreground">Yes</span>
-                      {stopPageOption === "yes" && (
+                      <span className="text-sm text-foreground">Stop campaign if page URL contains</span>
+                      {stopPageOption && (
                         <Input
                           type="url"
                           value={stopIfContainPage}
