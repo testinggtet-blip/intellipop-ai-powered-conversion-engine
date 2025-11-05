@@ -61,12 +61,105 @@ import {
   GripVertical,
   Upload,
   Video,
-  Settings
+  Settings,
+  Monitor,
+  Smartphone
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
+// Popup type configurations with dimensions
+const POPUP_TYPES = [
+  {
+    id: "modal",
+    name: "Modal Pop-up (Center Pop-up)",
+    icon: "🎯",
+    description: "Signup forms, limited-time offers, consent prompts",
+    desktop: { width: 700, height: 500 },
+    mobile: { width: "95%", height: 400 },
+    backdrop: true,
+    backdropOpacity: 0.6,
+    borderRadius: 14,
+    position: "center"
+  },
+  {
+    id: "slide-in",
+    name: "Slide-in Pop-up",
+    icon: "📨",
+    description: "Chat invites, product tips, newsletter signups",
+    desktop: { width: 400, height: 320 },
+    mobile: { width: "90%", height: "auto" },
+    backdrop: false,
+    backdropOpacity: 0,
+    borderRadius: 12,
+    position: "bottom-right"
+  },
+  {
+    id: "floating-bar",
+    name: "Floating Bar / Banner",
+    icon: "📢",
+    description: "Promotions, cookie consent, shipping alerts",
+    desktop: { width: "100%", height: 80 },
+    mobile: { width: "100%", height: 100 },
+    backdrop: false,
+    backdropOpacity: 0,
+    borderRadius: 0,
+    position: "top"
+  },
+  {
+    id: "fullscreen",
+    name: "Fullscreen Pop-up (Welcome Mat)",
+    icon: "🖥️",
+    description: "Lead magnets, discounts, newsletter signup",
+    desktop: { width: 800, height: 600 },
+    mobile: { width: "100%", height: "100%" },
+    backdrop: true,
+    backdropOpacity: 0.9,
+    borderRadius: 0,
+    position: "center"
+  },
+  {
+    id: "exit-intent",
+    name: "Exit-Intent Pop-up",
+    icon: "🚪",
+    description: "Retention offers, last-minute deals",
+    desktop: { width: 700, height: 500 },
+    mobile: { width: "90%", height: "auto" },
+    backdrop: true,
+    backdropOpacity: 0.7,
+    borderRadius: 16,
+    position: "center"
+  },
+  {
+    id: "inline",
+    name: "Inline Embedded Pop-up",
+    icon: "📄",
+    description: "Gated content, in-article forms, blog newsletter blocks",
+    desktop: { width: "100%", height: "auto" },
+    mobile: { width: "100%", height: "auto" },
+    backdrop: false,
+    backdropOpacity: 0,
+    borderRadius: 8,
+    position: "inline"
+  },
+  {
+    id: "sidebar",
+    name: "Sidebar Pop-up",
+    icon: "📱",
+    description: "Chat widgets, recommendations, quick forms",
+    desktop: { width: 350, height: "100%" },
+    mobile: { width: "100%", height: "85%" },
+    backdrop: true,
+    backdropOpacity: 0.4,
+    borderRadius: 0,
+    position: "right"
+  }
+];
+
 export default function BuilderPage() {
+  const [popupType, setPopupType] = useState("modal");
+  const [viewMode, setViewMode] = useState("desktop"); // 'desktop' or 'mobile'
+  
   const [popupFlow, setPopupFlow] = useState({
     name: "Sitewide Email Capture | Free Shipping",
     steps: [
@@ -110,6 +203,20 @@ export default function BuilderPage() {
     { name: "Border", value: "#CCCCCC", percentage: 100 }]
 
   });
+
+  // Get current popup type config
+  const currentPopupConfig = POPUP_TYPES.find(pt => pt.id === popupType) || POPUP_TYPES[0];
+  
+  // Get dimensions based on view mode
+  const getDimensions = () => {
+    const config = viewMode === "desktop" ? currentPopupConfig.desktop : currentPopupConfig.mobile;
+    return {
+      width: typeof config.width === "string" ? config.width : `${config.width}px`,
+      height: typeof config.height === "string" ? config.height : `${config.height}px`,
+      maxWidth: typeof config.width === "string" ? "100%" : `${config.width}px`,
+      maxHeight: typeof config.height === "string" ? "auto" : `${config.height}px`
+    };
+  };
 
   // History management for undo/redo
   const [history, setHistory] = useState([]);
@@ -1845,9 +1952,29 @@ export default function BuilderPage() {
               <Input
                 value={popupFlow.name}
                 onChange={(e) => setPopupFlow({ ...popupFlow, name: e.target.value })}
-                className="text-sm font-semibold bg-background border-0 h-8 w-[400px]" />
+                className="text-sm font-semibold bg-background border-0 h-8 w-[300px]" />
 
               <Badge variant="secondary" className="text-xs">Initial Design</Badge>
+              
+              {/* Popup Type Selector */}
+              <div className="flex items-center gap-2 ml-4 border-l border-border pl-4">
+                <Label className="text-xs text-muted-foreground">Type:</Label>
+                <Select value={popupType} onValueChange={setPopupType}>
+                  <SelectTrigger className="h-8 w-[220px] text-xs">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {POPUP_TYPES.map(type => (
+                      <SelectItem key={type.id} value={type.id}>
+                        <div className="flex items-center gap-2">
+                          <span>{type.icon}</span>
+                          <span className="text-xs">{type.name}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <div className="flex items-center gap-2">
               <Button
@@ -1856,7 +1983,6 @@ export default function BuilderPage() {
                 className="h-8 w-8 p-0"
                 onClick={handleUndo}
                 disabled={historyIndex <= 0}>
-
                 <Undo className="w-4 h-4" />
               </Button>
               <Button
@@ -1865,12 +1991,30 @@ export default function BuilderPage() {
                 className="h-8 w-8 p-0"
                 onClick={handleRedo}
                 disabled={historyIndex >= history.length - 1}>
-
                 <Redo className="w-4 h-4" />
               </Button>
               <div className="mx-2 h-6 w-px bg-border" />
               <span className="text-sm text-muted-foreground">Draft saved</span>
               <div className="mx-2 h-6 w-px bg-border" />
+              
+              {/* View Mode Toggle */}
+              <div className="flex items-center gap-1 border border-border rounded-lg p-1">
+                <Button
+                  variant={viewMode === "desktop" ? "secondary" : "ghost"}
+                  size="sm"
+                  className="h-6 w-6 p-0"
+                  onClick={() => setViewMode("desktop")}>
+                  <Monitor className="w-3 h-3" />
+                </Button>
+                <Button
+                  variant={viewMode === "mobile" ? "secondary" : "ghost"}
+                  size="sm"
+                  className="h-6 w-6 p-0"
+                  onClick={() => setViewMode("mobile")}>
+                  <Smartphone className="w-3 h-3" />
+                </Button>
+              </div>
+              
               <div className="flex items-center gap-1 border border-border rounded-lg px-2 py-1">
                 <Button variant="ghost" size="sm" className="h-6 w-6 p-0" onClick={() => setZoomLevel(Math.max(50, zoomLevel - 10))}>
                   <ZoomOut className="w-3 h-3" />
@@ -1880,22 +2024,11 @@ export default function BuilderPage() {
                   <ZoomIn className="w-3 h-3" />
                 </Button>
               </div>
-              <Select defaultValue="preview">
-                <SelectTrigger className="h-8 w-[100px] text-xs">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="preview">Preview</SelectItem>
-                  <SelectItem value="desktop">Desktop</SelectItem>
-                  <SelectItem value="mobile">Mobile</SelectItem>
-                </SelectContent>
-              </Select>
               <Button
                 variant="outline"
                 size="sm"
                 className="h-8 text-xs"
                 onClick={() => setTemplateDialogOpen(true)}>
-
                 <LayoutTemplate className="w-3 h-3 mr-1" />
                 Template
               </Button>
@@ -1904,7 +2037,6 @@ export default function BuilderPage() {
                 size="sm"
                 className="h-8 text-xs"
                 onClick={() => setPreviewOpen(true)}>
-
                 <Eye className="w-3 h-3 mr-1" />
                 Preview
               </Button>
@@ -1914,19 +2046,13 @@ export default function BuilderPage() {
                 className="h-8 text-xs"
                 onClick={handleSave}
                 disabled={saving}>
-
-                {saving ?
-                <Loader2 className="w-3 h-3 mr-1 animate-spin" /> :
-
-                <Save className="w-3 h-3 mr-1" />
-                }
+                {saving ? <Loader2 className="w-3 h-3 mr-1 animate-spin" /> : <Save className="w-3 h-3 mr-1" />}
                 Save Draft
               </Button>
               <Button
                 size="sm"
                 className="bg-[#1DBFAA] hover:bg-[#1DBFAA]/90 h-8 text-xs"
                 onClick={handleSave}>
-
                 Save and review
               </Button>
             </div>
@@ -1934,6 +2060,44 @@ export default function BuilderPage() {
         </div>
 
         <div className="container mx-auto max-w-7xl px-4 py-6">
+          {/* Popup Type Info Banner */}
+          <div className="mb-4 p-3 bg-muted/50 rounded-lg border border-border/50">
+            <div className="flex items-start gap-3">
+              <div className="text-2xl">{currentPopupConfig.icon}</div>
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <h4 className="font-semibold text-sm">{currentPopupConfig.name}</h4>
+                  <Badge variant="outline" className="text-xs">
+                    {viewMode === "desktop" ? "🖥️ Desktop" : "📱 Mobile"}
+                  </Badge>
+                </div>
+                <p className="text-xs text-muted-foreground mb-2">{currentPopupConfig.description}</p>
+                <div className="flex items-center gap-4 text-xs">
+                  <div className="flex items-center gap-1">
+                    <span className="text-muted-foreground">Dimensions:</span>
+                    <code className="bg-background px-2 py-0.5 rounded">
+                      {getDimensions().width} × {getDimensions().height}
+                    </code>
+                  </div>
+                  {currentPopupConfig.backdrop && (
+                    <div className="flex items-center gap-1">
+                      <span className="text-muted-foreground">Backdrop:</span>
+                      <code className="bg-background px-2 py-0.5 rounded">
+                        {(currentPopupConfig.backdropOpacity * 100).toFixed(0)}%
+                      </code>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-1">
+                    <span className="text-muted-foreground">Border Radius:</span>
+                    <code className="bg-background px-2 py-0.5 rounded">
+                      {currentPopupConfig.borderRadius}px
+                    </code>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="grid lg:grid-cols-[280px_1fr_320px] gap-6">
             {/* Left Sidebar - Steps Journey */}
             <div className="space-y-4 sticky top-6 self-start max-h-[calc(100vh-180px)] overflow-y-auto">
@@ -2134,154 +2298,92 @@ export default function BuilderPage() {
               </Card>
             </div>
 
-            {/* Center - Canvas Flow Diagram */}
+            {/* Center - Canvas with Dynamic Dimensions */}
             <div className="flex flex-col">
               <Card className="flex-1 p-6 bg-muted/20 min-h-[600px]">
-                <div className="h-full flex flex-col items-center justify-start gap-6 overflow-y-auto overflow-x-auto py-8 px-16" style={{ zoom: `${zoomLevel}%` }}>
-                  <AnimatePresence mode="popLayout">
-                    {popupFlow.steps.map((step, index) =>
-                    <motion.div
-                      key={step.id}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      className="w-full">
+                {/* Canvas with backdrop simulation */}
+                <div 
+                  className="h-full flex items-center justify-center overflow-auto py-8 px-4"
+                  style={{
+                    backgroundColor: currentPopupConfig.backdrop 
+                      ? `rgba(0, 0, 0, ${currentPopupConfig.backdropOpacity})` 
+                      : 'transparent'
+                  }}
+                >
+                  <div 
+                    className="transition-all duration-300"
+                    style={{
+                      width: getDimensions().width,
+                      height: getDimensions().height,
+                      maxWidth: getDimensions().maxWidth,
+                      maxHeight: getDimensions().maxHeight,
+                      zoom: `${zoomLevel}%`
+                    }}
+                  >
+                    <AnimatePresence mode="popLayout">
+                      {popupFlow.steps.map((step, index) =>
+                      <motion.div
+                        key={step.id}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        className="w-full h-full">
 
-                        <div className="flex items-start gap-16">
-                          {/* Main Step Preview */}
-                          <div
-                          onClick={() => {
-                            setActiveStepId(step.id);
-                            setActiveFollowUpId(null);
-                          }}
-                          className={`cursor-pointer transition-all relative flex-shrink-0 w-[320px] group ${
-                          activeStepId === step.id && !activeFollowUpId ?
-                          "ring-2 ring-[#1DBFAA] ring-offset-2" :
-                          "hover:ring-2 hover:ring-border hover:ring-offset-2"}`
-                          }>
+                          <div className="flex items-start gap-8 h-full">
+                            {/* Main Step Preview */}
+                            <div
+                            onClick={() => {
+                              setActiveStepId(step.id);
+                              setActiveFollowUpId(null);
+                            }}
+                            className={`cursor-pointer transition-all relative flex-1 group h-full ${
+                            activeStepId === step.id && !activeFollowUpId ?
+                            "ring-2 ring-[#1DBFAA] ring-offset-2" :
+                            "hover:ring-2 hover:ring-border hover:ring-offset-2"}`
+                            }>
 
-                            {/* Action buttons - visible when selected OR on hover */}
-                            <div className={`absolute -top-3 -right-3 flex gap-1 z-20 transition-opacity ${
-                          activeStepId === step.id && !activeFollowUpId ?
-                          "opacity-100" :
-                          "opacity-0 group-hover:opacity-100"}`
-                          }>
-                              <Button
-                              variant="outline"
-                              size="sm"
-                              className="h-7 w-7 p-0 rounded-full shadow-lg bg-background border-[#1DBFAA] hover:bg-[#1DBFAA]/10"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                duplicateStep(step.id);
-                              }}
-                              title="Duplicate step">
-
-                                <Copy className="w-3.5 h-3.5 text-[#1DBFAA]" />
-                              </Button>
-                              {popupFlow.steps.length > 1 &&
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              className="h-7 w-7 p-0 rounded-full shadow-lg"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                deleteStep(step.id);
-                              }}>
-
-                                  <Trash2 className="w-3.5 h-3.5" />
+                              {/* Action buttons */}
+                              <div className={`absolute -top-3 -right-3 flex gap-1 z-20 transition-opacity ${
+                            activeStepId === step.id && !activeFollowUpId ?
+                            "opacity-100" :
+                            "opacity-0 group-hover:opacity-100"}`
+                            }>
+                                <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-7 w-7 p-0 rounded-full shadow-lg bg-background border-[#1DBFAA] hover:bg-[#1DBFAA]/10"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  duplicateStep(step.id);
+                                }}
+                                title="Duplicate step">
+                                  <Copy className="w-3.5 h-3.5 text-[#1DBFAA]" />
                                 </Button>
-                            }
-                            </div>
-                            {renderStepPreview(step, activeStepId === step.id && !activeFollowUpId, false)}
-                            
-                            {/* Step Number Badge */}
-                            <div className="absolute -top-3 -left-3 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold shadow-lg">
-                              {index + 1}
-                            </div>
-                          </div>
-
-                          {/* Follow-up Steps - Show to the right with connecting line */}
-                          {step.followUps && step.followUps.length > 0 &&
-                        <div className="flex items-start gap-8 pt-8">
-                              {step.followUps.map((followUp, fuIndex) =>
-                          <div key={followUp.id} className="relative flex items-center gap-8">
-                                  {/* Horizontal Connector Line */}
-                                  {fuIndex === 0 &&
-                            <div className="absolute -left-10 top-1/2 -translate-y-1/2 w-16 h-0.5 bg-[#1DBFAA]" />
-                            }
-                                  
-                                  <div
-                              onClick={() => {
-                                setActiveStepId(step.id);
-                                setActiveFollowUpId(followUp.id);
-                              }}
-                              className={`cursor-pointer transition-all relative flex-shrink-0 w-[280px] group ${
-                              activeFollowUpId === followUp.id ?
-                              "ring-2 ring-[#1DBFAA] ring-offset-2" :
-                              "hover:ring-2 hover:ring-border hover:ring-offset-2"}`
-                              }>
-
-                                    {/* Action buttons - visible when selected OR on hover */}
-                                    <div className={`absolute -top-3 -right-3 flex gap-1 z-20 transition-opacity ${
-                              activeFollowUpId === followUp.id ?
-                              "opacity-100" :
-                              "opacity-0 group-hover:opacity-100"}`
-                              }>
-                                      <Button
-                                  variant="outline"
-                                  size="sm"
-                                  className="h-7 w-7 p-0 rounded-full shadow-lg bg-background border-[#1DBFAA] hover:bg-[#1DBFAA]/10"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    duplicateFollowUp(step.id, followUp.id);
-                                  }}
-                                  title="Duplicate follow-up">
-
-                                        <Copy className="w-3.5 h-3.5 text-[#1DBFAA]" />
-                                      </Button>
-                                      <Button
-                                  variant="destructive"
-                                  size="sm"
-                                  className="h-7 w-7 p-0 rounded-full shadow-lg"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    deleteFollowUp(step.id, followUp.id);
-                                  }}>
-
-                                        <Trash2 className="w-3.5 h-3.5" />
-                                      </Button>
-                                    </div>
-                                    {renderStepPreview(followUp, activeFollowUpId === followUp.id, true)}
-                                    
-                                    {/* Follow-up Badge */}
-                                    <div className="absolute -top-3 -left-3 px-2 h-6 bg-[#1DBFAA] text-white rounded-full flex items-center justify-center text-xs font-medium shadow-lg whitespace-nowrap">
-                                      Follow-up {fuIndex + 1}
-                                    </div>
-                                  </div>
-                                  
-                                  {/* Connector to next follow-up */}
-                                  {fuIndex < (step.followUps?.length || 0) - 1 &&
-                            <ChevronRight className="w-5 h-5 text-[#1DBFAA]" />
-                            }
-                                </div>
-                          )}
-                            </div>
-                        }
-                        </div>
-
-                        {/* Connection Arrow to Next Step */}
-                        {index < popupFlow.steps.length - 1 &&
-                      <div className="flex items-center justify-center py-6">
-                            <div className="flex flex-col items-center">
-                              <div className="w-px h-8 bg-border/50" />
-                              <ArrowDown className="w-5 h-5 text-border" />
-                              <div className="w-px h-8 bg-border/50" />
+                                {popupFlow.steps.length > 1 &&
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                className="h-7 w-7 p-0 rounded-full shadow-lg"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  deleteStep(step.id);
+                                }}>
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </Button>
+                              }
+                              </div>
+                              {renderStepPreview(step, activeStepId === step.id && !activeFollowUpId, false)}
+                              
+                              {/* Step Number Badge */}
+                              <div className="absolute -top-3 -left-3 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold shadow-lg">
+                                {index + 1}
+                              </div>
                             </div>
                           </div>
-                      }
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 </div>
               </Card>
             </div>
